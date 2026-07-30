@@ -56,7 +56,7 @@ window.I18N.ar = {
   "index.book1.coverAlt": "غلاف كتاب The Road from Manila",
 
   "index.book2.title": "The Unseen Memoir",
-  "index.book2.author": "تجربة أولى في الكتابة",
+  "index.book2.author": "Marion Hale",
   "index.book2.voice": "«كتبتُ هذا الكتاب على طاولة مطبخي طوال أربع سنوات، عن السنة التي توقفتُ فيها عن الكلام.»",
   "index.book2.starsAria": "4.3 من 5 نجوم، 127 تقييمًا",
   "index.book2.coverAlt": "غلاف كتاب The Unseen Memoir",

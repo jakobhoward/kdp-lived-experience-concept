@@ -11,16 +11,19 @@
          strings are standalone fragments with no antecedent in them, so this file is the only
          place that tells you. Do not neutralize them; that erases her.
      (b) Every UNSPECIFIED author or reader stays gender-free — "the author", "authors",
-         "any author", "the reader", "per reader", and the deliberately anonymous
-         "A first-time author". Recast the sentence rather than picking a gender: relative
-         clauses, the act instead of the actor, impersonal or second-person forms. Never
-         doubled forms, slashes, "@" or "-x" endings.
+         "any author", "the reader", "per reader". Recast the sentence rather than picking a
+         gender: relative clauses, the act instead of the actor, impersonal or second-person
+         forms. Never doubled forms, slashes, "@" or "-x" endings.
+     (c) Marion Hale's gender is deliberately unstated, and the name is deliberately one that
+         does not settle it. Nothing about that author needs to be inflected — the name sits
+         in the byline slot with no article or role noun, and the voice line is first person,
+         which is genderless in all five languages. Do not add a gendered role noun to it.
    - AUTHORSHIP, NOT PUBLISHING. The collection's gate is that the person who LIVED and WROTE
      the book says so. A recast that shifts the actor to whoever *publishes* or *uploads* it
      breaks the concept. Keep the writing, not the publishing, as the thing being attested.
    - Brand names are never translated: Kindle, Kindle Store, Kindle Unlimited,
      Amazon, KDP, Audible, 1-Click.
-   - Proper nouns stay in Latin script: Rosa Delgado, Emily Carter, Manila,
+   - Proper nouns stay in Latin script: Rosa Delgado, Emily Carter, Marion Hale, Manila,
      Chicago, and the four team members' names.
    - Prices stay in USD with the same digits ($4.99, $14.95, $0.00).
    - Keys ending in "Aria" are screen-reader-only labels.
@@ -82,7 +85,7 @@ window.I18N.en = {
   "index.book1.coverAlt": "Cover of The Road from Manila",
 
   "index.book2.title": "The Unseen Memoir",
-  "index.book2.author": "A first-time author",
+  "index.book2.author": "Marion Hale",
   "index.book2.voice": "“I wrote this at my kitchen table over four years, about the year I stopped speaking.”",
   "index.book2.starsAria": "4.3 out of 5 stars, 127 ratings",
   "index.book2.coverAlt": "Cover of The Unseen Memoir",

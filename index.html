@@ -42,17 +42,67 @@
     grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
     gap: 26px 22px;
   }
-  .book { font-size: 13px; }
+  /* Flex column so the commerce block (rating, Kindle Unlimited) sits on the card's
+     baseline and lines up across the row. Without it, a card whose author has not opted
+     in to answering readers is a badge-height shorter than its neighbours and the whole
+     grid goes ragged. The attestation box absorbs the slack instead. */
+  .book { font-size: 13px; display: flex; flex-direction: column; }
+  .book .stars { margin-top: auto; }
   .book img {
     width: 100%; aspect-ratio: 2/3; object-fit: cover;
     border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,.18);
     margin-bottom: 10px;
   }
   .book .t { font-size: 15px; font-weight: 700; color: var(--link); }
-  .book .a { color: var(--soft); margin: 2px 0 6px; }
-  .book .voice { color: var(--ink); font-size: 12.5px; line-height: 1.45; margin: 8px 0; }
+  .book .a { color: var(--soft); margin: 2px 0 3px; }
+
+  /* The attestation, on a card.
+     Deliberately NOT a badge: no checkmark, no green, no pill, no seal. A badge is a
+     third party vouching for something; this is the author speaking, with Amazon only
+     hosting it — which is the whole point of the gate note above, and the reason the
+     "verified human-written" badge was retired (Amazon cannot certify what it does not
+     check). What makes membership recognizable instead is the MODULE: the same bordered
+     a-box the book page expands, repeated on every card, so a reader learns the shape
+     and knows what collection they are looking at. A mark of belonging, not of approval.
+     No decorative “ glyph, on purpose — the strings already carry their own quotation
+     marks, and a hardcoded English one would be wrong in Spanish («») and Arabic. */
+  .book .voice {
+    color: var(--ink); font-size: 12.5px; line-height: 1.5;
+    background: var(--altbg);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 9px 11px;
+    margin: 7px 0 8px;
+  }
+
   .book .row { display: flex; align-items: center; gap: 10px; margin-top: 6px; flex-wrap: wrap; }
-  .reach { font-size: 12px; color: var(--green); font-weight: 700; }
+
+  /* THE BADGE — and why this one is allowed to be a badge.
+     It sits under the author's NAME, not in the merchandising row, because it is a fact
+     about the person, not the book, and it is the thing this collection actually offers.
+     It uses Amazon's real badge grammar (see .badge in amazon.css — the "#1 Best Seller"
+     flag: solid fill, near-square corners, white bold text), because it belongs to the
+     same family: a merchandising flag Amazon computes from its own data.
+     The distinction that keeps this honest, and that the retired "verified human-written"
+     badge could never satisfy:
+       - Amazon KNOWS whether an author opted in to answer readers, and whether they
+         actually answer. It is observable, and it can be lost. A badge you can lose is a
+         badge that means something.
+       - Amazon does NOT know whether a story is true. That claim stays in the author's
+         own quoted words, with no seal on it.
+     Amazon badges what it can measure; it quotes what it cannot.
+     And the signal works precisely because it is expensive to fake: forging a checkmark
+     is free, answering readers every week is not. */
+  .book .reachrow { margin: 0 0 8px; }
+  .reach {
+    display: inline-block;
+    background: var(--green);       /* Amazon's real green — a fact, not a ranking claim */
+    color: #fff;
+    font-size: 11px; font-weight: 700;
+    padding: 3px 7px;
+    border-radius: 2px;
+    line-height: 1.35;
+  }
 </style>
 </head>
 <body data-i18n-title="index.docTitle">
@@ -97,20 +147,20 @@
       <a href="book.html"><img src="covers/road-from-manila.png" alt="Cover of The Road from Manila" data-i18n-attr="alt:index.book1.coverAlt"></a>
       <div class="t"><a href="book.html" data-i18n="index.book1.title">The Road from Manila</a></div>
       <div class="a" data-i18n="index.book1.author">Rosa Delgado</div>
+      <div class="reachrow"><span class="reach" data-i18n="common.answersQuestions">✓ Answers reader questions</span></div>
       <div class="voice" data-i18n="index.book1.voice">"I left Manila in 1979. I wrote this in Tagalog first, because that is the language I remember it in."</div>
       <div class="stars" role="img" aria-label="4.4 out of 5 stars, 214 ratings" data-i18n-attr="aria-label:index.book1.starsAria">★★★★☆<span class="count">(<span data-i18n-num="214">214</span>)</span></div>
       <div class="row"><span class="kulogo">kindle<b>unlimited</b></span></div>
-      <div class="row"><span class="reach" data-i18n="common.answersQuestions">✓ Answers reader questions</span></div>
     </div>
 
     <div class="book">
       <img src="covers/unseen-memoir.png" alt="Cover of The Unseen Memoir" data-i18n-attr="alt:index.book2.coverAlt">
       <div class="t" data-i18n="index.book2.title">The Unseen Memoir</div>
-      <div class="a" data-i18n="index.book2.author">A first-time author</div>
+      <div class="a" data-i18n="index.book2.author">Marion Hale</div>
+      <div class="reachrow"><span class="reach" data-i18n="common.answersQuestions">✓ Answers reader questions</span></div>
       <div class="voice" data-i18n="index.book2.voice">"I wrote this at my kitchen table over four years, about the year I stopped speaking."</div>
       <div class="stars" role="img" aria-label="4.3 out of 5 stars, 127 ratings" data-i18n-attr="aria-label:index.book2.starsAria">★★★★☆<span class="count">(<span data-i18n-num="127">127</span>)</span></div>
       <div class="row"><span class="kulogo">kindle<b>unlimited</b></span></div>
-      <div class="row"><span class="reach" data-i18n="common.answersQuestions">✓ Answers reader questions</span></div>
     </div>
 
     <div class="book">

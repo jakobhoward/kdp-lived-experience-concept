@@ -77,7 +77,7 @@ window.I18N.fil = {
   "index.book1.coverAlt": "Pabalat ng librong The Road from Manila",
 
   "index.book2.title": "The Unseen Memoir",
-  "index.book2.author": "Baguhang may-akda",
+  "index.book2.author": "Marion Hale",
   "index.book2.voice": "“Apat na taon kong isinulat ito sa mesa ng kusina, tungkol sa taon na tumigil ako sa pagsasalita.”",
   "index.book2.starsAria": "4.3 sa 5 na bituin, 127 na rating",
   "index.book2.coverAlt": "Pabalat ng librong The Unseen Memoir",

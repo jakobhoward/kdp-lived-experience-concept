@@ -13,7 +13,7 @@ window.I18N.es = {
   "chrome.searchPlaceholder": "Buscar en la Tienda Kindle",
   "chrome.searchAria": "Buscar en la Tienda Kindle",
   "chrome.searchButtonAria": "Buscar",
-  "chrome.greeting": "Hola",
+  "chrome.greeting": "Hola, identifícate",
   "chrome.account": "Cuenta y listas",
   "chrome.nav.shop": "Libros",
   "chrome.nav.categories": "Categorías",
@@ -47,7 +47,7 @@ window.I18N.es = {
   "index.bannerH2": "Cada libro de esta colección empieza con las propias palabras de quien lo escribió.",
   "index.bannerP": "Primeros libros, historias en primera persona. Y en muchos casos, quien escribe ha decidido responder a tus preguntas.",
   "index.gateNoteLabel": "Cómo entra un libro en la colección:",
-  "index.gateNoteBody": "quien lo escribió declara, con sus propias palabras, que vivió esta historia y que la escribió. Amazon aloja esa declaración; no la certifica. Se admiten traducciones, incluidas las hechas con IA.",
+  "index.gateNoteBody": "hay que declarar, con palabras propias, haber vivido esta historia y haberla escrito. Amazon aloja esa declaración; no la certifica. Se admiten traducciones, incluidas las hechas con IA.",
 
   "index.book1.title": "The Road from Manila",
   "index.book1.author": "Rosa Delgado",
@@ -56,7 +56,7 @@ window.I18N.es = {
   "index.book1.coverAlt": "Portada de The Road from Manila",
 
   "index.book2.title": "The Unseen Memoir",
-  "index.book2.author": "Ópera prima",
+  "index.book2.author": "Marion Hale",
   "index.book2.voice": "«Lo escribí en la mesa de mi cocina durante cuatro años, sobre el año en que dejé de hablar».",
   "index.book2.starsAria": "4,3 de 5 estrellas, 127 valoraciones",
   "index.book2.coverAlt": "Portada de The Unseen Memoir",
@@ -68,7 +68,7 @@ window.I18N.es = {
   "index.book3.coverAlt": "Portada de Letters Home",
 
   "index.credits1": "Equipo Reader Discovery — Jakob Picciotto · Pablo Ortega · Jalen Oscar Howard · Wanting Chao · Requisito de declaración de autoría: mecanismo de Wanting (27/7) · Niveles de acceso desde quien lee hacia quien escribe: concepto de Pablo (27/7) · Enfoque de la colección: el giro StoryCorps propuesto por Chang (24/7) · Investigación sobre el descubrimiento comunitario para el lanzamiento: Jalen (en curso)",
-  "index.credits2": "Quienes firman los libros de ejemplo son ficción ilustrativa a la espera de las respuestas abiertas de nuestra encuesta; no son arquetipos de usuario. El perfil de Rosa Delgado se basa en la diáspora documentada de las enfermeras filipinas migrantes (fuentes en el PRD), no en datos demográficos inventados.",
+  "index.credits2": "Las personas que escriben los libros de ejemplo son ficción ilustrativa a la espera de las respuestas abiertas de nuestra encuesta; no son arquetipos de usuario. El perfil de Rosa Delgado se basa en la diáspora documentada de las enfermeras filipinas migrantes (fuentes en el PRD), no en datos demográficos inventados.",
 
   /* ---------- book detail ---------- */
   "book.disclaimer": "No es un producto de Amazon. Este libro, su autora y todas las valoraciones son ficticios; los controles no funcionan.",
@@ -84,7 +84,7 @@ window.I18N.es = {
   "book.audibleSample": "Muestra de Audible",
   "book.visitAuthorPage": "Página de la autora",
 
-  "book.attest.h3": "En palabras de la autora",
+  "book.attest.h3": "En sus propias palabras",
   "book.attest.quote": "«Salí de Manila en 1979 con una maleta y el rosario de mi madre. No soy escritora: fui enfermera durante treinta y un años. Lo escribí primero en tagalo, porque es el idioma en el que lo recuerdo, y mi sobrina y yo lo tradujimos juntas con la ayuda de una herramienta de traducción. Cada palabra de la historia es mía. Yo la viví».",
   "book.attest.sigName": "Rosa Delgado, declaración de la autora",
   "book.attest.sigLink": "Qué ocurre si una declaración es falsa",
@@ -92,8 +92,8 @@ window.I18N.es = {
   "book.attest.translationNote": "Estás leyendo una traducción de la declaración de Rosa. Las palabras que ella declaró son suyas.",
 
   "book.desc.lede": "Porque toda vida corriente guarda una historia extraordinaria que merece recordarse.",
-  "book.desc.p1Html": "En 1979, Rosa Delgado subió a un avión en Manila con un contrato de enfermería, una sola maleta y sin saber que no volvería a ver a su madre en once años. <em>The Road from Manila</em> es la historia de los años intermedios: turnos de noche en un país cuyo idioma se le aparecía traducido en sueños, el dinero que enviaba a casa doblado dentro de las tarjetas de cumpleaños y el lento trabajo de hacerse un hogar mientras echaba de menos el otro.",
-  "book.desc.p2": "Escritas primero en tagalo y traducidas con su sobrina, estas memorias son para quien se marchó alguna vez, y también para quien se quedó.",
+  "book.desc.p1Html": "En 1979, Rosa Delgado subió a un avión en Manila con un contrato de enfermería, una sola maleta y sin saber que no volvería a ver a su madre en once años. <em>The Road from Manila</em> es la historia de los años intermedios: turnos de noche en un país cuyo idioma soñaba traducido, el dinero que enviaba a casa doblado dentro de las tarjetas de cumpleaños y el lento trabajo de hacerse un hogar mientras echaba de menos el otro.",
+  "book.desc.p2": "Escritas primero en tagalo y traducidas con su sobrina, estas memorias son para quien alguna vez se ha marchado y también para quien se ha quedado.",
 
   "book.meta.pagesValue": "287 páginas",
   "book.meta.pagesLabel": "Longitud de impresión",
@@ -105,15 +105,15 @@ window.I18N.es = {
   "book.meta.dateLabel": "Fecha de publicación",
 
   "book.ask.h3": "Hazle una pregunta a Rosa",
-  "book.ask.sub": "La autora lo ha activado · Responde cada semana",
+  "book.ask.sub": "Activado por la autora · Responde cada semana",
   "book.ask.tier1Label": "Preguntas sobre el libro",
   "book.ask.tier1Body": "Una pregunta por persona y por libro, disponible para compras verificadas y préstamos de KU. Nada es público hasta que Rosa publica su respuesta.",
   "book.ask.tier2Label": "Preguntas en directo",
   "book.ask.tier2Body": "Sesión ocasional en directo, programada por la autora.",
-  "book.ask.note": "Quien escribe elige su nivel de acceso, incluido ninguno, y puede cambiarlo en cualquier momento. Por defecto, también es quien modera: ve, responde o borra; se aplican las herramientas de denuncia y bloqueo de las Normas de la comunidad de Amazon. Los datos de contacto nunca se comparten.",
+  "book.ask.note": "Quien escribe elige su nivel de acceso, incluido ninguno, y puede cambiarlo en cualquier momento. La moderación es suya por defecto: ve, responde o borra; se aplican las herramientas de denuncia y bloqueo de las Normas de la comunidad de Amazon. Los datos de contacto nunca se comparten.",
 
   "book.buy.formatKindle": "Kindle",
-  "book.buy.orBuy": "o cómpralo: $4.99",
+  "book.buy.orBuy": "o $4.99 para comprar",
   "book.buy.formatPaperback": "Tapa blanda",
   "book.buy.kuPitch": "Lectura ilimitada. Millones de títulos.",
   "book.buy.readFree": "Leer gratis",
@@ -121,7 +121,7 @@ window.I18N.es = {
   "book.buy.oneClick": "Comprar ahora con 1-Clic",
   "book.buy.sendSample": "Enviar una muestra gratis",
 
-  "book.credits1": "Equipo Reader Discovery — Jakob Picciotto · Pablo Ortega · Jalen Oscar Howard · Wanting Chao · Requisito de declaración de autoría: mecanismo de Wanting (27/7) · Niveles de acceso: concepto de Pablo (27/7) · Elegibilidad de «se admite la traducción»: investigación del equipo sobre la política de contenido con IA de KDP (27/7)",
+  "book.credits1": "Equipo Reader Discovery — Jakob Picciotto · Pablo Ortega · Jalen Oscar Howard · Wanting Chao · Requisito de declaración de autoría: mecanismo de Wanting (27/7) · Niveles de acceso: concepto de Pablo (27/7) · Elegibilidad de «Se admiten traducciones»: investigación del equipo sobre la política de contenido con IA de KDP (27/7)",
 
   /* ---------- author page ---------- */
   "author.disclaimer": "No es un producto de Amazon. Esta autora y todo el contenido son ficticios; los controles no funcionan.",
@@ -130,21 +130,21 @@ window.I18N.es = {
   "author.tabAbout": "BIOGRAFÍA",
   "author.tabBooks": "LIBROS",
   "author.aboutH2": "Biografía de la autora",
-  "author.bioHtml": "Rosa Delgado fue enfermera durante treinta y un años, en Manila y después en Chicago. <em>The Road from Manila</em> es su primer libro, escrito en tagalo y traducido con su sobrina. No pretendía ser escritora; pretendía recordar. Vive cerca de sus nietos, que son la razón de que el libro exista.",
+  "author.bioHtml": "Rosa Delgado fue enfermera durante treinta y un años, en Manila y después en Chicago. <em>The Road from Manila</em> es su primer libro, escrito en tagalo y traducido con su sobrina. No quería ser escritora; quería recordar. Vive cerca de sus nietos, que son la razón de que el libro exista.",
 
-  "author.qaH2": "Preguntas de quienes han leído a Rosa",
+  "author.qaH2": "Preguntas que le han hecho a Rosa",
   "author.qLabel": "Pregunta:",
   "author.aLabel": "Respuesta:",
   "author.answeredBy": "Respondido por Rosa Delgado, autora",
   "author.qa1.q": "¿Alguna vez pensaste en volver para quedarte?",
-  "author.qa1.a": "Cada diciembre, los diez primeros años. Luego un año me di cuenta de que echaba de menos los dos sitios, y entendí que ya tenía dos casas. De eso trata el capítulo 14.",
+  "author.qa1.a": "Cada diciembre, los diez primeros años. Luego un año me di cuenta de que echaba de menos los dos sitios, y entendí que los dos eran mi casa. De eso trata el capítulo 14.",
   "author.qa2.q": "¿Qué cambió en el libro al escribirlo primero en tagalo?",
   "author.qa2.a": "Todo. Algunos recuerdos solo existen en el idioma en el que ocurrieron. Mi sobrina y yo discutimos cada frase de la traducción, y en esas discusiones es donde el libro se volvió sincero.",
 
   "author.popularH2": "Lo más popular",
   "author.bookTitle": "The Road from Manila",
   "author.starsAria": "4,4 de 5 estrellas, 214 valoraciones",
-  "author.orBuy": "o cómpralo: $4.99",
+  "author.orBuy": "o $4.99 para comprar",
   "author.partOfValue": "Experiencia vivida",
   "author.coverAlt": "Portada de The Road from Manila",
 
@@ -158,8 +158,8 @@ window.I18N.es = {
   "author.access.tier2Body": "Ocasionales, programadas por la autora.",
   "author.access.tier3Label": "Sin acceso",
   "author.access.tier3State": "Disponible para cualquiera que escriba",
-  "author.access.tier3Body": "Quien escribe puede desactivarlo todo y seguir en la colección.",
-  "author.access.note": "El acceso lo decide quien escribe, nivel a nivel. No hay mensajes privados en ningún nivel: lo dejamos fuera a propósito, por la seguridad de quien escribe. Hoy la página de autor solo permite una acción a quien lee, Seguir, y en un único sentido. Este panel es la mitad que falta.",
+  "author.access.tier3Body": "Se puede desactivar todo y seguir en la colección.",
+  "author.access.note": "El acceso lo decide quien escribe, nivel a nivel. No hay mensajes privados en ningún nivel: lo dejamos fuera a propósito, por la seguridad de la persona que escribió el libro. Hoy la página de autor de Amazon solo permite una acción a quien lee: Seguir, y en un único sentido. Este panel es la mitad que falta.",
 
   "author.credits1": "Equipo Reader Discovery — Jakob Picciotto · Pablo Ortega · Jalen Oscar Howard · Wanting Chao · Niveles de acceso: concepto de Pablo (27/7) · Requisito de declaración de autoría: mecanismo de Wanting (27/7) · Enfoque StoryCorps: Chang (24/7)"
 };
