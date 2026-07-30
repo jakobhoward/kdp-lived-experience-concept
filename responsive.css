@@ -1,0 +1,563 @@
+/* Lived Experience prototype — viewport adaptation layer.
+   Loads THIRD, after amazon.css (the design grammar) and i18n/i18n.css (localization).
+
+   WHY THIS IS ITS OWN FILE, AND WHAT BELONGS IN IT
+   ------------------------------------------------
+   amazon.css answers "what does this component look like". The five pages' own
+   <style> blocks answer "how is this page laid out". Neither answered "what
+   happens when the window is 375px wide", and the answer was scattered: five
+   inline media queries, no shared breakpoint scale, and nothing at all for the
+   page chrome — which is identical on all five pages and was the thing actually
+   breaking. That is a third concern, so it gets a third file.
+
+   The division of labour, kept deliberately strict:
+     - HERE: the shared chrome (banner, topnav, subnav, language strip, page
+       gutters, credits), plus rules that cross pages by nature (touch target
+       floors, the rails and pagers that browse.html and search.html both define).
+     - IN EACH PAGE'S <style>: that page's own grid, next to the rationale comment
+       that explains it. A breakpoint moved away from the layout it modifies is a
+       breakpoint nobody will maintain.
+
+   THE RULE THIS FILE FOLLOWS, which is amazon.css's rule restated for layout:
+   nothing here invents a component. Every rule below either rearranges components
+   that already exist or changes a number. There is no hamburger menu, no filter
+   sheet, no bottom tab bar, no "mobile version" of anything — because each of
+   those is a control, every control in this prototype is inert, and an inert
+   hamburger that opens nothing would be a worse lie than a nav that wraps.
+
+   THE BREAKPOINT SCALE. Five, named for what they are rather than for a device,
+   because a 400px viewport is a small phone AND a desktop window at 400% zoom AND
+   an iPad in Slide Over, and the layout cannot tell the difference:
+
+     1180px  content cap      — .page's max-width, unchanged. Not a breakpoint so
+                                much as the width everything above is designed at.
+      980px  detail stack     — book.html's three columns can't hold below this
+                                (260 + 260 + 56 of gap = a 576px floor).
+      768px  language sheet   — where the locale panel stops hanging off its button.
+      760px  serp collapse    — where a 150px-cover result row stops fitting a rail.
+      700px  shelf halves     — where a 4-across cover grid becomes 2-across, where
+                                browse.html's rail collapses, and where the chrome
+                                starts running out of room.
+      600px  search gets a row — where a single-row header stops fitting at all.
+      560px  row tightening   — where a result row's cover has to shrink.
+      400px  small phone      — the last stop before 320, which is the narrowest
+                                viewport WCAG 1.4.10 asks anyone to survive.
+
+   AND THEY ARE IN px, WHICH WAS NOT THE FIRST ANSWER. Worth the paragraph, because
+   "use em breakpoints so the layout respects the reader's font size" is the standard
+   advice and it is wrong for THIS file.
+
+   These were all converted to em (each value ÷ 16) on the usual reasoning: a media
+   query's `em` resolves against the browser's initial font size, so a reader who raises
+   their default text size would get breakpoints that fire proportionally earlier. Then
+   it was measured, and the premise turned out to be missing. A unit census across all
+   four stylesheets and five pages finds ZERO font sizes in em or rem — roughly a
+   hundred px values and six clamp(px, vw, px) — and `body { font-size: 14px }` in
+   amazon.css overrides the browser's default outright. Those px sizes are deliberate:
+   they are the live store's own values, and the prototype's argument depends on a
+   reviewer being able to check them against it.
+
+   So with em breakpoints, a reader on Chrome with "Font size: Very large" (24px) got
+   every breakpoint 50% earlier and not one word of larger text: measured at a 1000px
+   window, the phone gutters, the collection shelf capped at 480px inside a 972px
+   column with 492px of white beside it, both rails stacked, and book.html down to two
+   columns at 1280px — the phone layout on a desktop, at 14px. em breakpoints only pay
+   off when the type is relative too; on a px type scale they are strictly worse than
+   px, because they move the layout while leaving the text where it was.
+
+   The one thing em was supposed to buy — surviving text-only zoom — is bought properly
+   in book.html instead, by letting the buy box's format tracks shrink below their
+   content (`minmax(0, 1fr)`). That was the actual WCAG 1.4.4 failure, and it was never
+   a breakpoint problem.
+
+   THE REAL FIX, if anyone wants it later: make the type root-relative — `body
+   { font-size: 0.875rem }` (14px at a 16px default) and the atoms as multiples of it —
+   and then convert these eight values back to em. That is a type-system change and a
+   fidelity decision about the px values, not a responsive one, so it is out of scope
+   here and recorded rather than half-done.
+
+   MEASURED BEFORE AND AFTER, so the numbers are checkable rather than asserted.
+   Every figure below was read off the live pages in a browser at that width:
+
+     - .topnav .searchbar computed to ZERO pixels wide at every viewport from 320px
+       to 414px, and to 26px at 420px, 86px at 480px, 166px at 560px. The Kindle
+       Store search box — the single most recognizable object in Amazon's chrome —
+       was completely absent from every page on every phone, in all six languages.
+       Cause: `flex: 1` gives it a 0% basis, the four siblings claim all the free
+       space, and `overflow: hidden` on the same element hides the collapse instead
+       of letting the input's own min-content width force a wrap.
+     - Every page overflowed horizontally at 320px (9px) and 280px (49px), from
+       .acct being pushed past the edge. That is WCAG 1.4.10, and at 400% zoom it
+       is a desktop bug, not a phone bug.
+     - index.html was 7,223px tall at 375px — nineteen screens for eight books —
+       because the grid dropped to ONE column below 460px, which made each 2:3
+       cover 335px wide and 503px tall. Amazon's own phone grid shows covers at
+       roughly 120-160px, two or three across. That fix is in index.html.
+*/
+
+/* ---------- things that are true at every width ----------
+
+   text-size-adjust: iOS Safari inflates text when a phone rotates to landscape,
+   which silently invalidates every measurement above and breaks the two nowrap
+   atoms (.kulogo, .attest-line). 100% keeps the author's sizes and does NOT stop
+   the user from zooming — that would be WCAG 1.4.4, and `user-scalable=no` is
+   deliberately absent from all five viewport meta tags for the same reason.
+
+   color-scheme: amazon.com's storefront has no dark mode; it is white at 2am.
+   Without this declaration a dark-mode browser is free to recolour form controls
+   and scrollbars, which would put a dark input inside a white a-box — a rendering
+   Amazon never produces, on a page whose contrast figures were all measured
+   against white. Stated rather than left to the browser. */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  color-scheme: only light;
+}
+
+/* A cover that fails to load, or any image dropped in later at its natural size,
+   must not be the thing that gives a phone a horizontal scrollbar.
+
+   height: auto is NOT optional here, and leaving it out is a real bug rather than a
+   tidiness question. Every cover now carries width/height attributes so the browser
+   can reserve the right box before the file arrives — without them a 848x1264 PNG
+   over a phone connection means the page reflows under the reader's thumb as each
+   one lands, and .leftcol img and .bookcard img had no CSS aspect-ratio to fall back
+   on either. But those attributes are presentational hints that set the CSS `height`
+   property, and a specified height beats `aspect-ratio`: with the attributes and
+   without this line, `.book img { width: 100%; aspect-ratio: 2/3 }` resolved to
+   260px x 1264px and every cover in the prototype was stretched to three times its
+   height. Restoring `height: auto` in the author origin puts the ratio back in charge
+   of the height while the attributes keep doing the one job they were added for. */
+img { max-width: 100%; height: auto; }
+
+/* THE min-width:0 PROBLEM, which is the bug behind most "why is my page 40px too
+   wide" reports. A grid or flex child defaults to min-width:auto and will not
+   shrink below its own min-content width — so one long unbroken token (a URL, a
+   German compound, an untranslated title) pushes the whole track past the edge and
+   no amount of media queries helps. These are every content track in the prototype
+   that sits next to a fixed-width sibling. .res .info already had this rule for
+   its own reason (it is what lets .attest-line's ellipsis actually clip); the rest
+   were relying on their content staying short, in six languages, forever. */
+.hitrow > div,
+.bookcard > div,
+.followcard .who,
+.mid,
+.results,
+.rail,
+.book { min-width: 0; }
+
+/* Long words break rather than overflow, in the four places where the content is
+   somebody's prose in a language nobody on the team reads. `anywhere` rather than
+   `break-all`: it only breaks when the word genuinely cannot fit, so ordinary
+   Arabic and Chinese wrapping is untouched. */
+.voice, .attest .quote, .desc, .nodeintro, .qa .q .line { overflow-wrap: anywhere; }
+
+/* The star row and its review count are written with no whitespace between them —
+   `★★★★☆<span class="count">(214)</span>` — which makes the whole thing one
+   unbreakable word about 103px wide. In a 100px card column it was the last element
+   on the page still poking over the edge. An atomic inline creates the soft-wrap
+   opportunity that the missing space did not, so the count drops to its own line
+   instead. Nothing changes anywhere the row already fits, and .stars carries
+   role="img" with its own aria-label, so how it wraps is invisible to a screen
+   reader either way. */
+.stars .count { display: inline-block; }
+
+/* ================================================================
+   THE PAGE CHROME
+   ================================================================
+   Identical markup on all five pages: concept banner, .topnav (logo, search box,
+   the language control i18n.js injects, account block), .subnav, then .page.
+   Everything below is one of those five things getting smaller. */
+
+/* ---------- the search box, and the wrap that makes it exist ----------
+   THE FIX, and the reason it is three declarations instead of a media query.
+
+   `flex: 1 1 200px` replaces `flex: 1`, i.e. a 200px flex-basis replaces a 0%
+   one, and `min-width: 200px` makes that floor binding rather than advisory. The
+   effect at wide widths is nil — there is free space, the box grows, and
+   amazon.css's own `max-width: 720px` still caps it exactly where it did before.
+   The effect at narrow widths is that the box now refuses to be squeezed, so the
+   flex line runs out of room and the LATER items wrap to a second row instead.
+
+   Which is, not coincidentally, Amazon's own phone header: a compact brand mark
+   and a search field on top, the account and locale controls tucked underneath.
+   We get that shape out of the existing DOM order — logo, search, language,
+   account — with no `order` property and no reordering of any kind, so the tab
+   order still walks the header the way it reads. That mattered enough to solve
+   properly: book.html rejected CSS `order` outright as a WCAG 1.3.2 problem, and
+   the chrome should not quietly do what the content pages refuse to.
+
+   Measured after: 216px of search box at 375px (was 0), 260px at 640px (was 246),
+   full width on its own row below 340px. No page overflows at 320px, or at 240px.
+
+   input min-width:0 is required, not decorative: a bare <input> carries a UA
+   min-content width of about 170px, and without this the input would be the thing
+   overflowing its own clipped parent instead of the parent shrinking. */
+.topnav { flex-wrap: wrap; row-gap: 10px; }
+.topnav .searchbar { flex: 1 1 200px; min-width: 200px; }
+.topnav .searchbar input { min-width: 0; }
+
+/* ITS OWN ROW BELOW 600px, WHICH IS WHERE THE PHONES ARE.
+   The wrap above restored the search box but left it oscillating, because a wrapping
+   flex line changes its mind about which items share a row. Measured, French:
+     450px → 320px of search box
+     460px → 206px          (the language pill just fits on row 1 and takes 113px)
+     560px → 306px
+     590px → 200px          (everything fits on one row and the account block takes 100px)
+   A control that gets SMALLER as the window gets BIGGER, twice, is not something to
+   leave in a prototype about interfaces.
+
+   There is exactly one honest shape for this, and it is arithmetic rather than taste.
+   A full-width row gives the box (viewport − 28px); sharing a row with the logo, the
+   language pill and the account block gives it (viewport − 358px). Both grow with the
+   window, so wherever the layout switches from the first to the second the box loses
+   330px — one step is unavoidable, and the only question is where to put it.
+
+   600px, because that is where a single row starts to fit at all, because everything
+   below it is a phone, and because a full-width search row under a compact brand row
+   is exactly Amazon's own phone header. Above it the box grows monotonically from
+   210px to its 720px cap with no further steps. The cost is one more header row
+   between 375px and 590px — about 45px, and the landscape rule at the foot of this
+   file claws most of it back on a rotated phone. */
+@media (max-width: 600px) {
+  .topnav .searchbar { flex-basis: 100%; }
+}
+
+/* AND THE SECOND BUG THE SAME LINE WAS CAUSING, which is worse than the first.
+   .searchbar carries `overflow: hidden`, which is there to clip the input and the
+   magnifier button to the bar's 6px corner radius. But amazon.css gives every focused
+   control a 2px outline at 2px of offset — deliberately outside the control, so the
+   ring's measured contrast is against the page rather than against whatever the
+   control is filled with — and an ancestor's `overflow: hidden` clips outlines too.
+   So the search field's focus ring was being cut off along all four edges, and at
+   phone width, where the clip rect was zero pixels wide, it was erased completely.
+   amazon.css calls a missing focus indicator "the worst available bug" on a page
+   arguing that access should not depend on sight; it had one, hidden inside a rule
+   about rounded corners.
+
+   THE FIX THAT WAS TRIED FIRST AND IS WRONG, recorded because it looks right and
+   tests clean: `overflow: clip` plus `overflow-clip-margin: 4px`, which clips like
+   `hidden` but declares a 4px bleed so the ring can paint. It works in Chromium and it
+   does nothing at all in WebKit — `CSS.supports('overflow-clip-margin', '4px')` is
+   false there, so Safari and every browser on iOS honour the clip, discard the bleed,
+   and land back on the invisible ring. A focus fix that only works in one engine is
+   not a focus fix; it is the same bug with a passing test on the reviewer's laptop.
+
+   So stop clipping and move the corners onto the two children instead. Nothing needs
+   to be clipped once the things being clipped are round themselves, the ring paints in
+   both engines, and `border-start-start-radius` and friends are logical properties, so
+   the bar keeps its shape under dir="rtl" without a second rule. */
+.topnav .searchbar { overflow: visible; }
+.topnav .searchbar input {
+  border-start-start-radius: 6px;
+  border-end-start-radius: 6px;
+}
+.topnav .searchbar button {
+  border-start-end-radius: 6px;
+  border-end-end-radius: 6px;
+}
+
+/* The header's own gutters, gaps and logo shrink CONTINUOUSLY rather than at 700px.
+   They were inside the phone block below, and stepping them created a third instance of
+   the shrinking-search-box problem: crossing 700 → 701px the header took 36px back
+   (three gaps × 6px, two paddings × 4px, and the logo's max-content growing 91 → 101px
+   as its size went 18 → 20px), so the box lost 36px for one pixel of extra viewport and
+   needed 36 more to recover. Measured in every language: en 342.5 → 306.8, fr 310.1 →
+   274.5, ar 360.9 → 324.7, zh 360.0 → 323.8. clamp() for the same reason index.html
+   gives for its display type — the shrink has to be continuous or the step lands in the
+   middle of the range instead of at a device edge. Each clamp's upper bound is the
+   original desktop value, reached at about 1000px, so the wide rendering does not move. */
+.topnav { gap: clamp(12px, 1.5vw, 18px); padding: 10px clamp(14px, 1.8vw, 18px); }
+.topnav .logo { font-size: clamp(18px, 2.2vw, 20px); }
+
+@media (max-width: 700px) {
+  .concept-banner { padding: 8px 14px; }
+
+  /* The store nav already wrapped — amazon.css gave it flex-wrap and a 6px
+     row-gap because translated labels run longer than the English. At phone width
+     it wraps to three rows and was eating 83px of a 667px screen, so the gap and
+     the type come down. It stays a wrapping list rather than becoming the
+     horizontal scroller Amazon uses on phones: a scroll container with no
+     focusable children inside it cannot be scrolled from a keyboard (WCAG 2.1.1),
+     and every item in this nav is deliberately inert text. */
+  .subnav { padding: 8px 14px; font-size: 12.5px; }
+  .subnav ul { gap: 14px; row-gap: 5px; }
+
+  /* .page's 20px side padding is where the content's own gutter comes from; at
+     375px it is 11% of the screen. 14px is Amazon's own phone gutter. */
+  .page { padding: 14px 14px 40px; }
+
+  /* The language auto-detect strip is a flex row of [message, "read it in English",
+     ✕], with the ✕ pushed to the inline end by an auto margin. At 320px the message
+     alone is two lines, so the row has to wrap.
+     Giving the MESSAGE the full line is what makes that work. The obvious alternative
+     — `order: -1` on the ✕ so it stays up top — was tried and removed: it puts the ✕
+     visually first while it is still last in the DOM, so the close button becomes the
+     first thing a sighted reader sees and the last thing a keyboard reader reaches,
+     and i18n.css's `margin-inline-start: auto` then shoves the message and the link to
+     the far end of the bar behind it. Same reordering objection as everywhere else in
+     this prototype, in eight fewer characters of CSS.
+     This strip only ever renders when the language was auto-detected rather than
+     chosen, so it is invisible in English at every width — which is why it needed
+     checking in the other five. */
+  .langnotice { padding: 7px 14px; flex-wrap: wrap; row-gap: 4px; }
+  .langnotice > span { flex: 1 1 100%; }
+
+  .credits { margin-top: 32px; }
+}
+
+@media (max-width: 400px) {
+  /* The account block is two lines by design — amazon.css makes its <b> a block,
+     because that is how Amazon's own header stacks "Hello, Reader" over "Account &
+     Lists". So it is not shortened here, only set smaller: deleting the greeting
+     would be the obvious phone move, and Amazon does drop it, but it is one of the
+     few pieces of chrome on these pages that is verbatim from the live store and
+     the fidelity is worth 11 pixels of height. */
+  .topnav .acct { font-size: 11px; }
+  .topnav .acct b { font-size: 12px; }
+  .subnav ul { gap: 12px; }
+  .page { padding: 12px 12px 36px; }
+}
+
+/* ---------- the language menu ----------
+   It is position:absolute inside .langpick, min-width:210px, and it opens downward
+   with its inline-END edge pinned to the control's inline-end edge — so it grows
+   210px toward the inline-START. That is correct on a desktop, where the control
+   sits near the inline-end of the nav bar and the menu opens back into the bar.
+
+   THE REGRESSION THE WRAP CAUSED, and the reason this block exists. Once .topnav
+   wraps, .langpick is no longer near the inline-end of anything: it becomes the FIRST
+   item on the second row, at x=14. A panel that pins its inline-end to x=118 and grows
+   210px inward starts at x=-92 — the menu opened off the edge of the screen and the
+   only working control in the page chrome, on a page whose whole point is being
+   readable in six languages, could not be used on a phone. It failed from 280px to
+   about 460px, in all six languages, and it was introduced by the search-box fix
+   above rather than being an old bug.
+
+   Simply flipping which edge is pinned does NOT fix it, and that was the first attempt:
+   it rescued 280-414px and broke 460-700px instead, where .langpick sits mid-row and a
+   210px panel growing the other way runs off the opposite edge — measured 5px over in
+   Arabic at 600px, 3px over in Chinese at 700px. Any rule keyed to which edge the
+   button happens to be near is a rule that breaks the moment a translated label
+   changes the wrap point, in a prototype whose labels are translated six ways.
+
+   So below 768px the panel stops being anchored to the BUTTON and is anchored to the
+   NAV BAR: .langpick goes position:static, .topnav becomes the containing block, and
+   the menu drops under the whole header at a fixed gutter. It cannot leave the screen
+   because its position no longer depends on anything that moves. A full-width sheet
+   below the header is also the shape Amazon's own narrow-width panels take, so this is
+   the store's grammar rather than a workaround wearing its clothes.
+   Logical properties throughout, so Arabic mirrors without a second rule.
+
+   These two rules are in this order on purpose. The height ceiling and the viewport cap
+   apply at every width; the narrow-width block below has to be able to tighten the
+   width cap further, and a media query adds no specificity — so if the unconditional
+   rule came second it would win, and the 340px cap inside the block would be dead code.
+   It was, at first: measured 740px of menu at a 768px viewport against a declared 340. */
+.langpick-menu {
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  max-width: calc(100vw - 28px);
+}
+@media (max-width: 768px) {
+  .langpick { position: static; }
+  .topnav { position: relative; }
+  .langpick-menu {
+    inset-inline-start: 14px;
+    inset-inline-end: auto;
+    width: calc(100% - 28px);
+    /* min(), so the sheet stops at 340px on a tablet without ever exceeding the
+       viewport on a 320px phone — one declaration doing both caps. */
+    max-width: min(340px, calc(100vw - 28px));
+  }
+}
+
+/* ================================================================
+   TOUCH
+   ================================================================
+   READ THIS FIRST IF A RULE BELOW APPEARS NOT TO WORK. Every page loads amazon.css,
+   i18n.css, THIS FILE, and then its own <style> block — so a page-level rule at equal
+   specificity always wins, and `@media` adds no specificity of its own. Three
+   declarations in this section were silently dead on arrival for exactly that reason
+   (the ask textarea's 16px, and both rails' row padding), and the fix in each case is
+   one more selector rather than moving the declaration into five page files. Where a
+   selector below looks redundant — `.abox.ask`, `.rail ul li` — that is why.
+
+   amazon.css sets a 24px floor on .btn, which is WCAG 2.5.8's minimum and the
+   right floor for a mouse. It is not the right floor for a thumb: Apple's HIG
+   asks 44pt and Material asks 48dp, and the gap between "technically conformant"
+   and "usable by the person the collection is for" is the whole subject of this
+   course.
+
+   Scoped to `pointer: coarse` rather than to a width, on purpose. Width is the
+   wrong proxy twice over: a 1024px tablet is touch, and a 375px desktop window at
+   400% zoom is a mouse and should keep its compact controls. This is also why the
+   floor is min-height rather than height — a control still grows for two lines of
+   Filipino, it just cannot be shorter than a fingertip.
+
+   NOT changed for touch: inline text links inside prose (the breadcrumbs, the
+   rail's department tree, "See more", the .expander). WCAG 2.5.8 exempts inline
+   links for a good reason — padding a link inside a sentence to 44px either
+   overlaps the line above or reflows the paragraph. Their line-height goes up
+   instead, which is the fix that does not break the sentence. */
+@media (pointer: coarse) {
+  .btn { min-height: 44px; }
+  /* Real <button> elements need the flex centring too, or the label sits at the
+     top of a 44px box that the browser has stretched but not filled. */
+  button.btn { display: flex; align-items: center; justify-content: center; }
+
+  .langpick-btn { min-height: 44px; }
+  .langpick-menu [role="option"] { min-height: 44px; }
+
+  /* The store search bar. Its magnifier is not a .btn — it is a bare <button> inside
+     .searchbar — so the rule above missed it, and it measured 47 x 34px. Setting the
+     BAR's height rather than the button's lets both the input and the button stretch to
+     it (they are flex items at the default align-items: stretch), so the field and its
+     button stay one object instead of the button growing taller than the box it sits
+     in. 44px is also what Amazon's phone search bar measures. */
+  .topnav .searchbar { min-height: 44px; }
+
+  /* The inline "See more" expander on book.html — 252 x 18px, and the one control on
+     that page a reader is most likely to actually reach for, because it is the "what if
+     she is lying" question. amazon.css exempts it under WCAG 2.5.8's inline-link
+     exception, which is the correct reading for a control inside a sentence; this one
+     is not inside a sentence, it is on its own line with a <br> after it. So it can
+     take the height without reflowing any prose around it, and the exemption is not
+     needed. inline-flex rather than block so it keeps the text-link shape amazon.css
+     went out of its way to give it. */
+  .expander { display: inline-flex; align-items: center; min-height: 44px; }
+  /* amazon.css's own target-size rule names the ✕ and misses the control beside it.
+     Both live in the same one-line strip and both are real, working buttons. */
+  .langnotice-x { min-width: 44px; min-height: 44px; }
+  .langnotice-back { min-height: 44px; padding-inline: 2px; }
+
+  /* The pager on browse.html is seven 5px-padded boxes in a row — about 27px tall
+     and 6px apart, which is a mis-tap waiting to happen. */
+  .pager span, .pager a { min-width: 44px; min-height: 44px; display: inline-flex;
+                          align-items: center; justify-content: center; }
+  .pager { flex-wrap: wrap; row-gap: 8px; }
+
+  /* Both rails: 3px of vertical padding on a list of category links gives a 20px
+     row. This is the inline-link exception's honest limit — these are links in a
+     list, not links in a sentence, so they get the room.
+
+     TWO things had to change for this to do anything. First the selectors: browse.html
+     and search.html both re-declare `.rail li { padding: 3px 0 }` at the same
+     specificity and later in the load order, so `.rail ul li` (one more type selector)
+     is what actually wins. Second, and more important, padding on the LI was never
+     going to enlarge the target anyway — the link inside it is an inline <a> measuring
+     15px tall, and block padding on its parent buys separation between rows without
+     growing the hit box by a pixel. The <a> has to become inline-block and take padding
+     itself. Measured: 15px → 23px for the link, inside a 7px-padded row, and no line
+     reflows because the row already had the space. */
+  .rail ul li { padding-block: 7px; }
+  .rail ul li a { display: inline-block; padding-block: 4px; }
+  .rail .refine div.opt { padding-block: 7px; }   /* they are <div>s, not spans */
+
+  /* Breadcrumbs and the author-page tabs: line-height, not padding, for the
+     reason in the block comment above. */
+  .crumbs { line-height: 2.2; }
+  .authhead .tabs { gap: 20px; }
+
+  /* THE ONE INLINE LINK THAT DOES NOT GET THE INLINE EXEMPTION. On a search result
+     row, "Part of: Lived Experience" is not decoration inside a sentence — it is the
+     entire visible surface of this proposal on a results page, and the only route
+     from a SERP row into the collection. It measured 96 x 14px. Its own line, with
+     room around it, rather than a padded link inside a paragraph: the line is already
+     on its own row in the markup, so this costs nothing but vertical space. */
+  .res .partof a, .book .t a, .hitrow .t a { display: inline-block; min-height: 24px; }
+  .res .partof { padding: 6px 0; }
+
+  /* iOS Safari zooms the entire page when a focused input's font-size is under
+     16px, and then leaves it zoomed. The store search box is readonly and cannot
+     be typed into, but it can still be focused; the ask flow's textarea genuinely
+     can be typed into and is the one control in the prototype where this would
+     actually bite a reader. Both go to 16px on touch only, so the desktop
+     rendering — where these sizes were matched against the live store — is
+     untouched.
+
+     `.abox.ask` and not `.ask`: book.html re-declares `.ask textarea { font: inherit;
+     font-size: 13px }` in its own <style>, at the same specificity and later in the
+     load order, so the plain selector lost and the ONE field in the prototype a reader
+     can actually type into kept its 13px — measured 13px with this block forced on,
+     while the readonly store search box next to it correctly read 16px. The rule that
+     mattered was the one that did nothing. */
+  .topnav .searchbar input,
+  .abox.ask textarea { font-size: 16px; }
+}
+
+/* ================================================================
+   WIDE SCREENS
+   ================================================================
+   .page stays capped at 1180px. That is deliberate and it is not laziness: it is
+   roughly what amazon.com's own content column measures, and a prototype that
+   argues by being checkable against the live store should not widen past it just
+   because a 2560px display has the room. What a very wide window gets instead is
+   the same page, centred, with enough gutter that it does not look pinned to the
+   left edge — which is what the auto margins already do.
+
+   The one thing worth adding above the cap: on a display wide enough that the
+   1180px column is a third of the screen, the gutters can afford to be generous
+   rather than staying at the phone-derived 20px. */
+@media (min-width: 1400px) {
+  .page { padding-inline: 32px; }
+}
+
+/* ================================================================
+   SHORT VIEWPORTS
+   ================================================================
+   A phone in landscape is 390px tall, not 812px, and the chrome above the first
+   word of content — concept banner, topnav, subnav — was measured at 244px on a
+   375px-wide screen. Rotated, that is nearly two thirds of the screen before the
+   page starts. The banner is required content and the nav is the store's, so
+   neither can go; what can go is their padding. Keyed on height, so a tall phone
+   in portrait keeps the roomier chrome. */
+@media (max-height: 500px) and (orientation: landscape) {
+  .concept-banner { padding: 4px 14px; }
+  .topnav { padding: 6px 14px; row-gap: 6px; }
+  .subnav { padding: 5px 14px; }
+  .subnav ul { row-gap: 3px; }
+  .page { padding-top: 10px; }
+}
+
+/* ================================================================
+   PRINT
+   ================================================================
+   Not speculative: these five pages get screenshotted into a deck and printed as
+   handouts, and a reviewer with the printed page in front of them should see the
+   same argument. Two columns of a three-column detail page do not survive a
+   portrait sheet, so everything stacks; the dark navs would drink a print
+   cartridge, so they go light; and the concept banner is the one thing that must
+   NEVER be lost in a format that strips context, so it survives with a border. */
+@media print {
+  .topnav, .subnav { background: #fff; color: #000; border-bottom: 1px solid #000; }
+  .topnav .logo span { color: #000; }
+  .topnav .searchbar, .langpick, .langnotice, .skiplink { display: none; }
+  .concept-banner { border: 1px solid #000; background: #fff; color: #000; }
+
+  /* `div.detail` and friends, not `.detail`: each page re-declares its own grid in its
+     own <style> block, which loads after this file, so the bare class selectors lost
+     the cascade and nothing stacked. @media does not add specificity — only the extra
+     type selector does. Same reason as the touch section above. */
+  div.detail, div.browse, div.serp, div.twocol, ul.grid { display: block; }
+  .grid > .book, .hitrow, .res { page-break-inside: avoid; break-inside: avoid; }
+  .banner { background: #fff; color: #000; border: 1px solid #000; }
+  .banner p { color: #000; }
+  .page { max-width: none; padding: 0; }
+  a { text-decoration: underline; }
+
+  /* THE ATOMS, not just the containers. Browsers print with print-color-adjust:
+     economy unless the reader ticks "Background graphics", which drops background
+     FILLS but keeps text colour — so every white-on-coloured-fill element prints white
+     on white and vanishes. That is the green "✓ Answers reader questions" badge, six
+     times on the collection page and six on the category page, and it is the one thing
+     index.html's own comment calls "the thing this collection actually offers"; plus
+     the two author initials discs. Repainted the same way the navs and the hero banner
+     already are three rules above — outline and dark text, keeping the badge's squared
+     solid-flag silhouette — rather than demanding a reader setting nobody will change. */
+  .reach, .badge,
+  .followcard .pic, .authhead .pic {
+    background: #fff; color: #000; border: 1px solid #000;
+  }
+  .tier .state { color: #000; }
+}

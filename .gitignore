@@ -1,3 +1,5 @@
 .DS_Store
-screenshots/
 .triage-cache/
+
+# screenshots/ is tracked on purpose: the captures are deck and PRD source material,
+# and teammates need them without cloning and running the prototype themselves.

@@ -36,13 +36,17 @@
                prose — and getting that wrong is the kind of small wrongness that tells
                a first-language reader a machine wrote the page.
      Ordering: English first (the source), then by the prototype's own reason for
-     including each one — see the note in i18n.css. */
+     including each one — see the note in i18n.css. French is added last, after Arabic,
+     so Arabic keeps its place as the deliberate RTL stress-test at the end of the
+     rationale in i18n.css; French's own reason is appended there rather than reshuffling
+     the existing four. */
   var LOCALES = [
     { id: 'en',  endonym: 'English',   english: 'English',            dir: 'ltr', htmlLang: 'en',      bcp47: 'en-US',      match: ['en'] },
     { id: 'es',  endonym: 'Español',   english: 'Spanish',            dir: 'ltr', htmlLang: 'es',      bcp47: 'es-ES',      match: ['es'], sentence: 'español' },
     { id: 'zh',  endonym: '简体中文',    english: 'Simplified Chinese', dir: 'ltr', htmlLang: 'zh-Hans', bcp47: 'zh-Hans-CN', match: ['zh', 'zh-cn', 'zh-hans', 'zh-sg'] },
     { id: 'fil', endonym: 'Filipino',  english: 'Filipino',           dir: 'ltr', htmlLang: 'fil',     bcp47: 'fil-PH',     match: ['fil', 'tl'] },
-    { id: 'ar',  endonym: 'العربية',    english: 'Arabic',             dir: 'rtl', htmlLang: 'ar',      bcp47: 'ar-u-nu-latn',         match: ['ar'] }
+    { id: 'ar',  endonym: 'العربية',    english: 'Arabic',             dir: 'rtl', htmlLang: 'ar',      bcp47: 'ar-u-nu-latn',         match: ['ar'] },
+    { id: 'fr',  endonym: 'Français',  english: 'French',             dir: 'ltr', htmlLang: 'fr',      bcp47: 'fr-FR',      match: ['fr'], sentence: 'français' }
   ];
 
   var DEFAULT = 'en';

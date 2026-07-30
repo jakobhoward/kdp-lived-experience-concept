@@ -2,7 +2,7 @@
    Loads after amazon.css. Everything here is either the language control itself or a
    rule that only exists because the page can now be read in another script.
 
-   Why these five languages, since "we support every language" is a non-answer:
+   Why these six languages, since "we support every language" is a non-answer:
      English   — the source the collection's copy was written in
      Español   — a first-language reader on the team
      简体中文    — a first-language reader on the team
@@ -10,7 +10,12 @@
                  she translated it. The collection's whole claim is that translation is
                  welcome; the prototype should be able to show it rather than assert it.
      العربية    — a right-to-left script, so the layout is proven direction-agnostic
-                 instead of assumed to be. This is the one that finds the bugs. */
+                 instead of assumed to be. This is the one that finds the bugs.
+     Français  — not a team member's language or the RTL check; it's here because it's
+                 an actual Kindle Store market (Amazon.fr, Amazon.ca), which the other
+                 four don't individually stand in for. Demonstrating the concept in a
+                 real storefront language, beyond the four justified above, is its own
+                 reason to include it. */
 
 /* ---------- the control ----------
    Sits in the dark nav where Amazon puts its own locale selector. Given a resting

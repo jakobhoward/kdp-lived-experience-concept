@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Hosted so the team can just open a link, but deliberately not indexable: this page
+     borrows Amazon's store grammar on purpose, and it should never turn up in a search
+     result stripped of the student-concept banner below. -->
+<meta name="robots" content="noindex, nofollow">
+<title>Lived Experience — category page (concept)</title>
+<link rel="stylesheet" href="amazon.css">
+<link rel="stylesheet" href="i18n/i18n.css">
+<!-- Loads third, and last: viewport adaptation overrides both of the above. -->
+<link rel="stylesheet" href="responsive.css">
+<style>
+  /* page-specific: Kindle Store category (browse node) layout.
+
+     WHY THIS PAGE EXISTS, AND WHY IT IS A CATEGORY RATHER THAN A ROW
+     ----------------------------------------------------------------
+     The reader has to arrive somewhere. The alternatives were a merchandised row on
+     the Kindle Store home page, and a row on the Kindle Unlimited landing page. Both
+     were rejected for the same reason Chang gave about video assets on 7/24: a
+     promotional slot has an expiration date. Somebody has to keep re-winning it, and
+     the day they stop, the collection has no address. A browse node is a permanent
+     place in the store's taxonomy; it keeps working with nobody tending it.
+
+     The second reason is the stronger one. A browse node's entry condition is already
+     the concept's gate. KDP authors choose their own categories when they upload. So
+     "the author put the book here, and attested" is not new machinery bolted onto a
+     promotion — it is how browse nodes already work.
+
+     PLACEMENT IN A TAXONOMY IS NOT AN ENDORSEMENT — the objection this page has to
+     survive. A category holds EVERY book that qualifies for it. It is a location, not
+     a selection: nobody at Amazon chose these eight over any other eight, in the same
+     way nobody at Amazon "endorses" a book by filing it under Historical. An
+     endorsement is scarce — an editors' pick, a promoted slot, a badge — and its
+     meaning comes from the books it leaves out. A node's meaning comes from the
+     entry condition, which here is the author's own statement, hosted and not
+     certified. That is why there is no "Top picks", no "Recommended", no "Editors'
+     Picks" strip and no "because you read" anywhere on this page: each of those would
+     be a scarce, chosen thing, and would convert a location into a claim.
+     Amazon badges what it can measure; it quotes what it cannot. */
+
+  /* Rail first in the DOM because it is navigation. dir="rtl" flips the grid for free,
+     which is why every offset below is a logical property, never left/right. */
+  .browse { display: grid; grid-template-columns: 200px 1fr; gap: 28px; align-items: start; }
+  /* 700px, not 900px. The rail collapsed 200px earlier than it needed to: measured at
+     768px, the single stacked track was 728px wide while the rail's own max-content
+     width is 164px, so 77% of that band was empty for the rail's full 347px of height —
+     a tablet in portrait was getting the phone layout and paying for it in scroll.
+     200 + 28 of gap + 28 of page gutter needs 256px before the results get anything, so
+     701px leaves the result column 445px, which is wider than the 375px a phone gives
+     the same rows. 700 is also the "shelf halves" step index.html and book.html use, so
+     the whole prototype now changes shape at the same three widths. */
+  @media (max-width: 700px) { .browse { grid-template-columns: 1fr; gap: 20px; } }
+
+  /* THE RAIL STAYS ON TOP, which is the opposite of what search.html does with its
+     rail, so the difference is worth stating rather than looking like an oversight.
+     search.html drops its rail below the results on a narrow screen (`order: 2`),
+     because that rail is six groups of refinements — chrome a reader scrolls past to
+     reach what they came for. This rail is the page's ARGUMENT: the bold, unlinked,
+     counted "Lived Experience (48)" sitting among its siblings is the whole proof
+     that the collection is a node in the taxonomy and not a filter over the store.
+     A reviewer opening this page on a phone should meet that before the books, and it
+     costs about 350px of scroll to guarantee it. It also means this page needs no
+     `order` property at all, so DOM order, visual order and tab order stay identical.
+     What it gets instead is less air: the tree and the refine block tighten up so the
+     same argument takes less of the screen. */
+  @media (max-width: 700px) {
+    .rail { padding-bottom: 14px; border-bottom: 1px solid var(--rule); }
+    .rail ul { margin-inline-start: 10px; }
+    .rail .refine { margin-top: 12px; padding-top: 10px; }
+    .results h1 { font-size: clamp(19px, 4vw, 24px); }
+    .hitrow { grid-template-columns: 76px 1fr; gap: 12px; padding: 14px 0; }
+    .hitrow img { width: 76px; }
+    .hitrow .t { font-size: 15px; }
+    .collcard { margin-bottom: 2px; }
+  }
+
+  .rail { font-size: 13px; }
+  .rail .dept { font-weight: 700; font-size: 14px; margin-bottom: 6px; }
+  .rail .parent { margin-bottom: 4px; }
+  .rail ul { list-style: none; margin-inline-start: 12px; }
+  .rail li { padding: 3px 0; line-height: 1.45; }
+  /* The selected node: bold, unlinked, with a count. This is the whole visual
+     difference between a NODE and a FACET, and it is load-bearing — see the source
+     comment above the rail. */
+  .rail li.here { font-weight: 700; color: var(--ink); }
+  .rail li.here .n { font-weight: 400; color: var(--soft); }
+  .rail .refine { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--rule); }
+  .rail .refine .h { font-weight: 700; margin-bottom: 6px; }
+  .rail .refine .opt { color: var(--soft); padding: 3px 0; }
+
+  .results h1 { font-size: 24px; font-weight: 700; }
+  /* Full-width above the rail+results pair now (see the note in the markup), so it
+     needs the gap to the grid that the results column used to give it. */
+  .resulthead { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+  .resulthead .count { font-size: 12px; color: var(--soft); }
+  .resulthead .sort { margin-inline-start: auto; font-size: 12px; color: var(--soft); }
+  .resulthead .sort b { color: var(--ink); font-weight: 700; }
+
+  .nodeintro { font-size: 13px; color: var(--ink); line-height: 1.55; margin: 10px 0 16px; max-width: 780px; }
+
+  .collcard { margin-bottom: 6px; }
+  /* Content-width, not full-bleed: a pointer to another page, not a promotion.
+     inline-FLEX rather than inline-block, which shrink-wraps identically but also
+     centres the label. It matters once responsive.css's touch rule grows every .btn to
+     44px on a coarse pointer: this is an <a>, so it takes the 44px min-height but not
+     the flex centring that rule gives real <button>s, and as inline-block the label sat
+     8px from the top of a 44px pill with 21px of empty space under it — the single
+     visibly broken control on the page, and the only link from this node into the
+     collection. Desktop is unchanged at its natural 30px height. */
+  .collcard .btn {
+    width: auto; padding: 6px 16px; margin-top: 10px;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .collcard p { font-size: 13px; line-height: 1.55; color: var(--ink); }
+
+  /* Row form, not the 4-across poster grid of index.html. This is what a real Amazon
+     category page uses, and it keeps the two surfaces visually distinguishable. */
+  .hitlist { list-style: none; }
+  .hitrow { display: grid; grid-template-columns: 92px 1fr; gap: 16px; padding: 18px 0; border-top: 1px solid var(--rule); }
+  .hitrow img { width: 92px; aspect-ratio: 2/3; object-fit: cover; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,.18); }
+  .hitrow .t { font-size: 17px; font-weight: 500; color: var(--link); }
+  .hitrow .a { color: var(--soft); font-size: 13px; margin: 2px 0 6px; }
+  .hitrow .row { display: flex; align-items: center; gap: 12px; margin-top: 8px; flex-wrap: wrap; }
+  .hitrow .row .btn { width: auto; padding: 5px 14px; font-size: 12px; }
+  .hitrow .reachrow { margin-bottom: 6px; }
+
+  /* DUPLICATED FROM index.html ON PURPOSE — amazon.css is owned by the accessibility
+     agent and is off limits during the build phase. .voice and .reach must look
+     identical on both surfaces: the bordered a-box is how a reader recognises a book
+     as belonging to this collection, and the badge is a fact about a person, so a
+     visual difference between pages would read as merchandising. FLAG: promote both
+     rules into amazon.css later and delete the copies here and in index.html. */
+  .voice {
+    color: var(--ink); font-size: 12.5px; line-height: 1.5;
+    background: var(--altbg);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 9px 11px;
+    margin: 2px 0 0;
+    max-width: 720px;
+  }
+  /* The one badge allowed to be a badge: Amazon can observe whether an author opted in
+     to answer readers, and an author can lose it. It is not a quality rating and not a
+     ranking signal. Same six authors as index.html, deliberately — an inconsistency
+     between the two pages would make it look chosen rather than observed. */
+  .reach {
+    display: inline-block;
+    background: var(--green);
+    color: #fff;
+    font-size: 11px; font-weight: 700;
+    padding: 3px 7px;
+    border-radius: 2px;
+    line-height: 1.35;
+  }
+
+  /* Inert. It exists so the node reads as a shelf with more on it, not a promotion
+     with a fixed number of slots. */
+  /* flex-wrap unconditionally: seven boxes plus "Next" is about 290px in English and
+     more in French, which fits a 375px screen and does not fit a 320px one. Wrapping
+     is also what it needs when the touch rule in responsive.css grows each box to
+     44px square. */
+  .pager { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 24px; font-size: 13px; }
+  .pager span, .pager a { border: 1px solid var(--rule); border-radius: 4px; padding: 5px 11px; }
+  .pager .cur { font-weight: 700; background: var(--altbg); color: var(--ink); }
+</style>
+</head>
+<body data-i18n-title="browse.docTitle">
+
+<!-- ============================ PAGE CHROME ============================
+     ACCESSIBILITY PASS. What changed here, and why, on all five pages:
+
+     - The disclaimer, the brand row and the store nav are now one <header>
+       banner landmark instead of three sibling <div>s floating outside every
+       landmark on the page. The concept banner in particular was orphaned
+       content: announced, but belonging to nothing.
+     - A skip link, off-screen until focused. There are ~12 tab stops in front
+       of the first word of content, identically on five pages.
+     - .subnav is a <nav> with an accessible name wrapping a real list. Its six
+       items stay plain text: they are inert store scenery, and the rule this
+       prototype follows is that Amazon's .btn atom becomes a real button while
+       flat text stays text (see amazon.css, "what an inert control is allowed
+       to be").
+     - The search field is readonly and its button is aria-disabled: the box is
+       reachable and announced, and says out loud that it will not search.
+     - lang="en" on the wordmarks. They are never translated, so on the Arabic
+       or Chinese rendering of this page they are a foreign-language run inside
+       the document's language (WCAG 3.1.2).
+     ==================================================================== -->
+<a class="skiplink" href="#main" data-i18n="chrome.skipToContent">Skip to main content</a>
+
+<header class="sitehead">
+  <div class="concept-banner"><strong data-i18n="chrome.conceptLabel">STUDENT CONCEPT — COMMLD 560, UW.</strong> <span data-i18n="browse.disclaimer">Not an Amazon product. This category, its books, authors and ratings are fictional; controls are non-functional.</span></div>
+  <div class="topnav">
+    <div class="logo" lang="en">kindle<span>store</span></div>
+    <div class="searchbar"><input value="" placeholder="Search Kindle Store" aria-label="Search Kindle Store" data-i18n-attr="placeholder:chrome.searchPlaceholder;aria-label:chrome.searchAria" readonly><button aria-label="Search" aria-disabled="true" data-i18n-attr="aria-label:chrome.searchButtonAria">🔍</button></div>
+    <!-- the language control is injected here by i18n/i18n.js, in Amazon's own locale-selector slot -->
+    <div class="acct"><span data-i18n="chrome.greeting">Hello, Reader</span><b data-i18n="chrome.account">Account &amp; Lists</b></div>
+  </div>
+  <nav class="subnav" aria-label="Store sections" data-i18n-attr="aria-label:chrome.subnavAria">
+    <ul>
+      <li data-i18n="chrome.nav.shop">Shop Books</li><li data-i18n="chrome.nav.categories">Categories</li><li data-i18n="chrome.nav.trending">New &amp; Trending</li>
+      <li data-i18n="chrome.nav.bestsellers">Best Sellers &amp; More</li><li data-i18n="chrome.nav.deals">Deals</li><li data-i18n="chrome.nav.yourbooks">Your Books</li>
+    </ul>
+  </nav>
+</header>
+
+<div class="page">
+
+<!-- MAIN LANDMARK. Everything between here and the credits was previously a bare
+     <div>, so a screen reader had no "jump to the content" target and the skip
+     link above would have had nowhere to land. <main> stays INSIDE div.page so the
+     max-width and padding are untouched, and the credits sit outside it as a
+     sibling — a <footer> whose nearest sectioning ancestor is <body>, which is what
+     makes it the contentinfo landmark rather than a generic block. -->
+<main id="main">
+
+  <!-- The terminal crumb is a plain span, not a link. That unlinked last item is the
+       store's own "you are here" convention, and it is the cheapest available proof
+       that the collection is a place in the tree rather than a campaign. -->
+  <!-- BREADCRUMB. Was a <div> of anonymous links with generated "›" separators —
+       no navigation landmark, no list, and nothing marking which item was the
+       page you are on. Now a named <nav> wrapping an <ol>, with aria-current on
+       the terminal item so the "you are here" convention that was carried only
+       by "this one is not a link" is stated programmatically too. Renders
+       identically: amazon.css keeps the same generated-chevron selector. -->
+  <nav aria-label="Breadcrumb" data-i18n-attr="aria-label:chrome.breadcrumbAria">
+    <ol class="crumbs">
+      <li><a href="#" data-i18n="crumb.store">Kindle Store</a></li>
+      <li><a href="#" data-i18n="crumb.ebooks">Kindle eBooks</a></li>
+      <li><a href="#" data-i18n="crumb.memoirs">Biographies &amp; Memoirs</a></li>
+      <li aria-current="page"><span data-i18n="collection.name">Lived Experience</span></li>
+    </ol>
+  </nav>
+
+  <!-- HOISTED OUT OF .results, ABOVE THE GRID. This block holds the page <h1> and its
+       result count, and it used to sit inside the results column — so the moment the
+       grid collapsed to one column, the rail (362px of category tree and refinements)
+       came before the heading, and the name of the page a reader had just navigated to
+       was the second thing on it. search.html's accessibility pass made exactly this
+       move for exactly this reason ("so that the page <h1> precedes the rail's <h2>s in
+       the DOM instead of trailing six of them"); the two row-list pages now agree.
+       Full-width above the rail+results pair is also where Amazon's own results bar
+       sits, so nothing about the desktop rendering is invented to make this work. -->
+  <div class="resulthead">
+    <h1 data-i18n="collection.name">Lived Experience</h1>
+    <span class="count" data-i18n="browse.resultCount">1-8 of 48 results</span>
+    <!-- The sort control is REPRODUCED, not proposed. It is the store's existing
+         control with its existing default, and this page adds no option, removes
+         no option, and reweights nothing. Any ordered list can be misread as a
+         ranking claim, so it is also said out loud in the credits footer rather
+         than only here in a comment. -->
+    <span class="sort"><span data-i18n="common.sortLabel">Sort by:</span> <b data-i18n="common.sortFeatured">Featured</b></span>
+  </div>
+
+  <div class="browse">
+
+    <!-- ================= LEFT RAIL =================
+         A NODE, NOT A FACET. This distinction is the retired-idea line the project
+         cannot cross, so it is worth stating plainly:
+
+           A NODE is one location in the store's category tree. You are in exactly one
+           at a time; its siblings are alternatives, not additions. It is rendered here
+           the way Amazon renders a selected category — bold, unlinked, with a result
+           count — and it changes nothing about the rest of the store.
+
+           A FACET is a checkbox that COMPOSES across whatever you are already looking
+           at. A "Lived Experience" facet would operate over the entire catalogue, and
+           that is the retired idea (R4): a store-wide filter is what buries the
+           translated books of multilingual authors, because everything outside the
+           checked set silently disappears from every result set in the store.
+
+         The three checkboxes under "Refine by" are the Kindle Store's OWN existing
+         refinements, reproduced unchanged. We add none, remove none, and reweight
+         none. If a reviewer still reads this rail as us proposing a filter, the whole
+         "Refine by" block can be deleted and nothing structural is lost. -->
+    <nav class="rail" aria-label="Category" data-i18n-attr="aria-label:browse.railAria">
+      <!-- Department and parent are the same taxonomy names the breadcrumb prints, so
+           they reuse crumb.* rather than adding a second set of keys that could drift
+           apart in translation. -->
+      <div class="dept" data-i18n="crumb.ebooks">Kindle eBooks</div>
+      <div class="parent"><a href="#" data-i18n="crumb.memoirs">Biographies &amp; Memoirs</a></div>
+      <ul>
+        <li><a href="#" data-i18n="browse.rail.sib1">Arts &amp; Literature</a></li>
+        <li><a href="#" data-i18n="browse.rail.sib2">Historical</a></li>
+        <li><a href="#" data-i18n="browse.rail.sib3">Leaders &amp; Notable People</a></li>
+        <li class="here" aria-current="page"><span data-i18n="collection.name">Lived Experience</span> <span class="n">(<span data-i18n-num="48">48</span>)</span></li>
+        <li><a href="#" data-i18n="browse.rail.sib4">Memoirs</a></li>
+        <li><a href="#" data-i18n="browse.rail.sib5">Regional</a></li>
+        <li><a href="#" data-i18n="browse.rail.sib6">Specific Groups</a></li>
+      </ul>
+
+      <div class="refine">
+        <div class="h" data-i18n="browse.rail.refineH">Refine by</div>
+        <div class="opt" data-i18n="common.kuEligible">Kindle Unlimited Eligible</div>
+        <div class="opt" data-i18n="common.avgReview">Avg. Customer Review</div>
+        <div class="opt" data-i18n="common.languageLabel">Language</div>
+      </div>
+    </nav>
+
+    <!-- ================= RESULTS ================= -->
+    <div class="results">
+
+
+      <p class="nodeintro" data-i18n="browse.nodeIntro">Books whose authors state, in their own words, that they lived the story and wrote it. Authors choose this category for their own book when they publish it. Amazon hosts each statement and doesn't certify it. Translation, including AI translation, is welcome.</p>
+
+      <!-- The one forward link on this page. A bordered a-box with a content-width
+           ghost button rather than a full-width banner, so it reads as a pointer and
+           not as Amazon merchandising a collection at the top of a category. Its own
+           body copy carries the endorsement answer in user-visible words: the category
+           holds everything that qualifies, so being in it is a place and not a rating. -->
+      <div class="abox alt collcard">
+        <h2 data-i18n="browse.card.h3">The Lived Experience collection</h2>
+        <div class="sub" data-i18n="browse.card.sub">A smaller, hand-picked view of this category</div>
+        <p data-i18n="browse.card.body">Every book that qualifies is in this category, so being here is a place on the shelf, not a rating. The collection page introduces a few of these authors in their own words, and shows which of them have chosen to answer reader questions.</p>
+        <a class="btn ghost" href="index.html" data-i18n="browse.card.cta">Browse the collection</a>
+      </div>
+
+      <!-- Eight rows. No price on any row: index.html shows none either, and varied
+           prices would both invent data and edge toward the price framing that is
+           retired. De-risking happens without price — a free sample and Kindle
+           Unlimited eligibility on every row, at the moment of choosing. -->
+
+      <!-- LIST + HEADINGS (accessibility pass). Was eight sibling <div>s with the title
+           in <div class="t">. Two things that cost a screen-reader user: no "list of 8
+           items", and eight "Read sample" buttons whose accessible names were byte-for-byte
+           identical — in a button list, eight indistinguishable entries with nothing saying
+           which book each one samples. With the title as the row's heading the button sits
+           under the heading it belongs to, and heading navigation walks the shelf.
+           Renders identically; list-style is off. -->
+      <ul class="hitlist">
+      <li class="hitrow">
+        <a href="book.html"><img src="covers/road-from-manila.png" alt="Cover of The Road from Manila" data-i18n-attr="alt:index.book1.coverAlt" width="848" height="1264" fetchpriority="high" decoding="async"></a>
+        <div>
+          <h2 class="t"><a href="book.html" data-i18n="index.book1.title">The Road from Manila</a></h2>
+          <div class="a" data-i18n="index.book1.author">Rosa Delgado</div>
+          <div class="reachrow"><span class="reach" data-i18n="common.answersQuestions">✓ Answers reader questions</span></div>
+          <div class="voice" data-i18n="index.book1.voice">"I left Manila in 1979. I wrote this in Tagalog first, because that is the language I remember it in."</div>
+          <div class="row">
+            <span class="stars" role="img" aria-label="4.4 out of 5 stars, 214 ratings" data-i18n-attr="aria-label:index.book1.starsAria">★★★★☆<span class="count">(<span data-i18n-num="214">214</span>)</span></span>
+            <span class="kulogo" lang="en">kindle<b>unlimited</b></span>
+            <button type="button" class="btn ghost" data-i18n="book.readSample" aria-disabled="true">Read sample</button>
+          </div>
+        </div>
+      </li>
+
+      <li class="hitrow">
+        <img src="covers/unseen-memoir.png" alt="Cover of The Unseen Memoir" data-i18n-attr="alt:index.book2.coverAlt" width="848" height="1264" fetchpriority="high" decoding="async">
+        <div>
+          <!-- UNLINKED, like rows 3-8 below and like index.html. Only The Road from Manila has
+             a detail page; the other seven titles were <a href="#">, which on a results page
+             is the one link a reviewer is certain to click. search.html states the rule this
+             page now follows: "a dead link is a worse lie than an unlinked title". -->
+        <h2 class="t" data-i18n="index.book2.title">The Unseen Memoir</h2>
+          <div class="a" data-i18n="index.book2.author">Marion Hale</div>
+          <div class="reachrow"><span class="reach" data-i18n="common.answersQuestions">✓ Answers reader questions</span></div>
+          <div class="voice" data-i18n="index.book2.voice">"I wrote this at my kitchen table over four years, about the year I stopped speaking."</div>
+          <div class="row">
+            <span class="stars" role="img" aria-label="4.3 out of 5 stars, 127 ratings" data-i18n-attr="aria-label:index.book2.starsAria">★★★★☆<span class="count">(<span data-i18n-num="127">127</span>)</span></span>
+            <span class="kulogo" lang="en">kindle<b>unlimited</b></span>
+            <button type="button" class="btn ghost" data-i18n="book.readSample" aria-disabled="true">Read sample</button>
+          </div>
+        </div>
+      </li>
+
+      <!-- No badge on this row, and none on Ray Okonkwo's, exactly as on index.html.
+           The badge is observed, not awarded; if it appeared here and not there it
+           would look like merchandising. -->
+      <li class="hitrow">
+        <img src="covers/letters-home.png" alt="Cover of Letters Home" data-i18n-attr="alt:index.book3.coverAlt" width="848" height="1264" loading="lazy" decoding="async">
+        <div>
+          <h2 class="t" data-i18n="index.book3.title">Letters Home</h2>
+          <div class="a" data-i18n="index.book3.author">Emily Carter</div>
+          <div class="voice" data-i18n="index.book3.voice">"These are my grandmother's letters, and mine. I typed every one of them myself."</div>
+          <div class="row">
+            <span class="stars" role="img" aria-label="4.5 out of 5 stars, 2,341 ratings" data-i18n-attr="aria-label:index.book3.starsAria">★★★★☆<span class="count">(<span data-i18n-num="2341">2,341</span>)</span></span>
+            <span class="kulogo" lang="en">kindle<b>unlimited</b></span>
+            <button type="button" class="btn ghost" data-i18n="book.readSample" aria-disabled="true">Read sample</button>
+          </div>
+        </div>
+      </li>
+
+      <li class="hitrow">
+        <img src="covers/last-ninety-acres.png" alt="Cover of The Last Ninety Acres" data-i18n-attr="alt:index.book4.coverAlt" width="853" height="1272" loading="lazy" decoding="async">
+        <div>
+          <h2 class="t" data-i18n="index.book4.title">The Last Ninety Acres</h2>
+          <div class="a" data-i18n="index.book4.author">Dale Whitcomb</div>
+          <div class="reachrow"><span class="reach" data-i18n="common.answersQuestions">✓ Answers reader questions</span></div>
+          <div class="voice" data-i18n="index.book4.voice">"Four generations farmed this ground. I wrote down the year we lost it, because nobody else was going to."</div>
+          <div class="row">
+            <span class="stars" role="img" aria-label="4.2 out of 5 stars, 86 ratings" data-i18n-attr="aria-label:index.book4.starsAria">★★★★☆<span class="count">(<span data-i18n-num="86">86</span>)</span></span>
+            <span class="kulogo" lang="en">kindle<b>unlimited</b></span>
+            <button type="button" class="btn ghost" data-i18n="book.readSample" aria-disabled="true">Read sample</button>
+          </div>
+        </div>
+      </li>
+
+      <li class="hitrow">
+        <img src="covers/eleven-addresses.png" alt="Cover of Eleven Addresses" data-i18n-attr="alt:index.book5.coverAlt" width="853" height="1272" loading="lazy" decoding="async">
+        <div>
+          <h2 class="t" data-i18n="index.book5.title">Eleven Addresses</h2>
+          <div class="a" data-i18n="index.book5.author">Terrance Boyd</div>
+          <div class="reachrow"><span class="reach" data-i18n="common.answersQuestions">✓ Answers reader questions</span></div>
+          <div class="voice" data-i18n="index.book5.voice">"Eleven places in six years after I got out. I wrote most of this on a library computer, an hour at a time."</div>
+          <div class="row">
+            <span class="stars" role="img" aria-label="4.6 out of 5 stars, 438 ratings" data-i18n-attr="aria-label:index.book5.starsAria">★★★★☆<span class="count">(<span data-i18n-num="438">438</span>)</span></span>
+            <span class="kulogo" lang="en">kindle<b>unlimited</b></span>
+            <button type="button" class="btn ghost" data-i18n="book.readSample" aria-disabled="true">Read sample</button>
+          </div>
+        </div>
+      </li>
+
+      <li class="hitrow">
+        <img src="covers/loud-in-here.png" alt="Cover of Loud in Here" data-i18n-attr="alt:index.book6.coverAlt" width="853" height="1272" loading="lazy" decoding="async">
+        <div>
+          <h2 class="t" data-i18n="index.book6.title">Loud in Here</h2>
+          <div class="a" data-i18n="index.book6.author">Nadia Haddad</div>
+          <div class="reachrow"><span class="reach" data-i18n="common.answersQuestions">✓ Answers reader questions</span></div>
+          <div class="voice" data-i18n="index.book6.voice">"I have been deaf since I was four. This is what a quiet house is actually like from the inside."</div>
+          <div class="row">
+            <span class="stars" role="img" aria-label="4.4 out of 5 stars, 309 ratings" data-i18n-attr="aria-label:index.book6.starsAria">★★★★☆<span class="count">(<span data-i18n-num="309">309</span>)</span></span>
+            <span class="kulogo" lang="en">kindle<b>unlimited</b></span>
+            <button type="button" class="btn ghost" data-i18n="book.readSample" aria-disabled="true">Read sample</button>
+          </div>
+        </div>
+      </li>
+
+      <li class="hitrow">
+        <img src="covers/sixteen-hundred-miles.png" alt="Cover of Sixteen Hundred Miles a Week" data-i18n-attr="alt:index.book7.coverAlt" width="853" height="1272" loading="lazy" decoding="async">
+        <div>
+          <h2 class="t" data-i18n="index.book7.title">Sixteen Hundred Miles a Week</h2>
+          <div class="a" data-i18n="index.book7.author">Ray Okonkwo</div>
+          <div class="voice" data-i18n="index.book7.voice">"I can't spell to save my life. I talked this book into my phone between Laredo and Toledo."</div>
+          <div class="row">
+            <span class="stars" role="img" aria-label="4.1 out of 5 stars, 52 ratings" data-i18n-attr="aria-label:index.book7.starsAria">★★★★☆<span class="count">(<span data-i18n-num="52">52</span>)</span></span>
+            <span class="kulogo" lang="en">kindle<b>unlimited</b></span>
+            <button type="button" class="btn ghost" data-i18n="book.readSample" aria-disabled="true">Read sample</button>
+          </div>
+        </div>
+      </li>
+
+      <li class="hitrow">
+        <img src="covers/coming-back-slow.png" alt="Cover of Coming Back Slow" data-i18n-attr="alt:index.book8.coverAlt" width="853" height="1272" loading="lazy" decoding="async">
+        <div>
+          <h2 class="t" data-i18n="index.book8.title">Coming Back Slow</h2>
+          <div class="a" data-i18n="index.book8.author">Deborah Aoki</div>
+          <div class="reachrow"><span class="reach" data-i18n="common.answersQuestions">✓ Answers reader questions</span></div>
+          <div class="voice" data-i18n="index.book8.voice">"I had a stroke at fifty-one. Relearning to write took two years. This book took four."</div>
+          <div class="row">
+            <span class="stars" role="img" aria-label="4.7 out of 5 stars, 1,608 ratings" data-i18n-attr="aria-label:index.book8.starsAria">★★★★★<span class="count">(<span data-i18n-num="1608">1,608</span>)</span></span>
+            <span class="kulogo" lang="en">kindle<b>unlimited</b></span>
+            <button type="button" class="btn ghost" data-i18n="book.readSample" aria-disabled="true">Read sample</button>
+          </div>
+        </div>
+      </li>
+
+      </ul>
+
+      <!-- Six pages of eight matches the 48 the book page already states. Inert. -->
+      <nav class="pager" aria-label="Results pages" data-i18n-attr="aria-label:browse.pagerAria">
+        <span class="cur" aria-current="page">1</span>
+        <a href="#">2</a><a href="#">3</a><a href="#">4</a><a href="#">5</a><a href="#">6</a>
+        <a href="#" data-i18n="browse.pagerNext">Next</a>
+      </nav>
+
+    </div>
+  </div>
+
+  </main>
+
+  <footer class="credits">
+    <span data-i18n="browse.credits1">Reader Discovery team — Jakob Picciotto · Pablo Ortega · Jalen Oscar Howard · Wanting Chao · Entry point: a permanent category node rather than a merchandised row. A promotional slot has an expiration date (Chang, 7/24); a category doesn't, and its entry condition is one KDP already has — the author chooses the category, and attests. Non-price de-risking (Pablo, A5) appears here as a free sample and Kindle Unlimited on every row, at the moment of choosing — never as a discount.</span><br>
+    <span data-i18n="browse.credits2">This category is a location, not an endorsement. Nothing here filters the store, ranks a book, or recommends one book from another; the left-rail refinements and the sort control are the Kindle Store's existing ones, reproduced unchanged. A Kindle Unlimited row could carry the collection during a launch window, but a launch vehicle is not an entry point, so it isn't built here.</span>
+  </footer>
+
+</div>
+
+<script src="i18n/strings.en.js"></script>
+<script src="i18n/strings.es.js"></script>
+<script src="i18n/strings.zh.js"></script>
+<script src="i18n/strings.fil.js"></script>
+<script src="i18n/strings.ar.js"></script>
+<script src="i18n/strings.fr.js"></script>
+<script src="i18n/i18n.js"></script>
+</body>
+</html>

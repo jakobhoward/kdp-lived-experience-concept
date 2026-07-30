@@ -10,6 +10,8 @@
 <title>Rosa Delgado — author page (concept)</title>
 <link rel="stylesheet" href="amazon.css">
 <link rel="stylesheet" href="i18n/i18n.css">
+<!-- Loads third, and last: viewport adaptation overrides both of the above. -->
+<link rel="stylesheet" href="responsive.css">
 <style>
   /* page-specific: author page (interface-reference.md §3) */
   .authhead {
@@ -28,10 +30,60 @@
   .authhead .tabs { margin-inline-start: auto; display: flex; gap: 26px; font-size: 13px; letter-spacing: 1px; }
   .authhead .tabs .on { font-weight: 700; border-bottom: 3px solid #2162a1; padding-bottom: 6px; }
 
-  .bigname { text-align: center; font-size: 32px; font-weight: 700; margin: 10px 0 26px; }
+  /* This is the page's <h1>. It was a <div>, which left author.html with no h1 at
+     all — the one page in the prototype named after a person had nothing telling a
+     screen reader whose page it was. The type is unchanged. */
+  /* clamp: 32px is the largest type in the prototype and at 375px it took two lines
+     for a two-word name. Upper bound is the original. */
+  .bigname { text-align: center; font-size: clamp(23px, 5.4vw, 32px); font-weight: 700; margin: 10px 0 clamp(18px, 3vw, 26px); }
 
   .twocol { display: grid; grid-template-columns: 1.4fr 1fr; gap: 28px; align-items: start; }
-  .panel h2 { font-size: 19px; margin-bottom: 12px; }
+  /* REFLOW (WCAG 1.4.10), added in the accessibility pass. fr units shrink, but the
+     book card's 92px cover plus its text has a min-content width the two columns could
+     not honour below ~500px, so the page scrolled sideways at 375px and at desktop
+     zoom above 200%. One breakpoint, and the panels stack in DOM order. */
+  @media (max-width: 760px) { .twocol { grid-template-columns: 1fr; gap: 22px; } }
+
+  /* THE AUTHOR HEADER AT PHONE WIDTH. It is a flex row of [avatar, Follow, tabs],
+     with the tab group pushed to the trailing edge by margin-inline-start:auto. Once
+     it wraps, that auto margin is still shoving three tabs against the inline-end of
+     a line they now have to themselves, leaving them hanging off one corner under a
+     72px avatar. Dropping the margin and spreading them across the full line is what
+     Amazon's own author page does on a phone, and it also turns the tab row back into
+     something a thumb can hit: 26px of gap between three ~60px words becomes three
+     evenly spaced targets. The active tab keeps its 3px underline, which is the only
+     thing marking which one you are on. */
+  @media (max-width: 560px) {
+    .authhead { gap: 12px; }
+    .authhead .pic { width: 56px; height: 56px; font-size: 20px; }
+    .authhead .tabs {
+      margin-inline-start: 0;
+      width: 100%;
+      justify-content: space-between;
+      gap: 12px;
+      border-top: 1px solid var(--rule);
+      padding-top: 10px;
+    }
+    /* The bio and Q&A prose is the page; give it back the 32px the card borders take. */
+    .biocard { padding: 12px; }
+    .bookcard { padding: 12px; gap: 12px; }
+  }
+  /* Direct child only. The access a-box inside this panel now carries its own <h2>
+     (it was an <h3> under the page heading, a skipped level), and it must keep the
+     a-box title size from amazon.css rather than the panel-heading size. */
+  .panel > h2, .qa > h2 { font-size: 19px; margin-bottom: 12px; }
+  /* MEASURE CAP. The 1.4fr prose track had no ceiling, so this page's two blocks of
+     running text — the bio, and Rosa's answers — grew wider than every other piece of
+     prose in the prototype. Measured: 88 characters per line at 760px and 99 at the
+     desktop width, against .banner p's 640px and .nodeintro's 780px. Nobody reads a
+     99-character line comfortably, and on the one page whose content is a person
+     talking, the line length is the reading experience.
+     68ch rather than a pixel value because a cap in characters holds its meaning when
+     the page is read at a larger text size, and because Chinese and Arabic set at
+     different widths from the Latin (see i18n.css). The two modules beside these —
+     the book card and the access a-box — stay uncapped: they are labelled rows, not
+     running text, and capping them would just narrow a table. */
+  .biocard, .qa { max-width: 68ch; }
   .biocard {
     border: 1px solid var(--rule); border-radius: 8px; padding: 16px; font-size: 14px; line-height: 1.55;
   }
@@ -53,30 +105,74 @@
 </head>
 <body data-i18n-title="author.docTitle">
 
-<div class="concept-banner"><strong data-i18n="chrome.conceptLabel">STUDENT CONCEPT — COMMLD 560, UW.</strong> <span data-i18n="author.disclaimer">Not an Amazon product. This author and all content are fictional; controls are non-functional.</span></div>
+<!-- ============================ PAGE CHROME ============================
+     ACCESSIBILITY PASS. What changed here, and why, on all five pages:
 
-<header class="topnav">
-  <div class="logo">kindle<span>store</span></div>
-  <div class="searchbar"><input value="" placeholder="Search Kindle Store" aria-label="Search Kindle Store" data-i18n-attr="placeholder:chrome.searchPlaceholder;aria-label:chrome.searchAria" readonly><button aria-label="Search" data-i18n-attr="aria-label:chrome.searchButtonAria">🔍</button></div>
-  <!-- the language control is injected here by i18n/i18n.js, in Amazon's own locale-selector slot -->
-  <div class="acct"><span data-i18n="chrome.greeting">Hello, Reader</span><b data-i18n="chrome.account">Account &amp; Lists</b></div>
+     - The disclaimer, the brand row and the store nav are now one <header>
+       banner landmark instead of three sibling <div>s floating outside every
+       landmark on the page. The concept banner in particular was orphaned
+       content: announced, but belonging to nothing.
+     - A skip link, off-screen until focused. There are ~12 tab stops in front
+       of the first word of content, identically on five pages.
+     - .subnav is a <nav> with an accessible name wrapping a real list. Its six
+       items stay plain text: they are inert store scenery, and the rule this
+       prototype follows is that Amazon's .btn atom becomes a real button while
+       flat text stays text (see amazon.css, "what an inert control is allowed
+       to be").
+     - The search field is readonly and its button is aria-disabled: the box is
+       reachable and announced, and says out loud that it will not search.
+     - lang="en" on the wordmarks. They are never translated, so on the Arabic
+       or Chinese rendering of this page they are a foreign-language run inside
+       the document's language (WCAG 3.1.2).
+     ==================================================================== -->
+<a class="skiplink" href="#main" data-i18n="chrome.skipToContent">Skip to main content</a>
+
+<header class="sitehead">
+  <div class="concept-banner"><strong data-i18n="chrome.conceptLabel">STUDENT CONCEPT — COMMLD 560, UW.</strong> <span data-i18n="author.disclaimer">Not an Amazon product. This author and all content are fictional; controls are non-functional.</span></div>
+  <div class="topnav">
+    <div class="logo" lang="en">kindle<span>store</span></div>
+    <div class="searchbar"><input value="" placeholder="Search Kindle Store" aria-label="Search Kindle Store" data-i18n-attr="placeholder:chrome.searchPlaceholder;aria-label:chrome.searchAria" readonly><button aria-label="Search" aria-disabled="true" data-i18n-attr="aria-label:chrome.searchButtonAria">🔍</button></div>
+    <!-- the language control is injected here by i18n/i18n.js, in Amazon's own locale-selector slot -->
+    <div class="acct"><span data-i18n="chrome.greeting">Hello, Reader</span><b data-i18n="chrome.account">Account &amp; Lists</b></div>
+  </div>
+  <nav class="subnav" aria-label="Store sections" data-i18n-attr="aria-label:chrome.subnavAria">
+    <ul>
+      <li data-i18n="chrome.nav.shop">Shop Books</li><li data-i18n="chrome.nav.categories">Categories</li><li data-i18n="chrome.nav.trending">New &amp; Trending</li>
+      <li data-i18n="chrome.nav.bestsellers">Best Sellers &amp; More</li><li data-i18n="chrome.nav.deals">Deals</li><li data-i18n="chrome.nav.yourbooks">Your Books</li>
+    </ul>
+  </nav>
 </header>
-<nav class="subnav">
-  <span data-i18n="chrome.nav.shop">Shop Books</span><span data-i18n="chrome.nav.categories">Categories</span><span data-i18n="chrome.nav.trending">New &amp; Trending</span>
-  <span data-i18n="chrome.nav.bestsellers">Best Sellers &amp; More</span><span data-i18n="chrome.nav.deals">Deals</span><span data-i18n="chrome.nav.yourbooks">Your Books</span>
-</nav>
 
 <div class="page">
 
-  <div class="crumbs"><a href="#" data-i18n="crumb.store">Kindle Store</a><a href="index.html" data-i18n="collection.name">Lived Experience</a><span data-i18n="author.name">Rosa Delgado</span></div>
+<!-- MAIN LANDMARK. Everything between here and the credits was previously a bare
+     <div>, so a screen reader had no "jump to the content" target and the skip
+     link above would have had nowhere to land. <main> stays INSIDE div.page so the
+     max-width and padding are untouched, and the credits sit outside it as a
+     sibling — a <footer> whose nearest sectioning ancestor is <body>, which is what
+     makes it the contentinfo landmark rather than a generic block. -->
+<main id="main">
+  <!-- BREADCRUMB. Was a <div> of anonymous links with generated "›" separators —
+       no navigation landmark, no list, and nothing marking which item was the
+       page you are on. Now a named <nav> wrapping an <ol>, with aria-current on
+       the terminal item so the "you are here" convention that was carried only
+       by "this one is not a link" is stated programmatically too. Renders
+       identically: amazon.css keeps the same generated-chevron selector. -->
+  <nav aria-label="Breadcrumb" data-i18n-attr="aria-label:chrome.breadcrumbAria">
+    <ol class="crumbs">
+      <li><a href="#" data-i18n="crumb.store">Kindle Store</a></li>
+      <li><a href="index.html" data-i18n="collection.name">Lived Experience</a></li>
+      <li aria-current="page"><span data-i18n="author.name">Rosa Delgado</span></li>
+    </ol>
+  </nav>
 
   <div class="authhead">
-    <div class="pic">RD</div>
-    <span class="btn ghost" data-i18n="common.follow">+ Follow</span>
+    <div class="pic" aria-hidden="true">RD</div>
+    <button type="button" class="btn ghost" data-i18n="common.follow" aria-disabled="true">+ Follow</button>
     <div class="tabs"><span class="on" data-i18n="author.tabHome">HOME</span><span data-i18n="author.tabAbout">ABOUT</span><span data-i18n="author.tabBooks">ALL BOOKS</span></div>
   </div>
 
-  <div class="bigname" data-i18n="author.name">Rosa Delgado</div>
+  <h1 class="bigname" data-i18n="author.name">Rosa Delgado</h1>
 
   <div class="twocol">
 
@@ -112,11 +208,11 @@
     <div class="panel">
       <h2 data-i18n="author.popularH2">Most popular</h2>
       <div class="bookcard">
-        <a href="book.html"><img src="covers/road-from-manila.png" alt="Cover of The Road from Manila" data-i18n-attr="alt:author.coverAlt"></a>
+        <a href="book.html"><img src="covers/road-from-manila.png" alt="Cover of The Road from Manila" data-i18n-attr="alt:author.coverAlt" width="848" height="1264" fetchpriority="high" decoding="async"></a>
         <div>
           <div class="t"><a href="book.html" data-i18n="author.bookTitle">The Road from Manila</a></div>
           <div class="stars" role="img" aria-label="4.4 out of 5 stars, 214 ratings" data-i18n-attr="aria-label:author.starsAria">★★★★☆<span class="count">(<span data-i18n-num="214">214</span>)</span></div>
-          <div style="margin:6px 0"><span class="kulogo">kindle<b>unlimited</b></span></div>
+          <div style="margin:6px 0"><span class="kulogo" lang="en">kindle<b>unlimited</b></span></div>
           <div><span class="price"><span class="sym">$</span><span class="whole">0</span><span class="frac">00</span></span> <span class="orbuy" data-i18n="author.orBuy">or $4.99 to buy</span></div>
           <div class="partof" style="margin-top:6px"><span data-i18n="common.partOf">Part of:</span> <a href="index.html" data-i18n="author.partOfValue">Lived Experience</a></div>
         </div>
@@ -124,7 +220,7 @@
 
       <div style="margin-top:16px">
         <div class="abox">
-          <h3 data-i18n="author.access.h3">Rosa's access settings</h3>
+          <h2 data-i18n="author.access.h3">Rosa's access settings</h2>
           <div class="sub" data-i18n="author.access.sub">Chosen by the author · Changeable anytime</div>
           <div class="tier">
             <b data-i18n="author.access.tier1Label">Questions about the book</b> — <span class="state" data-i18n="author.access.tier1State">On</span>
@@ -147,11 +243,13 @@
 
   </div>
 
-  <p class="credits" data-i18n="author.credits1">
+  </main>
+
+  <footer class="credits" data-i18n="author.credits1">
     Reader Discovery team — Jakob Picciotto · Pablo Ortega · Jalen Oscar Howard · Wanting Chao ·
     Access tiers: Pablo's concept (7/27) · Author-statement gate: Wanting's mechanism (7/27) ·
     StoryCorps framing: Chang (7/24)
-  </p>
+  </footer>
 
 </div>
 
@@ -160,6 +258,7 @@
 <script src="i18n/strings.zh.js"></script>
 <script src="i18n/strings.fil.js"></script>
 <script src="i18n/strings.ar.js"></script>
+<script src="i18n/strings.fr.js"></script>
 <script src="i18n/i18n.js"></script>
 </body>
 </html>

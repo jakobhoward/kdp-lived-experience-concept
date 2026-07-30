@@ -4,7 +4,24 @@
    Rule for this file: every component must have a real counterpart on
    Amazon.com. No pastel pills, no colored left-edge accent bars, no status
    dots — Amazon uses bordered a-boxes, solid squared badges, "Part of:" text
-   links, and bold-label rows. When in doubt, copy the buy box. */
+   links, and bold-label rows. When in doubt, copy the buy box.
+
+   ACCESSIBILITY PASS (2026-07-29). Measured ratios and the full reasoning are in
+   scratchpad/accessibility-report.md. Three things this file now carries that it
+   did not before, and one thing it deliberately still does not:
+
+   1. A global :focus-visible indicator (there was none anywhere), in two variants
+      so it is visible on white AND inside the two dark navs.
+   2. A prefers-reduced-motion guard covering the whole prototype, not just the
+      language control.
+   3. Landmark/list plumbing for .subnav and .crumbs, which are now a real <nav>
+      + <ul>/<ol> instead of flex-of-spans, with no change to how they look.
+
+   NOT changed, on purpose: --star (#DE7921) and --rule (#D5D9D9). Both are
+   Amazon's real values and both are below what WCAG would want in one of the
+   roles we use them in. Silently "improving" a brand colour would make the
+   prototype's contrast claims untestable against the real store. Reported
+   instead — see the report's "Known limitations". */
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -24,6 +41,52 @@
   --ku: #E87722;
   --green: #067D62;      /* Amazon's real green — "In Stock", savings */
   --badge: #C45500;      /* Amazon's Best Seller badge orange */
+
+  /* Focus ring colours. --focus is --link, which measures 5.67:1 on white and so
+     clears the 3:1 that WCAG 1.4.11 asks of a focus indicator against the page.
+     --focus-dark is Amazon's CTA yellow, 12.69:1 on --nav and 10.6:1 on --nav2;
+     --link on those two navs would be under 2:1, which is why there are two. */
+  --focus: #007185;
+  --focus-dark: #FFD814;
+}
+
+/* ---------- focus visibility (WCAG 2.4.7 / 1.4.11) ----------
+   There was no focus styling anywhere in this prototype before this pass: a
+   keyboard reader could tab through the whole thing and never know where they
+   were, which on a page arguing that access should not depend on sight is the
+   worst available bug.
+
+   2px of solid outline plus 2px of offset gives a contiguous ring at least 2px
+   thick on every side, and the offset guarantees the ring sits on the page
+   background rather than on the control's own fill — so its contrast is the
+   measured --focus-on-white figure regardless of what the button is filled with.
+   The white box-shadow underneath is the separator for the one case the offset
+   cannot help: a focused control sitting on --nav2 or on a dark placeholder. */
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px #fff;
+}
+/* Inside the two dark navs the ring flips to yellow and drops the white halo,
+   which would read as a glow rather than a separator on a near-black bar. */
+.topnav :focus-visible,
+.subnav :focus-visible,
+.banner :focus-visible {
+  outline-color: var(--focus-dark);
+  box-shadow: none;
+}
+
+/* ---------- reduced motion ----------
+   i18n.css already disables the language control's one-time ring. This is the
+   catch-all for everything else in the prototype, present and future: nothing
+   here is animation that carries meaning, so it can all be stopped outright. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 body {
@@ -34,6 +97,18 @@ body {
   line-height: 1.4;
 }
 
+/* MEASURED, AND REPORTED RATHER THAN QUIETLY CHANGED.
+   --link #007185 on white is 5.67:1 and on --altbg 5.41:1 — both clear AA.
+   --hover #C7511F is 4.54:1 on white (a pass, barely) but 4.33:1 on the --altbg tint,
+   which is a fail for body text by 0.17. That affects link hover inside the tinted
+   a-boxes: the attestation panel on book.html and the collection card on browse.html.
+   #C7511F is Amazon's real link-hover colour, and this prototype's argument depends on
+   a reviewer being able to check every value against the live store, so it is NOT being
+   nudged darker here. Two things bound the harm and are worth stating out loud:
+   hover is a transient state, not resting text, and the underline below carries the
+   hover independently of the colour — so nothing is signalled by colour alone.
+   If this were shipping rather than being argued about, the fix is Amazon's, not ours:
+   #B14018 would clear 4.5:1 on both backgrounds. */
 a { color: var(--link); text-decoration: none; }
 a:hover { text-decoration: underline; color: var(--hover); }
 
@@ -45,6 +120,28 @@ a:hover { text-decoration: underline; color: var(--hover); }
   text-align: center;
   font-size: 12px;
   padding: 6px 10px;
+}
+
+/* ---------- skip link ----------
+   Every page puts a disclaimer bar, a brand row, a search box, a language control
+   and a six-item store nav in front of the content. That is roughly a dozen tab
+   stops before the first word on the page, repeated identically on five pages —
+   the textbook case for a skip link. Off-screen until focused, which is the only
+   way it can exist without adding a visible element Amazon does not have. */
+.skiplink {
+  position: absolute;
+  inset-inline-start: -9999px;
+  top: 0;
+  z-index: 100;
+  background: #fff;
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  padding: 10px 16px;
+  font-size: 13px;
+}
+.skiplink:focus {
+  inset-inline-start: 0;
+  text-decoration: underline;
 }
 
 /* ---------- header ---------- */
@@ -64,17 +161,34 @@ a:hover { text-decoration: underline; color: var(--hover); }
 .topnav .acct { font-size: 12px; line-height: 1.25; color: #ddd; }
 .topnav .acct b { color: #fff; display: block; font-size: 13px; }
 
+/* The store nav is a <nav> with an accessible name wrapping a real <ul>, so the
+   flex container moved from .subnav onto that list. Renders identically; the
+   difference is that a screen reader now announces "navigation, Store sections,
+   list of 6 items" instead of six unrelated runs of text.
+   The six items stay plain text rather than becoming buttons or links: they are
+   inert store chrome, and the rule this prototype follows is that anything drawn
+   as Amazon's .btn atom becomes a real control while flat text stays text. Six
+   dead tab stops on every page, five pages deep, would be a worse outcome than
+   the honest one. */
 .subnav {
   background: var(--nav2); color: #ddd; font-size: 13px;
-  padding: 8px 18px; display: flex; gap: 18px;
+  padding: 8px 18px;
+}
+.subnav ul {
+  list-style: none; display: flex; gap: 18px;
   flex-wrap: wrap; row-gap: 6px;   /* translated labels run longer than the English */
 }
 
 .page { max-width: 1180px; margin: 0 auto; padding: 18px 20px 50px; }
 
 /* Chevrons are generated rather than typed, so they can point the way the reader is
-   travelling — see i18n.css for the right-to-left form. */
-.crumbs { font-size: 12px; color: var(--soft); margin-bottom: 14px; }
+   travelling — see i18n.css for the right-to-left form.
+   .crumbs is now the <ol> itself, inside a <nav aria-label="Breadcrumb">, so the
+   existing "> * + *" selector still matches (li + li) and the i18n.css RTL rule
+   keeps working untouched. display:inline on the items preserves the original
+   run-on text rendering exactly. */
+.crumbs { font-size: 12px; color: var(--soft); margin-bottom: 14px; list-style: none; }
+.crumbs li { display: inline; }
 .crumbs > * + *::before { content: " › "; color: var(--soft); }
 
 /* ---------- atoms ---------- */
@@ -88,11 +202,54 @@ a:hover { text-decoration: underline; color: var(--hover); }
 .kulogo { color: var(--ku); font-weight: 700; font-size: 13px; white-space: nowrap; }
 .kulogo b { color: #111; font-weight: 700; }
 
+/* ---------- .btn, and what an inert control is allowed to be ----------
+   THE DECISION, because it is the one an accessibility reviewer should argue with.
+
+   Most controls in this prototype do nothing: it is a picture of a store. They
+   used to be <span class="btn">, which meant a keyboard user could not reach them
+   and a screen-reader user was never told they existed at all. That is not a
+   neutral choice — it silently deletes the buy box, the sample links and the
+   Follow control from the page for anyone not using a mouse and eyes. The page
+   whose whole argument is that reach should not depend on sight cannot ship that.
+
+   The three candidates:
+     (a) leave them presentational. Cheapest, and wrong: it hides the store
+         grammar the prototype exists to show from precisely the readers this
+         project is about.
+     (b) real <button disabled>. Honest about doing nothing, but `disabled`
+         removes them from the tab order too, so it lands back at (a) for a
+         keyboard user, and disabled controls are skipped by some screen readers.
+     (c) real <button type="button" aria-disabled="true"> — CHOSEN. Reachable by
+         Tab, announced as a button by name, and announced as unavailable. Nothing
+         happens on click for anyone, sighted or not, which is the same behaviour
+         everyone already gets.
+
+   The usual objection to (c) is that an aria-disabled control looks enabled and
+   so lies to sighted users while telling the truth to screen-reader users. It
+   does not lie here, because the disclaimer is not per-control: every page opens
+   with the concept banner saying, to everybody, "controls are non-functional".
+   The visual channel already carries the statement globally; aria-disabled just
+   restates it locally for the channel that cannot see the banner's placement.
+
+   Applied consistently on every page: anything styled as .btn is a real button.
+   Flat text that merely sits in a control-shaped slot — the subnav items, the
+   author-page tabs, the "Sort by: Featured" strip — stays text, because turning
+   scenery into three dozen dead tab stops is a checkbox, not an improvement.
+   The exceptions are the controls that genuinely work (the ask flow on book.html
+   and the language picker), which are ordinary enabled buttons. */
 .btn {
   display: block; width: 100%; text-align: center;
   border-radius: 100px; padding: 8px 14px;
   font-size: 13px; border: 1px solid transparent; cursor: default;
+  /* min-height clears WCAG 2.5.8's 24px target minimum even at the smallest
+     padding override on browse.html's result rows (5px/12px = 27px today, but
+     the floor should not depend on a page-level rule staying put). */
+  min-height: 24px;
 }
+/* <button> does not inherit the page font, and its UA colour would override the
+   inherited --ink. Both restated rather than relying on the browser. */
+button.btn { font: inherit; color: var(--ink); }
+.btn[aria-disabled="true"] { cursor: default; }
 .btn.yellow { background: var(--cta); border-color: var(--cta-border); }
 .btn.orange { background: var(--buy); }
 .btn.ghost { background: #fff; border-color: var(--rule); }
@@ -121,7 +278,11 @@ a:hover { text-decoration: underline; color: var(--hover); }
   background: #fff;
 }
 .abox.alt { background: var(--altbg); }
-.abox h3 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+/* The a-box title is the panel's own heading and is now an <h2> on every page —
+   it was an <h3> sitting directly under the page <h1>, i.e. a skipped level. The
+   direct-child selector keeps this rule off the <h3>s that now live *inside* the
+   ask panel's states. */
+.abox > h2 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
 .abox .sub { font-size: 12px; color: var(--soft); margin: -4px 0 10px; }
 
 /* attestation body */
@@ -133,18 +294,54 @@ a:hover { text-decoration: underline; color: var(--hover); }
 .tier { padding: 9px 0; border-top: 1px solid #E7E9E9; font-size: 13px; }
 .tier:first-of-type { border-top: 0; padding-top: 2px; }
 .tier b { font-weight: 700; }
+/* NON-COLOUR SIGNAL (WCAG 1.4.1). Green-vs-gray is not the carrier of on/off here
+   and must never become it: the state is a WORD — "On" against "Available to any
+   author" — so the meaning survives greyscale, a colour-blind reader and a screen
+   reader identically. Colour and weight are redundant emphasis on top of text
+   that already says it.
+   Deliberately NOT added: a ✓/✕ glyph or a status dot. Both would be decoration
+   duplicating a word that is already there, and a status dot is banned by this
+   file's visual grammar anyway. The weight difference is kept so the two states
+   remain distinguishable if a translator ever shortens one to a bare "Off".
+   --green measures 5.10:1 on white and --soft 7.07:1, so both clear AA as text. */
 .tier .state { color: var(--green); font-weight: 700; }
-.tier .state.off { color: var(--soft); }
+.tier .state.off { color: var(--soft); font-weight: 400; }
 .tier p { color: var(--soft); font-size: 12px; margin-top: 2px; line-height: 1.45; }
 .abox .note {
   font-size: 12px; color: var(--soft); line-height: 1.5;
   margin-top: 12px; padding-top: 10px; border-top: 1px solid #E7E9E9;
 }
 
-/* ---------- footer credits ---------- */
+/* ---------- target size (WCAG 2.5.8) ----------
+   The language notice's dismiss "✕" lives in i18n.css and is 16px square there,
+   under the 24px minimum. i18n.css is not this pass's file to edit, so the floor
+   is set here with enough specificity to win the cascade despite loading first.
+   Inline text links (breadcrumbs, the rail, the "See more" expander) are exempt
+   from 2.5.8 under its own inline exception and are left alone. */
+.langnotice button.langnotice-x { min-width: 24px; min-height: 24px; }
+
+/* ---------- footer credits ----------
+   Now a <footer> element, a direct child of div.page, which makes it the page's
+   contentinfo landmark (its nearest sectioning ancestor is <body>, not <main>). */
+/* 14px, not the 11.5px this started at. These notes carry the reasoning the pages
+   are arguing for — who the fictional authors are and are not, why a category is a
+   location and not an endorsement, why the books are invented at all. Set in fine
+   print they read as a disclaimer to be skipped; at body size they read as part of
+   the argument, which is what they are. The 68ch cap keeps the lines readable now
+   that they are big enough to run the full width of the page. */
 .credits {
   margin-top: 44px; padding-top: 14px;
+  margin-left: auto; margin-right: auto; max-width: 68ch;
   border-top: 1px solid var(--rule);
-  font-size: 11.5px; color: var(--soft);
-  line-height: 1.6; text-align: center;
+  font-size: 14px; color: var(--soft);
+  line-height: 1.65; text-align: center;
 }
+/* The <br>-separated notes need air between them, or three stacked paragraphs at
+   body size read as one run-on block. Each span is a standalone note on every page
+   that has them (index, browse, search), so promoting them to blocks and dropping
+   the <br>s changes the spacing without changing the reading order or the markup.
+   book.html and author.html put their credit line straight in the footer with no
+   span, so they take the size bump and nothing else. */
+.credits span { display: block; margin-bottom: 11px; }
+.credits span:last-child { margin-bottom: 0; }
+.credits br { display: none; }

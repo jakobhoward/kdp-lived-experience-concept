@@ -1,0 +1,666 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Hosted so the team can just open a link, but deliberately not indexable: this page
+     borrows Amazon's store grammar on purpose, and it should never turn up in a search
+     result stripped of the student-concept banner below. -->
+<meta name="robots" content="noindex, nofollow">
+<title>memoir about leaving home — search results (concept)</title>
+<link rel="stylesheet" href="amazon.css">
+<link rel="stylesheet" href="i18n/i18n.css">
+<!-- Loads third, and last: viewport adaptation overrides both of the above. -->
+<link rel="stylesheet" href="responsive.css">
+
+<!-- =====================================================================
+     WHY THIS PAGE EXISTS, AND WHY IT DOES NOT TOUCH RANKING
+     =====================================================================
+     R7 — "no search / ranking / recommendation changes" — is the hardest line in this
+     project (Chang 7/20: no algorithm changes; Rachel 7/23: "'just promote it in the
+     algorithm!' is shallow in the same way as 'just launch in every language!'"). The
+     obvious way to honour it is to build no search page at all. We built one anyway,
+     because "we didn't touch search" is a claim, and a claim is weaker than a page a
+     reviewer can look at.
+
+     So this is a faithful, inert Kindle-Store results page for the query "memoir about
+     leaving home", and the only thing on it that is ours is the following, on two of the
+     sixteen rows:
+
+       1. a "Part of: Lived Experience" TEXT LINK, in the slot where Amazon already
+          prints a book's series line ("Book 3 of 7: Series Name"); and
+       2. one CSS-clipped line of the author's own quoted statement, as plain gray text
+          in the slot Amazon already uses for a truncated description snippet.
+
+     That is it. Specifically NOT here:
+       - no re-ordering, no boost, no "featured" placement, no cluster or carousel;
+       - no refinement of ours in the left rail — every one of the six groups there is a
+          refinement Amazon already ships (R4 retired store-wide filters and facets, and
+          the rail is the evidence we honoured it);
+       - no sort option of ours — the control is Amazon's, at Amazon's default;
+       - no badge. The green "✓ Answers reader questions" badge is legitimate on the
+          collection page and the detail page, because Amazon can observe whether an
+          author answers readers and can take it away. On a SERP row the same badge
+          reads as a merchandising flag injected into search, which is exactly the
+          reading we cannot afford. Conceding it here is what makes the "Part of:" line
+          credible. It appears nowhere on this page;
+       - no visual differentiation of the two member rows: no tint, no border, no accent
+          bar, no bigger cover, no "Featured" label;
+       - no strikethrough price, percent-off or deal flag anywhere (R2).
+
+     Positions 6 and 11 are deliberate. Top-three is where promotion would show, and
+     adjacent rows would look seeded. Two of sixteen, for a query that is literally the
+     subject of both books, is the density an ordinary topical relevance match produces.
+     The two Sponsored rows (1 and 9) are deliberately NOT ours: the one place on a real
+     SERP where money already moves results is visibly not somewhere we put ourselves.
+
+     Everything on this page is fictional, including the result count. It is store
+     chrome for a fictional query, in the same class as the 214 ratings on book.html —
+     it is not a statistic and must never migrate into the PRD or the deck as a figure
+     about anything.
+     ===================================================================== -->
+
+<style>
+  /* page-specific: two-column search results page.
+     Grid, not float — under dir="rtl" the rail moves to the right and the covers move
+     to the inline-end of each row with no extra rules. */
+  .serp { display: grid; grid-template-columns: 240px 1fr; gap: 30px; align-items: start; }
+
+  /* ---------- left rail ----------
+     Every control here is an inert <span>/<li>, never a real <input>. Same convention as
+     the rest of the prototype, and it keeps a screen reader from announcing a checkbox
+     that cannot be checked. */
+  .rail { font-size: 13px; }
+  /* h2, not h3: the page h1 is the result count directly above this grid, so h3 here
+     would skip a level. The size is set explicitly and does not depend on the tag. */
+  .rail h2 { font-size: 15px; font-weight: 700; margin: 18px 0 6px; }
+  .rail h2:first-child { margin-top: 0; }
+  .rail ul { list-style: none; }
+  .rail li { padding: 3px 0; color: var(--ink); }
+  .rail .sub { padding-inline-start: 14px; }      /* the department tree's children */
+  .rail .cur { font-weight: 700; color: var(--ink); }
+  .rail .cb {
+    display: inline-block; width: 13px; height: 13px;
+    border: 1px solid var(--soft); border-radius: 2px;
+    vertical-align: -2px; margin-inline-end: 8px;
+  }
+  .rail .stars { font-size: 14px; }
+  .rail .andup { color: var(--ink); font-size: 12.5px; margin-inline-start: 6px; }
+
+  /* ---------- results head ---------- */
+  /* Full-width toolbar above the rail+results grid, which is where Amazon's own results
+     bar sits. Moved out of the right-hand column in the accessibility pass so that the
+     page <h1> (the result count) precedes the rail's <h2>s in the DOM instead of trailing
+     six of them. Reordering with CSS was the alternative and was rejected: it would put
+     the visual order and the reading order out of step, which is WCAG 1.3.2. */
+  .resulthead {
+    display: flex; justify-content: space-between; align-items: baseline;
+    gap: 16px; flex-wrap: wrap; row-gap: 8px;
+    border-bottom: 1px solid var(--rule); padding-bottom: 10px;
+    margin-bottom: 18px;
+  }
+  /* The count is the page heading; it must not inherit the browser's h1 type. */
+  .resulthead .count { font-size: 14px; font-weight: 400; margin: 0; }
+  .resulthead .q { color: var(--hover); }   /* Amazon prints the search term in this red */
+  .sortby {
+    border: 1px solid var(--rule); border-radius: 8px;
+    padding: 5px 10px; background: var(--altbg); font-size: 13px;
+    white-space: nowrap;
+  }
+
+  /* THE DEFENSE NOTE. Same atoms and same register as index.html's .gate-note: bold
+     label, lowercase continuation. Directly under the result count and above result 1 —
+     the first thing a reader reaches — and outside the rail so it can never be mistaken
+     for a refinement. */
+  .serp-note { font-size: 13px; line-height: 1.55; margin: 0 0 4px; }
+  .reslist { list-style: none; }
+
+  /* ---------- one result row ---------- */
+  .res {
+    display: grid; grid-template-columns: 150px 1fr; gap: 18px;
+    padding: 20px 0; border-bottom: 1px solid #E7E9E9;   /* the .tier hairline */
+  }
+  .res .info { min-width: 0; }   /* lets the clipped last line actually clip */
+  /* One rule for all sixteen covers. The fourteen filler rows previously used typeset
+     colour-block placeholders; they now carry real cover art on the same terms as the two
+     collection rows — same size, same corner, same shadow, same untitled painterly
+     treatment — because visual parity across all sixteen rows is the point of this page.
+     A styled placeholder next to two illustrated covers would have read as exactly the
+     "you highlighted your own" treatment this page exists to defeat. */
+  .res img {
+    width: 100%; aspect-ratio: 2/3; object-fit: cover;
+    border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,.18);
+  }
+
+  .res .sponsored { font-size: 12px; color: var(--soft); margin-bottom: 2px; }
+  /* Amazon's SERP titles are dark, not link-blue; they turn --hover on hover, which the
+     global a:hover already does. */
+  /* font-weight is now stated rather than inherited: the title became an <h2> in the
+     accessibility pass and would otherwise pick up the browser's bold. Amazon's SERP
+     titles are normal weight, and a bolder title on this page of all pages would be a
+     visual difference a reviewer could point at. */
+  .res .t { font-size: 18px; line-height: 1.3; font-weight: 400; color: var(--ink); }
+  .res .t a { color: var(--ink); }
+  /* Flex row rather than inline text, copied from book.html's .byline: not every
+     language needs a word before the author's name, and the :empty rule removes the
+     unused slot instead of leaving a stray space. */
+  .res .by {
+    font-size: 13px; color: var(--soft); margin: 2px 0 3px;
+    display: flex; flex-wrap: wrap; gap: 0 5px; align-items: baseline;
+  }
+  .res .by > span:empty { display: none; }
+  .res .by .an { color: var(--link); }
+  /* Reuses the global .partof atom; only the scale changes for a result row. */
+  .res .partof { font-size: 12.5px; margin: 4px 0 0; }
+  .res .stars { margin-top: 4px; }
+  .res .fmt { font-size: 12px; color: var(--soft); margin-top: 3px; }
+  .res .pricerow { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
+  .res .pricerow .price { font-size: 16px; }
+
+  /* The author's own line, on a result row.
+     Deliberately NOT the bordered .voice module from index.html. On a card grid that box
+     is the mark of belonging; in a linear result list a bordered module is a badge by
+     another name. Here it is plain gray text in the slot Amazon already uses for a
+     truncated description snippet. No border, no background, no ✓, no icon, no colour.
+     Clipped in CSS, never in the string: the whole sentence stays in the DOM for a
+     screen reader, and a longer translated line clips correctly instead of breaking a
+     hardcoded ellipsis. */
+  .res .attest-line {
+    font-size: 12.5px; color: var(--soft); margin-top: 6px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+
+  /* 760px, not 900px. At 768px — an iPad in portrait — this page was stacking its rail
+     while browse.html, the other row-list page, still showed its rail beside the
+     results; the same reviewer on the same device got two different treatments of the
+     same idea. Neither page should stack until its result row genuinely stops fitting,
+     and the two thresholds differ because the two rows do: a result row here is a 150px
+     cover plus 18px of gap, and a comfortable text column beside it is about 280px, so
+     the results track needs 448px and the whole grid needs 448 + 240 rail + 30 gap +
+     28 gutter = 746px. browse.html's rows use a 92px cover and clear the same bar at
+     about 650px, which is why its own threshold is 700 and this one is 760. Same rule
+     derived twice, not two conventions. */
+  @media (max-width: 760px) {
+    .serp { grid-template-columns: 1fr; gap: 22px; }
+    /* `order: 2` REMOVED HERE, reversing an earlier decision, because measurement
+       contradicted the reason it was made. The comment it replaces said the rail
+       "drops below the results, as Amazon's does" — true of Amazon, but Amazon's
+       phone rail is behind a Filters control, so it is one tab stop, not eleven.
+       This rail holds eleven real <a href> links (three department levels, four
+       taxonomy children, four price bands, "See more"). With order: 2 at 640px the
+       rail painted at y≈3,900 while the results ran from y=362 to y=3,866 — so a
+       keyboard user tabbing off the last result landed on links nearly five screens
+       above where the focus ring appeared, with nothing to indicate the jump. That is
+       WCAG 2.4.3, and it is the same trade book.html refused to make on this exact
+       grounds ("Reordering would read correctly and tab wrongly").
+       Without it the rail stacks above the results in DOM order, which also makes this
+       page the same shape as browse.html on a phone — see the note there about why
+       that rail stays on top too. The cost is about 400px of scroll before result 1;
+       the mitigation is that everything in the rail gets tighter below 700px. */
+    /* Once the rail is out of the row, the results are the page and the note above
+       them is the first thing read; it keeps its a-box but not its desktop margins. */
+    .serp-note { margin-bottom: 0; }
+  }
+  @media (max-width: 560px) {
+    .res { grid-template-columns: 110px 1fr; gap: 12px; }
+    .res .t { font-size: 16px; }
+  }
+  /* SMALL PHONE. 110px of cover plus 12px of gap leaves 174px of text column at
+     320px, and a 16px title in 174px is four lines for "Homesick for a Place That
+     Changed". 76px matches the cover width browse.html's row list drops to at the
+     same width, so the two row-based pages stay the same shape as each other — which
+     matters more than either number, because a reviewer comparing them on a phone is
+     comparing our two surfaces, not our two stylesheets. */
+  /* The rail is above the results on a phone now (see the note in the 900px block),
+     so it has to earn its screen space rather than sprawl. Same treatment as
+     browse.html's rail at the same width, for the same reason. */
+  @media (max-width: 700px) {
+    .rail { padding-bottom: 14px; border-bottom: 1px solid var(--rule); }
+    .rail h2 { font-size: 14px; margin: 14px 0 4px; }
+    .rail h2:first-child { margin-top: 0; }
+  }
+  @media (max-width: 400px) {
+    .res { grid-template-columns: 76px 1fr; gap: 10px; padding: 14px 0; }
+    .res .t { font-size: 15px; }
+  }
+
+  /* THE AUTHOR'S OWN LINE, ON A PHONE. .attest-line clips to one line with an
+     ellipsis, which is right on a desktop row where one line is most of the sentence.
+     At 320px the text column is 158px against a 529px sentence: 70% of it was thrown
+     away, on one of only two things this page adds and the one that is the author
+     speaking. Two lines instead, below 700px — which is also what Amazon's phone SERP
+     gives a description snippet.
+     Still clipped in CSS and never in the string, which was the original rule and the
+     reason it matters: the whole sentence stays in the DOM, so a screen reader reads
+     all of it, and a longer translation clips correctly instead of running past a
+     hardcoded ellipsis. line-clamp needs the -webkit- prefixed trio to work anywhere;
+     the unprefixed property is listed first for whenever that stops being true. */
+  @media (max-width: 700px) {
+    .res .attest-line {
+      white-space: normal;
+      line-clamp: 2;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+  }
+</style>
+</head>
+<body data-i18n-title="search.docTitle">
+
+<!-- ============================ PAGE CHROME ============================
+     ACCESSIBILITY PASS. What changed here, and why, on all five pages:
+
+     - The disclaimer, the brand row and the store nav are now one <header>
+       banner landmark instead of three sibling <div>s floating outside every
+       landmark on the page. The concept banner in particular was orphaned
+       content: announced, but belonging to nothing.
+     - A skip link, off-screen until focused. There are ~12 tab stops in front
+       of the first word of content, identically on five pages.
+     - .subnav is a <nav> with an accessible name wrapping a real list. Its six
+       items stay plain text: they are inert store scenery, and the rule this
+       prototype follows is that Amazon's .btn atom becomes a real button while
+       flat text stays text (see amazon.css, "what an inert control is allowed
+       to be").
+     - The search field is readonly and its button is aria-disabled: the box is
+       reachable and announced, and says out loud that it will not search.
+     - lang="en" on the wordmarks. They are never translated, so on the Arabic
+       or Chinese rendering of this page they are a foreign-language run inside
+       the document's language (WCAG 3.1.2).
+     ==================================================================== -->
+<a class="skiplink" href="#main" data-i18n="chrome.skipToContent">Skip to main content</a>
+
+<header class="sitehead">
+  <div class="concept-banner"><strong data-i18n="chrome.conceptLabel">STUDENT CONCEPT — COMMLD 560, UW.</strong> <span data-i18n="search.disclaimer">Not an Amazon product. These results are a fictional example; every book, author, and rating is invented and no control works. The order of the results is not part of this proposal.</span></div>
+  <div class="topnav">
+    <div class="logo" lang="en">kindle<span>store</span></div>
+    <div class="searchbar"><input value="memoir about leaving home" placeholder="Search Kindle Store" aria-label="Search Kindle Store" data-i18n-attr="value:search.query;placeholder:chrome.searchPlaceholder;aria-label:chrome.searchAria" readonly><button aria-label="Search" aria-disabled="true" data-i18n-attr="aria-label:chrome.searchButtonAria">🔍</button></div>
+    <!-- the language control is injected here by i18n/i18n.js, in Amazon's own locale-selector slot -->
+    <div class="acct"><span data-i18n="chrome.greeting">Hello, Reader</span><b data-i18n="chrome.account">Account &amp; Lists</b></div>
+  </div>
+  <nav class="subnav" aria-label="Store sections" data-i18n-attr="aria-label:chrome.subnavAria">
+    <ul>
+      <li data-i18n="chrome.nav.shop">Shop Books</li><li data-i18n="chrome.nav.categories">Categories</li><li data-i18n="chrome.nav.trending">New &amp; Trending</li>
+      <li data-i18n="chrome.nav.bestsellers">Best Sellers &amp; More</li><li data-i18n="chrome.nav.deals">Deals</li><li data-i18n="chrome.nav.yourbooks">Your Books</li>
+    </ul>
+  </nav>
+</header>
+
+<!-- No .crumbs on this page, unlike index/book/author. A real Amazon results page carries
+     no store breadcrumb — the rail's department tree is its equivalent — and inventing one
+     on the riskiest page in the deck would be an element a reviewer could point at. -->
+
+<div class="page">
+
+<!-- MAIN LANDMARK. Everything between here and the credits was previously a bare
+     <div>, so a screen reader had no "jump to the content" target and the skip
+     link above would have had nowhere to land. <main> stays INSIDE div.page so the
+     max-width and padding are untouched, and the credits sit outside it as a
+     sibling — a <footer> whose nearest sectioning ancestor is <body>, which is what
+     makes it the contentinfo landmark rather than a generic block. -->
+<main id="main">
+  <!-- THE PAGE HEADING. This page had no <h1> at all — sixteen results and nothing
+       naming what they were results OF. The count line is the honest candidate: it is
+       already the page's title in plain words, it already carries the query, and it
+       needs no invented string. Amazon does the same thing.
+       The "Sort by" strip stays flat text rather than becoming a button: it is a picture
+       of Amazon's control at Amazon's default, and this page's whole argument is that we
+       did not touch sort. Making it a focusable control that refuses to sort would say
+       the opposite of that louder than the comment says it. -->
+  <div class="resulthead">
+    <h1 class="count" data-i18n-html="search.resultCountHtml">1-16 of over 800 results for <span class="q">“memoir about leaving home”</span></h1>
+    <!-- Amazon's own sort, at its own default, with its own options and none of ours
+         in it. Kept rather than deleted because a results page with no sort control
+         looks doctored, and "no — that is Amazon's Featured sort, unchanged" is a
+         better answer in the room than a missing control. -->
+    <div class="sortby"><span data-i18n="common.sortLabel">Sort by:</span> <b data-i18n="common.sortFeatured">Featured</b> <span aria-hidden="true">▾</span></div>
+  </div>
+
+  <div class="serp">
+
+    <!-- ============================ LEFT RAIL ============================
+         READ THIS BEFORE ASKING WHETHER WE ADDED A FILTER.
+         None of these six groups is ours. There is no "Lived Experience" checkbox, no
+         "author attestation" refinement, no "answers reader questions" refinement, no
+         "human-written" refinement, and nothing anywhere in the rail names or references
+         the collection. R4 retired store-wide filters and facets; this rail is the
+         evidence that we honoured it.
+
+         Two of the six are worth saying out loud in the room:
+           - Price is Amazon's stock refinement, shown inert. R2 forbids US introducing
+             price mechanics; it does not forbid depicting a control Amazon already ships.
+           - Language is the one refinement here that already serves the multilingual
+             authors and readers this project centers — and we did not add it. Amazon
+             shipped it years ago. That is a better argument than a paragraph of ours.
+         ================================================================== -->
+    <nav class="rail" aria-label="Refine results" data-i18n-attr="aria-label:search.railAria">
+
+      <h2 data-i18n="search.rail.dept">Department</h2>
+      <ul>
+        <!-- The three department levels above the current node are the same taxonomy
+             names the breadcrumb prints, so they reuse crumb.* rather than adding a
+             second set of keys that could drift apart in translation. -->
+        <li><a href="#" data-i18n="crumb.store">Kindle Store</a></li>
+        <li class="sub"><a href="#" data-i18n="crumb.ebooks">Kindle eBooks</a></li>
+        <li class="sub cur" data-i18n="crumb.memoirs">Biographies &amp; Memoirs</li>
+        <li class="sub"><a href="#" data-i18n="search.rail.deptChild1">Memoirs</a></li>
+        <li class="sub"><a href="#" data-i18n="search.rail.deptChild2">Cultural Heritage</a></li>
+        <li class="sub"><a href="#" data-i18n="search.rail.deptChild3">Ethnic &amp; National</a></li>
+        <li class="sub"><a href="#" data-i18n="search.rail.deptChild4">Travelers &amp; Explorers</a></li>
+      </ul>
+
+      <h2 data-i18n="search.rail.ku">Kindle Unlimited</h2>
+      <ul>
+        <li><span class="cb" aria-hidden="true"></span><span data-i18n="common.kuEligible">Kindle Unlimited Eligible</span></li>
+      </ul>
+
+      <h2 data-i18n="search.rail.format">Format</h2>
+      <ul>
+        <li><span class="cb" aria-hidden="true"></span><span data-i18n="common.kindleEdition">Kindle Edition</span></li>
+        <li><span class="cb" aria-hidden="true"></span><span data-i18n="search.rail.formatAudio">Audiobook</span></li>
+        <li><span class="cb" aria-hidden="true"></span><span data-i18n="search.rail.formatPaper">Paperback</span></li>
+        <li><span class="cb" aria-hidden="true"></span><span data-i18n="search.rail.formatHard">Hardcover</span></li>
+      </ul>
+
+      <h2 data-i18n="common.avgReview">Avg. Customer Review</h2>
+      <ul>
+        <li><span class="stars" role="img" aria-label="4 stars and up" data-i18n-attr="aria-label:search.rail.review4Aria">★★★★☆</span><span class="andup" data-i18n="search.rail.reviewAndUp">&amp; Up</span></li>
+        <li><span class="stars" role="img" aria-label="3 stars and up" data-i18n-attr="aria-label:search.rail.review3Aria">★★★☆☆</span><span class="andup" data-i18n="search.rail.reviewAndUp">&amp; Up</span></li>
+        <li><span class="stars" role="img" aria-label="2 stars and up" data-i18n-attr="aria-label:search.rail.review2Aria">★★☆☆☆</span><span class="andup" data-i18n="search.rail.reviewAndUp">&amp; Up</span></li>
+        <li><span class="stars" role="img" aria-label="1 star and up" data-i18n-attr="aria-label:search.rail.review1Aria">★☆☆☆☆</span><span class="andup" data-i18n="search.rail.reviewAndUp">&amp; Up</span></li>
+      </ul>
+
+      <h2 data-i18n="search.rail.price">Price</h2>
+      <ul>
+        <li><a href="#" data-i18n="search.rail.priceUnder5">Under $5</a></li>
+        <li><a href="#" data-i18n="search.rail.price5to10">$5 to $10</a></li>
+        <li><a href="#" data-i18n="search.rail.price10to20">$10 to $20</a></li>
+        <li><a href="#" data-i18n="search.rail.price20up">$20 &amp; Above</a></li>
+      </ul>
+
+      <h2 data-i18n="common.languageLabel">Language</h2>
+      <ul>
+        <li><span class="cb" aria-hidden="true"></span><span data-i18n="search.rail.langEnglish">English</span></li>
+        <li><span class="cb" aria-hidden="true"></span><span data-i18n="search.rail.langSpanish">Spanish</span></li>
+        <li><span class="cb" aria-hidden="true"></span><span data-i18n="search.rail.langFrench">French</span></li>
+        <li><span class="cb" aria-hidden="true"></span><span data-i18n="search.rail.langChinese">Chinese</span></li>
+        <li><span class="cb" aria-hidden="true"></span><span data-i18n="search.rail.langArabic">Arabic</span></li>
+        <li><a href="#" data-i18n="search.rail.seeMore">See more</a></li>
+      </ul>
+
+    </nav>
+
+    <!-- ============================ RESULTS ============================ -->
+    <section class="results">
+
+      <p class="abox alt serp-note">
+        <b data-i18n="search.orderNoteLabel">What this page does not change:</b>
+        <span data-i18n="search.orderNoteBody">the order of these results. Nothing here is re-ranked,
+        promoted, or filtered — we added no refinement to the left rail and no sort option — and the
+        two collection titles below carry only the same “Part of:” line Amazon already prints for a
+        book in a series, plus one line the author wrote.</span>
+      </p>
+
+      <!-- LIST + HEADINGS. Sixteen sibling <div>s with the titles in <div class="t">:
+           no "list of 16 items", no heading to jump between results, and no way for a
+           screen-reader user to tell where one result ended and the next began. An <ol>
+           because on a results page the order is information — which is the one thing
+           this page is at pains to say it did not touch. -->
+      <!-- COVERS. All sixteen rows carry generated cover art in one painterly, untitled
+           treatment, so no row is legible-or-not, illustrated-or-not, or otherwise
+           distinguishable by its cover — the two member rows differ from the fourteen
+           only in the two text lines called out at row 6. The fourteen filler covers
+           show places and objects and no faces: those titles are not people, and a
+           painted face would start to read as a persona the footer says they are not.
+           Their alt text is hardcoded English rather than keyed for translation, which
+           is how the filler titles themselves are already handled — search.rNN.title is
+           the same English string in all six locales, because inventing translated
+           titles for invented books would put fiction into the localisation work. -->
+      <ol class="reslist">
+
+      <!-- 1 — SPONSORED, not a collection title -->
+      <li class="res">
+        <img src="covers/house-on-winter-street.png" alt="Cover of The House on Winter Street" width="848" height="1264" fetchpriority="high" decoding="async">
+        <div class="info">
+          <div class="sponsored"><span data-i18n="search.sponsored">Sponsored</span> <span aria-hidden="true">ⓘ</span></div>
+          <h2 class="t" data-i18n="search.r01.title">The House on Winter Street</h2>
+          <div class="by"><span data-i18n="search.byPrefix">by</span> <span class="an" data-i18n="search.r01.author">Anne Prescott</span></div>
+          <div class="stars" role="img" aria-label="4.5 out of 5 stars, 12,480 ratings" data-i18n-attr="aria-label:search.r01.starsAria">★★★★☆<span class="count">(<span data-i18n-num="12480">12,480</span>)</span></div>
+          <div class="fmt" data-i18n="common.kindleEdition">Kindle Edition</div>
+          <div class="pricerow"><span class="price" dir="ltr">$9.99</span></div>
+        </div>
+      </li>
+
+      <!-- 2 -->
+      <li class="res">
+        <img src="covers/salt-and-distance.png" alt="Cover of Salt and Distance" width="848" height="1264" fetchpriority="high" decoding="async">
+        <div class="info">
+          <h2 class="t" data-i18n="search.r02.title">Salt and Distance</h2>
+          <div class="by"><span data-i18n="search.byPrefix">by</span> <span class="an" data-i18n="search.r02.author">Michael Brandt</span></div>
+          <div class="stars" role="img" aria-label="4.2 out of 5 stars, 3,109 ratings" data-i18n-attr="aria-label:search.r02.starsAria">★★★★☆<span class="count">(<span data-i18n-num="3109">3,109</span>)</span></div>
+          <div class="fmt" data-i18n="common.kindleEdition">Kindle Edition</div>
+          <div class="pricerow"><span class="price" dir="ltr">$12.99</span></div>
+        </div>
+      </li>
+
+      <!-- 3 -->
+      <li class="res">
+        <img src="covers/everything-i-left-behind.png" alt="Cover of Everything I Left Behind" width="848" height="1264" loading="lazy" decoding="async">
+        <div class="info">
+          <h2 class="t" data-i18n="search.r03.title">Everything I Left Behind</h2>
+          <div class="by"><span data-i18n="search.byPrefix">by</span> <span class="an" data-i18n="search.r03.author">Carol Whitfield</span></div>
+          <div class="stars" role="img" aria-label="4.4 out of 5 stars, 87 ratings" data-i18n-attr="aria-label:search.r03.starsAria">★★★★☆<span class="count">(<span data-i18n-num="87">87</span>)</span></div>
+          <div class="fmt" data-i18n="common.kindleEdition">Kindle Edition</div>
+          <div class="pricerow"><span class="price" dir="ltr">$0.00</span> <span class="kulogo" lang="en">kindle<b>unlimited</b></span></div>
+        </div>
+      </li>
+
+      <!-- 4 -->
+      <li class="res">
+        <img src="covers/departures-a-memoir.png" alt="Cover of Departures: A Memoir" width="848" height="1264" loading="lazy" decoding="async">
+        <div class="info">
+          <h2 class="t" data-i18n="search.r04.title">Departures: A Memoir</h2>
+          <div class="by"><span data-i18n="search.byPrefix">by</span> <span class="an" data-i18n="search.r04.author">Paul Ashby</span></div>
+          <div class="stars" role="img" aria-label="4.0 out of 5 stars, 1,204 ratings" data-i18n-attr="aria-label:search.r04.starsAria">★★★★☆<span class="count">(<span data-i18n-num="1204">1,204</span>)</span></div>
+          <div class="fmt" data-i18n="common.kindleEdition">Kindle Edition</div>
+          <div class="pricerow"><span class="price" dir="ltr">$6.99</span></div>
+        </div>
+      </li>
+
+      <!-- 5 -->
+      <li class="res">
+        <img src="covers/sixty-miles-from-anywhere.png" alt="Cover of Sixty Miles from Anywhere" width="848" height="1264" loading="lazy" decoding="async">
+        <div class="info">
+          <h2 class="t" data-i18n="search.r05.title">Sixty Miles from Anywhere</h2>
+          <div class="by"><span data-i18n="search.byPrefix">by</span> <span class="an" data-i18n="search.r05.author">Janet Kroll</span></div>
+          <div class="stars" role="img" aria-label="4.3 out of 5 stars, 640 ratings" data-i18n-attr="aria-label:search.r05.starsAria">★★★★☆<span class="count">(<span data-i18n-num="640">640</span>)</span></div>
+          <div class="fmt" data-i18n="common.kindleEdition">Kindle Edition</div>
+          <div class="pricerow"><span class="price" dir="ltr">$4.99</span></div>
+        </div>
+      </li>
+
+      <!-- 6 — COLLECTION MEMBER.
+           Exactly two things differ from the fifteen rows around it, and both are marked
+           below: the "Part of:" line (the slot Amazon already uses for a series) and the
+           author's own clipped line (the slot Amazon already uses for a description
+           snippet). Same cover size, same type, same order, no badge, no highlight.
+           Row 6 rather than row 1–3 on purpose: see the head comment. -->
+      <li class="res">
+        <a href="book.html"><img src="covers/road-from-manila.png" alt="Cover of The Road from Manila" data-i18n-attr="alt:index.book1.coverAlt" width="848" height="1264" loading="lazy" decoding="async"></a>
+        <div class="info">
+          <h2 class="t"><a href="book.html" data-i18n="index.book1.title">The Road from Manila</a></h2>
+          <div class="by"><span data-i18n="search.byPrefix">by</span> <span class="an" data-i18n="index.book1.author">Rosa Delgado</span></div>
+          <!-- OURS (1 of 2). The bare collection name only — no "(48 books)" count, which
+               belongs on the detail page (book.partOfValue). Amazon prints the bare series
+               name on a search row and the fuller form on the product page; so do we. -->
+          <div class="partof"><span data-i18n="common.partOf">Part of:</span> <a href="index.html" data-i18n="collection.name">Lived Experience</a></div>
+          <div class="stars" role="img" aria-label="4.4 out of 5 stars, 214 ratings" data-i18n-attr="aria-label:index.book1.starsAria">★★★★☆<span class="count">(<span data-i18n-num="214">214</span>)</span></div>
+          <div class="fmt" data-i18n="common.kindleEdition">Kindle Edition</div>
+          <div class="pricerow"><span class="price" dir="ltr">$0.00</span> <span class="kulogo" lang="en">kindle<b>unlimited</b></span></div>
+          <!-- OURS (2 of 2). The same string the collection card uses, so the two pages
+               can never drift. Clipped by CSS; the full sentence is in the DOM. -->
+          <div class="attest-line" data-i18n="index.book1.voice">"I left Manila in 1979. I wrote this in Tagalog first, because that is the language I remember it in."</div>
+        </div>
+      </li>
+
+      <!-- 7 -->
+      <li class="res">
+        <img src="covers/the-long-way-round.png" alt="Cover of The Long Way Round" width="848" height="1264" loading="lazy" decoding="async">
+        <div class="info">
+          <h2 class="t" data-i18n="search.r07.title">The Long Way Round</h2>
+          <div class="by"><span data-i18n="search.byPrefix">by</span> <span class="an" data-i18n="search.r07.author">Stephen Marek</span></div>
+          <div class="stars" role="img" aria-label="4.1 out of 5 stars, 58 ratings" data-i18n-attr="aria-label:search.r07.starsAria">★★★★☆<span class="count">(<span data-i18n-num="58">58</span>)</span></div>
+          <div class="fmt" data-i18n="common.kindleEdition">Kindle Edition</div>
+          <div class="pricerow"><span class="price" dir="ltr">$11.99</span></div>
+        </div>
+      </li>
+
+      <!-- 8 -->
+      <li class="res">
+        <img src="covers/a-door-that-did-not-lock.png" alt="Cover of A Door That Did Not Lock" width="848" height="1264" loading="lazy" decoding="async">
+        <div class="info">
+          <h2 class="t" data-i18n="search.r08.title">A Door That Did Not Lock</h2>
+          <div class="by"><span data-i18n="search.byPrefix">by</span> <span class="an" data-i18n="search.r08.author">Helen Voss</span></div>
+          <div class="stars" role="img" aria-label="4.6 out of 5 stars, 4,730 ratings" data-i18n-attr="aria-label:search.r08.starsAria">★★★★☆<span class="count">(<span data-i18n-num="4730">4,730</span>)</span></div>
+          <div class="fmt" data-i18n="common.kindleEdition">Kindle Edition</div>
+          <div class="pricerow"><span class="price" dir="ltr">$2.99</span></div>
+        </div>
+      </li>
+
+      <!-- 9 — SPONSORED, not a collection title. Sponsored placement is paid ranking: the
+           one mechanism on this page that genuinely moves results. Keeping our two rows
+           out of it is a free, visible proof point. -->
+      <li class="res">
+        <img src="covers/after-the-move.png" alt="Cover of After the Move" width="848" height="1264" loading="lazy" decoding="async">
+        <div class="info">
+          <div class="sponsored"><span data-i18n="search.sponsored">Sponsored</span> <span aria-hidden="true">ⓘ</span></div>
+          <h2 class="t" data-i18n="search.r09.title">After the Move</h2>
+          <div class="by"><span data-i18n="search.byPrefix">by</span> <span class="an" data-i18n="search.r09.author">Gregory Lyle</span></div>
+          <div class="stars" role="img" aria-label="3.9 out of 5 stars, 909 ratings" data-i18n-attr="aria-label:search.r09.starsAria">★★★★☆<span class="count">(<span data-i18n-num="909">909</span>)</span></div>
+          <div class="fmt" data-i18n="common.kindleEdition">Kindle Edition</div>
+          <div class="pricerow"><span class="price" dir="ltr">$8.99</span></div>
+        </div>
+      </li>
+
+      <!-- 10 -->
+      <li class="res">
+        <img src="covers/what-the-suitcase-held.png" alt="Cover of What the Suitcase Held" width="848" height="1264" loading="lazy" decoding="async">
+        <div class="info">
+          <h2 class="t" data-i18n="search.r10.title">What the Suitcase Held</h2>
+          <div class="by"><span data-i18n="search.byPrefix">by</span> <span class="an" data-i18n="search.r10.author">Barbara Nell</span></div>
+          <div class="stars" role="img" aria-label="4.2 out of 5 stars, 176 ratings" data-i18n-attr="aria-label:search.r10.starsAria">★★★★☆<span class="count">(<span data-i18n-num="176">176</span>)</span></div>
+          <div class="fmt" data-i18n="common.kindleEdition">Kindle Edition</div>
+          <div class="pricerow"><span class="price" dir="ltr">$0.00</span> <span class="kulogo" lang="en">kindle<b>unlimited</b></span></div>
+        </div>
+      </li>
+
+      <!-- 11 — COLLECTION MEMBER. Same two additions as row 6 and nothing else.
+           The title is not a link: no detail page exists for this book, and index.html
+           follows the same convention (only book 1 links). A dead link is a worse lie
+           than an unlinked title. -->
+      <li class="res">
+        <img src="covers/eleven-addresses.png" alt="Cover of Eleven Addresses" data-i18n-attr="alt:index.book5.coverAlt" width="853" height="1272" loading="lazy" decoding="async">
+        <div class="info">
+          <h2 class="t" data-i18n="index.book5.title">Eleven Addresses</h2>
+          <div class="by"><span data-i18n="search.byPrefix">by</span> <span class="an" data-i18n="index.book5.author">Terrance Boyd</span></div>
+          <div class="partof"><span data-i18n="common.partOf">Part of:</span> <a href="index.html" data-i18n="collection.name">Lived Experience</a></div>
+          <div class="stars" role="img" aria-label="4.6 out of 5 stars, 438 ratings" data-i18n-attr="aria-label:index.book5.starsAria">★★★★☆<span class="count">(<span data-i18n-num="438">438</span>)</span></div>
+          <div class="fmt" data-i18n="common.kindleEdition">Kindle Edition</div>
+          <div class="pricerow"><span class="price" dir="ltr">$0.00</span> <span class="kulogo" lang="en">kindle<b>unlimited</b></span></div>
+          <div class="attest-line" data-i18n="index.book5.voice">"Eleven places in six years after I got out. I wrote most of this on a library computer, an hour at a time."</div>
+        </div>
+      </li>
+
+      <!-- 12 -->
+      <li class="res">
+        <img src="covers/homesick-for-a-place-that-changed.png" alt="Cover of Homesick for a Place That Changed" width="848" height="1264" loading="lazy" decoding="async">
+        <div class="info">
+          <h2 class="t" data-i18n="search.r12.title">Homesick for a Place That Changed</h2>
+          <div class="by"><span data-i18n="search.byPrefix">by</span> <span class="an" data-i18n="search.r12.author">Diane Cutler</span></div>
+          <div class="stars" role="img" aria-label="4.4 out of 5 stars, 2,015 ratings" data-i18n-attr="aria-label:search.r12.starsAria">★★★★☆<span class="count">(<span data-i18n-num="2015">2,015</span>)</span></div>
+          <div class="fmt" data-i18n="common.kindleEdition">Kindle Edition</div>
+          <div class="pricerow"><span class="price" dir="ltr">$7.99</span></div>
+        </div>
+      </li>
+
+      <!-- 13 -->
+      <li class="res">
+        <img src="covers/the-year-of-boxes.png" alt="Cover of The Year of Boxes" width="848" height="1264" loading="lazy" decoding="async">
+        <div class="info">
+          <h2 class="t" data-i18n="search.r13.title">The Year of Boxes</h2>
+          <div class="by"><span data-i18n="search.byPrefix">by</span> <span class="an" data-i18n="search.r13.author">Thomas Reyburn</span></div>
+          <div class="stars" role="img" aria-label="4.0 out of 5 stars, 31 ratings" data-i18n-attr="aria-label:search.r13.starsAria">★★★★☆<span class="count">(<span data-i18n-num="31">31</span>)</span></div>
+          <div class="fmt" data-i18n="common.kindleEdition">Kindle Edition</div>
+          <div class="pricerow"><span class="price" dir="ltr">$3.99</span></div>
+        </div>
+      </li>
+
+      <!-- 14 -->
+      <li class="res">
+        <img src="covers/leaving-a-memoir-in-essays.png" alt="Cover of Leaving: A Memoir in Essays" width="848" height="1264" loading="lazy" decoding="async">
+        <div class="info">
+          <h2 class="t" data-i18n="search.r14.title">Leaving: A Memoir in Essays</h2>
+          <div class="by"><span data-i18n="search.byPrefix">by</span> <span class="an" data-i18n="search.r14.author">Ruth Almond</span></div>
+          <div class="stars" role="img" aria-label="4.3 out of 5 stars, 762 ratings" data-i18n-attr="aria-label:search.r14.starsAria">★★★★☆<span class="count">(<span data-i18n-num="762">762</span>)</span></div>
+          <div class="fmt" data-i18n="common.kindleEdition">Kindle Edition</div>
+          <div class="pricerow"><span class="price" dir="ltr">$10.99</span></div>
+        </div>
+      </li>
+
+      <!-- 15 -->
+      <li class="res">
+        <img src="covers/nobody-warned-me-about-the-quiet.png" alt="Cover of Nobody Warned Me About the Quiet" width="848" height="1264" loading="lazy" decoding="async">
+        <div class="info">
+          <h2 class="t" data-i18n="search.r15.title">Nobody Warned Me About the Quiet</h2>
+          <div class="by"><span data-i18n="search.byPrefix">by</span> <span class="an" data-i18n="search.r15.author">Frank Delahunt</span></div>
+          <div class="stars" role="img" aria-label="4.5 out of 5 stars, 5,388 ratings" data-i18n-attr="aria-label:search.r15.starsAria">★★★★☆<span class="count">(<span data-i18n-num="5388">5,388</span>)</span></div>
+          <div class="fmt" data-i18n="common.kindleEdition">Kindle Edition</div>
+          <div class="pricerow"><span class="price" dir="ltr">$0.00</span> <span class="kulogo" lang="en">kindle<b>unlimited</b></span></div>
+        </div>
+      </li>
+
+      <!-- 16 -->
+      <li class="res">
+        <img src="covers/the-country-i-remember.png" alt="Cover of The Country I Remember" width="848" height="1264" loading="lazy" decoding="async">
+        <div class="info">
+          <h2 class="t" data-i18n="search.r16.title">The Country I Remember</h2>
+          <div class="by"><span data-i18n="search.byPrefix">by</span> <span class="an" data-i18n="search.r16.author">Marjorie Stane</span></div>
+          <div class="stars" role="img" aria-label="4.2 out of 5 stars, 143 ratings" data-i18n-attr="aria-label:search.r16.starsAria">★★★★☆<span class="count">(<span data-i18n-num="143">143</span>)</span></div>
+          <div class="fmt" data-i18n="common.kindleEdition">Kindle Edition</div>
+          <div class="pricerow"><span class="price" dir="ltr">$5.99</span></div>
+        </div>
+      </li>
+
+      </ol>
+
+      <!-- The filler review counts deliberately straddle ours (31 … 12,480). A row with
+           214 ratings sitting above a row with 4,730 is what a topical relevance match
+           looks like on Amazon today, and it is the visible proof that popularity was not
+           the thing we bought. -->
+
+    </section>
+  </div>
+
+  </main>
+
+  <footer class="credits">
+    <span data-i18n="search.credits1">Reader Discovery team — Jakob Picciotto · Pablo Ortega · Jalen Oscar Howard · Wanting Chao ·
+    Collection membership is shown with Amazon's existing “Part of:” series line and nothing else — no new
+    search UI, no refinement, no ranking change · Author-statement gate: Wanting's mechanism (7/27) ·
+    The no-algorithm-changes scope line: Chang 7/20, Rachel 7/23</span><br>
+    <span data-i18n="search.credits2">Fourteen of these sixteen results are invented filler so that the two
+    collection titles sit in an ordinary result list rather than a staged one. Those fourteen are not
+    characters, personas, or research output; they carry no biography and appear on no other page.</span>
+  </footer>
+
+</div>
+
+<script src="i18n/strings.en.js"></script>
+<script src="i18n/strings.es.js"></script>
+<script src="i18n/strings.zh.js"></script>
+<script src="i18n/strings.fil.js"></script>
+<script src="i18n/strings.ar.js"></script>
+<script src="i18n/strings.fr.js"></script>
+<script src="i18n/i18n.js"></script>
+</body>
+</html>

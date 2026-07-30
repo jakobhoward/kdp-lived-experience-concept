@@ -10,15 +10,130 @@
 <title>The Road from Manila — book detail (concept)</title>
 <link rel="stylesheet" href="amazon.css">
 <link rel="stylesheet" href="i18n/i18n.css">
+<!-- Loads third, and last: viewport adaptation overrides both of the above. -->
+<link rel="stylesheet" href="responsive.css">
 <style>
   /* page-specific: 3-column detail layout (interface-reference.md §2) */
   .detail { display: grid; grid-template-columns: 260px 1fr 260px; gap: 28px; align-items: start; }
 
+  /* EXPLICIT PLACEMENT FOR FOUR CHILDREN, WHICH IS THE WHOLE TRICK.
+     .detail has four children now — cover column, middle column, buy box, ask panel —
+     because the ask panel was moved out of .leftcol (the note beside it in the markup
+     has the measurement that forced it: the book's own title sat 1,100px down the page
+     on a phone). Moving it in the DOM is what makes every narrow layout read in the
+     right order. Keeping the desktop rendering identical is what these four rules do.
+
+     The one that matters is `.mid { grid-row: 1 / span 2 }`. Grid rows are sized by the
+     items in them, and a SPANNING item's height is spread across the rows it crosses
+     rather than forcing either one. So row 1 is sized by the short things — the cover
+     column and the buy box, about 520px — and the ask panel, sitting in row 2 of
+     column 1, begins directly beneath the Follow card exactly where it always did.
+     Without the span, row 1 would be sized by the 1,100px middle column and the panel
+     would drop to the bottom of the page with a 600px hole above it.
+
+     And read row-major — cover, middle, buy box, then the panel below the cover — the
+     visual order is still the DOM order, at all three widths. That is the test the
+     reflow note below sets, and it is why this is placement rather than reordering:
+     nothing here is an `order` property, and nothing tabs out of sequence. */
+  .detail > .leftcol    { grid-column: 1; grid-row: 1; }
+  .detail > .mid        { grid-column: 2; grid-row: 1 / span 2; }
+  .detail > .buybox-col { grid-column: 3; grid-row: 1; }
+  .detail > .ask        { grid-column: 1; grid-row: 2; }
+
+  /* REFLOW (WCAG 1.4.10), added in the accessibility pass. This was the only page in
+     the prototype with no breakpoint at all: 260 + 260 + 56px of gap is a 576px floor,
+     so at 320–375px the page scrolled sideways and the title, the byline and the whole
+     buy box sat off the edge. That is not a phone-only problem — it is also what a
+     desktop reader sees at 200–400% zoom, which is the population this page is written
+     for. Amazon's own detail page stacks here too.
+     The columns stack in DOM order (cover → title and attestation → buy box) rather
+     than being reordered with `order`. Reordering would read correctly and tab wrongly,
+     which is WCAG 1.3.2, and the alternative — moving the title in the markup — would
+     put it above the cover on desktop as well. */
+  /* TABLET, which this page did not have. The rule below used to fire at 980px and
+     take the layout straight from three columns to one, so a 768px tablet — and a
+     1024px laptop at 133% zoom, and an iPad in landscape Split View — got the phone
+     layout: everything in a single 320px-capped ribbon down the inline-start edge,
+     2,515px of page where the desktop rendering was 1,525px.
+
+     Two columns instead, and the arrangement falls out of the DOM order for free:
+     .leftcol and .mid take row 1, and .buybox-col — being third and last — lands in
+     row 2, where it is told to span both tracks. So the visual order is exactly the
+     DOM order (cover and attestation, then the text, then the buy box across the
+     bottom), which is what makes this legal where a CSS reorder would not be. This
+     page rejected `order` outright as a WCAG 1.3.2 problem; nothing here reorders
+     anything, it only changes how many tracks the same sequence flows through.
+
+     The buy box going full-width rather than staying a 260px rail is also what
+     Amazon's own detail page does when its right rail runs out of room: the box
+     becomes a band. It reads as a band because it is one, not because we styled it
+     to look like one.
+
+     No `and (min-width: …)` pairing the two blocks below: the phone block simply comes
+     after this one and overrides it. A min/max pair has to be written as 700px and
+     701px, which leaves a fractional gap — a 700.4px viewport matches neither and
+     silently falls back to the three-column desktop grid — and fractional viewport
+     widths are ordinary on a scaled display. Letting the cascade do it has no seam. */
+  @media (max-width: 980px) {
+    .detail { grid-template-columns: 260px 1fr; gap: 24px; }
+    /* Row 1 is cover | text; the buy box and then the ask panel become full-width
+       bands under it. .mid drops its row span here — with only one row above the
+       bands there is nothing left to span, and leaving it would open an empty row. */
+    .detail > .mid        { grid-column: 2; grid-row: 1; }
+    .detail > .buybox-col { grid-column: 1 / -1; grid-row: 2; }
+    .detail > .ask        { grid-column: 1 / -1; grid-row: 3; }
+    /* A 260px buy box stretched to 700px would put two format tiles at 340px each
+       and a "Read for Free" button a third of a metre wide. Capped, and centred in
+       its own band, so it stays the size the buy box is on the live store. */
+    .buybox { max-width: 420px; margin-inline: auto; }
+  }
+
+  /* PHONE. One column, in DOM order, as before — this is the stack the reflow note
+     above was written for. What changed is that the 320px cap moved off the COLUMN
+     and onto the cover: capping the column also squeezed the ask panel, which is the
+     longest piece of prose on the page and the thing the page exists to show, into a
+     320px ribbon on a 700px screen. The cover is the only thing in that column that
+     should not grow. Centred, because a stacked Amazon detail page centres it. */
+  @media (max-width: 700px) {
+    .detail { grid-template-columns: 1fr; gap: 22px; }
+    /* All four children back to auto-placement, which in a single-column grid is DOM
+       order: cover → title, attestation and description → buy box → ask panel. That
+       is the order an Amazon detail page reads on a phone, and it is the reason the
+       panel was moved in the markup rather than pushed around with CSS. */
+    .detail > .leftcol,
+    .detail > .mid,
+    .detail > .buybox-col,
+    .detail > .ask { grid-column: 1; grid-row: auto; }
+    .leftcol img { max-width: 300px; display: block; margin-inline: auto; }
+    /* The sample buttons are a column here (Amazon's rule — see .sample-links above),
+       so they get the cover's 300px cap and its centring rather than a
+       justify-content, which in a column direction would distribute them vertically
+       and do nothing useful. */
+    .sample-links { max-width: 300px; margin-inline: auto; }
+    .metastrip { gap: 16px; }
+  }
+
   .leftcol img {
     width: 100%; border-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,.2); margin-bottom: 12px;
   }
-  .sample-links { display: flex; gap: 8px; margin-bottom: 22px; }
+  /* A COLUMN UNTIL 1250px, WHICH IS AMAZON'S OWN RULE RATHER THAN OURS.
+     The live detail page ships
+       @media only screen and (min-width: 1250px) {
+         .sample-buttons-container-reflowable { flex-direction: row; justify-content: space-between }
+       }
+     i.e. "Read sample" and "Audible sample" stack vertically at every width below
+     1250px and only sit side by side on a wide desktop. Ours were a row everywhere,
+     which is where the pair got cramped: two buttons in a 260px column is 126px each,
+     and "Extrait Audible" does not fit in 126px, so the French rendering wrapped both
+     labels onto two lines. Transplanting Amazon's breakpoint fixes the translation
+     as a side effect and makes the pair checkable against the live page.
+     78.125em = 1250px. */
+  .sample-links { display: flex; flex-direction: column; gap: 8px; margin-bottom: 22px; }
   .sample-links .btn { font-size: 12px; padding: 6px 10px; }
+  @media (min-width: 1250px) {
+    .sample-links { flex-direction: row; justify-content: space-between; }
+    .sample-links .btn { flex: 1 0 0; }
+  }
 
   .followcard {
     border: 1px solid var(--rule); border-radius: 8px; padding: 12px; margin-bottom: 14px;
@@ -38,7 +153,10 @@
   .followcard .who b { display: block; font-size: 14px; }
   .followcard .btn { width: auto; padding: 5px 16px; }
 
-  .mid h1 { font-size: 26px; font-weight: 400; }
+  /* clamp for the same reason as index.html's headline: 26px was set for a 600px
+     middle column and this page is also read at 375px and at 400% desktop zoom.
+     Upper bound is the original, so the desktop rendering does not move. */
+  .mid h1 { font-size: clamp(20px, 3.6vw, 26px); font-weight: 400; }
   /* Flex, not inline text, because not every language needs a word before the author's
      name — Chinese reads "Rosa Delgado（作者）" with no preposition at all. A flex row
      drops the whitespace between items and the :empty rule removes the unused slot, so
@@ -60,10 +178,36 @@
   .metastrip b { display: block; color: var(--ink); font-size: 13px; margin-bottom: 2px; }
 
   .buybox { border: 1px solid var(--rule); border-radius: 8px; padding: 16px; margin-bottom: 14px; }
-  .buybox .formats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+  /* minmax(0, 1fr), not 1fr — and this is a real bug fix, not pedantry.
+     `1fr` is shorthand for `minmax(auto, 1fr)`, so each track refuses to shrink below
+     its own min-content width. Inside a 260px buy box the two tiles have 226px to
+     share, 109px each, and the widest unbreakable thing in a tile is the
+     `kindleunlimited` lockup, which amazon.css marks white-space: nowrap on purpose
+     (it is one wordmark and must never split). At the page's own 1280px design width
+     that fits — but turn on text-only zoom, or set a browser minimum font size, and
+     the lockup grows while the 260px track does not, so the tiles push the grid wider
+     than the column and the whole page scrolls sideways at a viewport that never
+     changed. That is WCAG 1.4.4, and it is invisible to any amount of window
+     resizing, which is why it survived this long.
+     minmax(0, …) lets the tracks go narrower than their content; min-width: 0 does the
+     same for the tiles themselves. The lockup then overflows its own tile instead of
+     the page, which is the right thing to sacrifice.
+     The other half of this fix is the em-based media queries — see responsive.css —
+     which make the three columns stack when the TEXT gets bigger, not only when the
+     window gets smaller. */
+  .buybox .formats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-bottom: 12px; }
   .buybox .fmt-tile {
     border: 1px solid var(--rule); border-radius: 8px; padding: 8px; font-size: 12px;
+    min-width: 0; overflow-wrap: anywhere;
   }
+  /* The selected format. Amazon's own treatment, kept: 2px blue border + pale tint
+     against a 1px gray border. WCAG 1.4.1 asks that colour not be the ONLY carrier —
+     here the border also doubles in thickness, so the selection survives greyscale.
+     It is the weaker half of the audit's findings and is reported as such: the tiles
+     are inert display, not a control, so there is no checked/selected state for a
+     screen reader to be told about, and inventing one would be ARIA describing a
+     widget that does not exist. #2162a1 measures 6.31:1 on white and #0F1111 on the
+     #edf6ff fill measures 17.34:1. */
   .buybox .fmt-tile.sel { border: 2px solid #2162a1; background: #edf6ff; }
   /* Direct child only — the Kindle Unlimited wordmark has its own nested <b>, and
      blocking that one split the lockup onto two lines. */
@@ -77,60 +221,169 @@
     font-size: 12px; color: var(--soft); line-height: 1.5;
     margin-top: 10px; padding-top: 9px; border-top: 1px solid #E7E9E9;
   }
+
+  /* ---------- shared: controls that actually do something ----------
+     UPDATED IN THE ACCESSIBILITY PASS. Every control on this prototype is now a real
+     <button>; what separates them is whether it does anything. The inert ones carry
+     aria-disabled="true" and keep .btn's cursor:default; the two real interactions on
+     this page get the pointer. Full reasoning in amazon.css under "what an inert
+     control is allowed to be".
+     The old rejected alternative is worth keeping on the record: styling the spans and
+     wiring click handlers to them. A div/span that responds to a click is invisible to
+     a screen reader's button list and unreachable by Tab, and this page is the one
+     arguing that access should not depend on being able to see it. */
+  button.btn:not([aria-disabled]) { cursor: pointer; }
+  /* The focus ring itself now lives in amazon.css and applies document-wide — this used
+     to be the only focus styling in the entire prototype, and it covered three selectors
+     on one page. Only the textarea keeps a local rule, because its ring has to sit
+     inside the a-box rather than overlapping the panel's border. */
+  .ask textarea:focus-visible { outline-offset: 1px; }
+
+  /* Amazon's own inline "See more" expander: a text link with a caret, not a chevron
+     button in a box. Rendered from a <button> so the state is announced. */
+  .expander {
+    background: none; border: 0; padding: 0; font: inherit; font-size: 12px;
+    color: var(--link); cursor: pointer; text-align: start;
+  }
+  .expander:hover { text-decoration: underline; color: var(--hover); }
+  .expander .caret { margin-inline-start: 4px; display: inline-block; font-size: 10px; }
+  /* Rotation, not a second glyph, so the caret cannot get out of sync with the state —
+     and rotation is direction-neutral, so it survives the Arabic layout untouched. */
+  .expander[aria-expanded="true"] .caret { transform: rotate(180deg); }
+
+  /* ---------- interaction 2: what happens if an attestation is false ---------- */
+  .attest-false {
+    font-size: 12px; color: var(--soft); line-height: 1.55;
+    margin-top: 10px; padding-top: 10px; border-top: 1px solid #E7E9E9;
+  }
+  .attest-false h3 { font-size: 13px; color: var(--ink); font-weight: 700; margin-bottom: 6px; }
+  .attest-false p { margin-bottom: 8px; }
+
+  /* ---------- interaction 1: the question flow ---------- */
+  .ask .ask-start { margin-top: 12px; }
+  .ask h3 { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  /* The headings are focus targets when a state replaces another, so they take focus
+     programmatically — and must not then draw a browser's default focus ring in a place
+     a mouse user never put it. :focus-visible would suppress the ring for keyboard users
+     too here (a programmatic focus is not "visible" interaction), so the ring is removed
+     outright and the heading text itself is the confirmation. */
+  .ask [tabindex="-1"]:focus { outline: none; }
+  .ask p { font-size: 12px; color: var(--soft); line-height: 1.5; margin-bottom: 8px; }
+  .ask .ask-label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .ask textarea {
+    width: 100%; font: inherit; font-size: 13px; line-height: 1.45;
+    border: 1px solid var(--rule); border-radius: 6px; padding: 8px; resize: vertical;
+    /* Amazon's own review composer; nothing invented here. */
+  }
+  /* No character counter. A counter is a live-updating string, and a string built in JS
+     is a string no translator ever sees — the hint sentence carries the 300 either way,
+     and hitting the cap is announced instead. */
+  .ask .ask-err { color: #B12704; font-weight: 700; }   /* Amazon's error red */
+  .ask .ask-actions { margin-top: 10px; display: grid; gap: 8px; }
+  .ask .yourq {
+    font-size: 13px; color: var(--ink); line-height: 1.5;
+    border-inline-start: 0; border-top: 1px solid #E7E9E9; border-bottom: 1px solid #E7E9E9;
+    padding: 8px 0; margin-bottom: 8px;
+    /* Hairline rows, not a quote bar: an accent bar on the inline edge is the pastel
+       grammar this project banned, and it also has to be re-sided for Arabic. */
+  }
+  .ask .ask-strings { display: none; }
+  .ask .mocknote { font-size: 11.5px; }
+  /* The live region is for the announcement only — everything it says is already on
+     screen in the new state, so repeating it visually would be a duplicate. Clipped
+     rather than display:none, which would make it unannounced as well as unseen. */
+  .ask-live {
+    position: absolute; width: 1px; height: 1px; overflow: hidden;
+    clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+  }
 </style>
 </head>
 <body data-i18n-title="book.docTitle">
 
-<div class="concept-banner"><strong data-i18n="chrome.conceptLabel">STUDENT CONCEPT — COMMLD 560, UW.</strong> <span data-i18n="book.disclaimer">Not an Amazon product. This book, its author, and all ratings are fictional; controls are non-functional.</span></div>
+<!-- ============================ PAGE CHROME ============================
+     ACCESSIBILITY PASS. What changed here, and why, on all five pages:
 
-<header class="topnav">
-  <div class="logo">kindle<span>store</span></div>
-  <div class="searchbar"><input value="" placeholder="Search Kindle Store" aria-label="Search Kindle Store" data-i18n-attr="placeholder:chrome.searchPlaceholder;aria-label:chrome.searchAria" readonly><button aria-label="Search" data-i18n-attr="aria-label:chrome.searchButtonAria">🔍</button></div>
-  <!-- the language control is injected here by i18n/i18n.js, in Amazon's own locale-selector slot -->
-  <div class="acct"><span data-i18n="chrome.greeting">Hello, Reader</span><b data-i18n="chrome.account">Account &amp; Lists</b></div>
+     - The disclaimer, the brand row and the store nav are now one <header>
+       banner landmark instead of three sibling <div>s floating outside every
+       landmark on the page. The concept banner in particular was orphaned
+       content: announced, but belonging to nothing.
+     - A skip link, off-screen until focused. There are ~12 tab stops in front
+       of the first word of content, identically on five pages.
+     - .subnav is a <nav> with an accessible name wrapping a real list. Its six
+       items stay plain text: they are inert store scenery, and the rule this
+       prototype follows is that Amazon's .btn atom becomes a real button while
+       flat text stays text (see amazon.css, "what an inert control is allowed
+       to be").
+     - The search field is readonly and its button is aria-disabled: the box is
+       reachable and announced, and says out loud that it will not search.
+     - lang="en" on the wordmarks. They are never translated, so on the Arabic
+       or Chinese rendering of this page they are a foreign-language run inside
+       the document's language (WCAG 3.1.2).
+     ==================================================================== -->
+<a class="skiplink" href="#main" data-i18n="chrome.skipToContent">Skip to main content</a>
+
+<header class="sitehead">
+  <div class="concept-banner"><strong data-i18n="chrome.conceptLabel">STUDENT CONCEPT — COMMLD 560, UW.</strong> <span data-i18n="book.disclaimer">Not an Amazon product. This book, its author, and all ratings are fictional; controls are non-functional.</span></div>
+  <div class="topnav">
+    <div class="logo" lang="en">kindle<span>store</span></div>
+    <div class="searchbar"><input value="" placeholder="Search Kindle Store" aria-label="Search Kindle Store" data-i18n-attr="placeholder:chrome.searchPlaceholder;aria-label:chrome.searchAria" readonly><button aria-label="Search" aria-disabled="true" data-i18n-attr="aria-label:chrome.searchButtonAria">🔍</button></div>
+    <!-- the language control is injected here by i18n/i18n.js, in Amazon's own locale-selector slot -->
+    <div class="acct"><span data-i18n="chrome.greeting">Hello, Reader</span><b data-i18n="chrome.account">Account &amp; Lists</b></div>
+  </div>
+  <nav class="subnav" aria-label="Store sections" data-i18n-attr="aria-label:chrome.subnavAria">
+    <ul>
+      <li data-i18n="chrome.nav.shop">Shop Books</li><li data-i18n="chrome.nav.categories">Categories</li><li data-i18n="chrome.nav.trending">New &amp; Trending</li>
+      <li data-i18n="chrome.nav.bestsellers">Best Sellers &amp; More</li><li data-i18n="chrome.nav.deals">Deals</li><li data-i18n="chrome.nav.yourbooks">Your Books</li>
+    </ul>
+  </nav>
 </header>
-<nav class="subnav">
-  <span data-i18n="chrome.nav.shop">Shop Books</span><span data-i18n="chrome.nav.categories">Categories</span><span data-i18n="chrome.nav.trending">New &amp; Trending</span>
-  <span data-i18n="chrome.nav.bestsellers">Best Sellers &amp; More</span><span data-i18n="chrome.nav.deals">Deals</span><span data-i18n="chrome.nav.yourbooks">Your Books</span>
-</nav>
 
 <div class="page">
 
-  <div class="crumbs"><a href="#" data-i18n="crumb.store">Kindle Store</a><a href="#" data-i18n="crumb.ebooks">Kindle eBooks</a><a href="#" data-i18n="crumb.memoirs">Biographies &amp; Memoirs</a><a href="index.html" data-i18n="collection.name">Lived Experience</a></div>
+<!-- MAIN LANDMARK. Everything between here and the credits was previously a bare
+     <div>, so a screen reader had no "jump to the content" target and the skip
+     link above would have had nowhere to land. <main> stays INSIDE div.page so the
+     max-width and padding are untouched, and the credits sit outside it as a
+     sibling — a <footer> whose nearest sectioning ancestor is <body>, which is what
+     makes it the contentinfo landmark rather than a generic block. -->
+<main id="main">
+  <!-- BREADCRUMB. Was a <div> of anonymous links with generated "›" separators —
+       no navigation landmark, no list, and nothing marking which item was the
+       page you are on. Now a named <nav> wrapping an <ol>, with aria-current on
+       the terminal item so the "you are here" convention that was carried only
+       by "this one is not a link" is stated programmatically too. Renders
+       identically: amazon.css keeps the same generated-chevron selector.
+       NO aria-current ON THIS PAGE'S TRAIL, deliberately, unlike the other three:
+       this breadcrumb ends at the parent collection, not at the book, so no item
+       in it IS the current page. Marking the last link "current" would be exactly
+       the kind of reflex ARIA that says something untrue to a screen reader while
+       looking correct in a checklist. -->
+  <nav aria-label="Breadcrumb" data-i18n-attr="aria-label:chrome.breadcrumbAria">
+    <ol class="crumbs">
+      <li><a href="#" data-i18n="crumb.store">Kindle Store</a></li>
+      <li><a href="#" data-i18n="crumb.ebooks">Kindle eBooks</a></li>
+      <li><a href="#" data-i18n="crumb.memoirs">Biographies &amp; Memoirs</a></li>
+      <li><a href="index.html" data-i18n="collection.name">Lived Experience</a></li>
+    </ol>
+  </nav>
 
   <div class="detail">
 
     <!-- left column -->
     <div class="leftcol">
-      <img src="covers/road-from-manila.png" alt="Cover of The Road from Manila" data-i18n-attr="alt:book.coverAlt">
+      <img src="covers/road-from-manila.png" alt="Cover of The Road from Manila" data-i18n-attr="alt:book.coverAlt" width="848" height="1264" fetchpriority="high" decoding="async">
       <div class="sample-links">
-        <span class="btn ghost" data-i18n="book.readSample">Read sample</span>
-        <span class="btn ghost" data-i18n="book.audibleSample">Audible sample</span>
+        <button type="button" class="btn ghost" data-i18n="book.readSample" aria-disabled="true">Read sample</button>
+        <button type="button" class="btn ghost" data-i18n="book.audibleSample" aria-disabled="true">Audible sample</button>
       </div>
 
       <!-- Follow block, deepened: A3 lives here (interface-reference.md §2 row 3) -->
       <div class="followcard">
-        <div class="pic">RD</div>
+        <div class="pic" aria-hidden="true">RD</div>
         <div class="who"><b>Rosa Delgado</b><a href="author.html" data-i18n="book.visitAuthorPage">Visit author page</a></div>
-        <span class="btn ghost" data-i18n="common.follow">+ Follow</span>
+        <button type="button" class="btn ghost" data-i18n="common.follow" aria-disabled="true">+ Follow</button>
       </div>
 
-      <div class="abox">
-        <h3 data-i18n="book.ask.h3">Ask Rosa a question</h3>
-        <div class="sub" data-i18n="book.ask.sub">Author has opted in · Answers weekly</div>
-        <div class="tier">
-          <b data-i18n="book.ask.tier1Label">Questions about the book</b>
-          <p data-i18n="book.ask.tier1Body">One question per reader per book, open to verified purchases and KU borrows.
-          Nothing is public until Rosa publishes her answer.</p>
-        </div>
-        <div class="tier">
-          <b data-i18n="book.ask.tier2Label">Live reader Q&amp;A</b>
-          <p data-i18n="book.ask.tier2Body">Occasional live session, scheduled by the author.</p>
-        </div>
-        <div class="note" data-i18n="book.ask.note">Authors choose their level of access — including none — and can change it
-        anytime. Author-moderated by default: the author sees, answers, or deletes; Amazon's existing
-        Community Guidelines report-and-block tools apply. Contact details are never shared.</div>
-      </div>
     </div>
 
     <!-- middle column -->
@@ -144,7 +397,7 @@
       <!-- A2: the attestation, in the author's-own-voice slot (§2 row 6).
            Rendered as an Amazon a-box, the same module shape as "Great on Kindle". -->
       <div class="abox alt attest" style="margin-top:14px">
-        <h3 data-i18n="book.attest.h3">In the author's own words</h3>
+        <h2 data-i18n="book.attest.h3">In the author's own words</h2>
         <p class="quote" data-i18n="book.attest.quote">"I left Manila in 1979 with one suitcase and my mother's rosary. I am not
         a writer — I was a nurse for thirty-one years. I wrote this in Tagalog first, because that
         is the language I remember it in, and my niece and I translated it together with help from
@@ -155,9 +408,42 @@
              nothing to disclose. -->
         <div class="translated" data-i18n-only="translated" data-i18n="book.attest.translationNote" hidden></div>
         <div class="sig">
-          <span data-i18n="book.attest.sigName">Rosa Delgado, author attestation</span> · <a href="#" data-i18n="book.attest.sigLink">What happens if an attestation is false</a><br>
+          <span data-i18n="book.attest.sigName">Rosa Delgado, author attestation</span> ·
+          <!-- INTERACTION 2. Was a dead <a href="#">, which is the one link on this page a
+               reader is most likely to actually click: it is the "and what if she is lying"
+               question, and the gate is the weakest part of the concept. So the answer is
+               on the page instead of behind a link to nowhere.
+               Progressive enhancement, inverted the usual way round: the panel below is
+               EXPANDED in the markup and this toggle is [hidden]. With scripting off the
+               reader gets the full answer and no inert control; ask.js collapses the panel
+               and reveals the toggle. Rejected: <details>/<summary>, which would have been
+               free — but its marker and its open/closed typography are the browser's, not
+               Amazon's, and this panel sits inside an a-box that has to keep looking like
+               Amazon's own "See more" expander. -->
+          <button type="button" class="expander" id="attest-toggle" aria-expanded="true" aria-controls="attest-false" hidden><span data-i18n="book.attest.sigLink">What happens if an attestation is false</span><span class="caret" aria-hidden="true">▾</span></button><br>
           <span data-i18n="book.attest.sigBody">A false attestation removes the book from the collection; the account is handled under
           KDP's existing content policies — no new enforcement machinery.</span>
+        </div>
+
+        <div class="attest-false" id="attest-false">
+          <h3 data-i18n="book.attest.false.h">If an attestation turns out to be false</h3>
+          <p data-i18n="book.attest.false.p1">The statement is treated like anything else an author writes on their own detail page.
+          If it is reported and KDP finds it breaks the content guidelines the account already agreed to, the book comes out of
+          the collection and the account is handled the way any other guidelines violation is handled — up to losing publishing
+          access. Nothing new is built for this.</p>
+          <p data-i18n="book.attest.false.p2">A reader reports it with the report control Amazon already has. KDP applies the policies
+          it already applies. There is no separate review board here, no queue we invented, no appeal process we made up, and no
+          score attached to the author.</p>
+          <!-- The paragraph that keeps R3 dead: state the limit out loud, so nobody reads
+               the attestation as an Amazon check on whether a life happened. -->
+          <p data-i18n="book.attest.false.p3">The limit is worth saying plainly: Amazon does not know whether a story is true and
+          cannot find out. Nothing here checks a memory, a date, or a life. That is exactly why the claim stays in the author's
+          own words with her name on it, and why there is no Amazon seal beside it — a seal would be a promise Amazon cannot
+          keep. What can be acted on is a statement that turns out to be fabricated, in the same way a false claim in any other
+          listing can be.</p>
+          <p data-i18n="book.attest.false.p4">So reporting is the whole of the mechanism. It is not a promise of an outcome, and
+          you will not get a progress report.</p>
+          <p><a href="#" data-i18n="book.attest.false.reportLink">Report this content</a></p>
         </div>
       </div>
 
@@ -184,25 +470,206 @@
     <div class="buybox-col">
       <div class="buybox">
         <div class="formats">
-          <div class="fmt-tile sel"><b data-i18n="book.buy.formatKindle">Kindle</b><span dir="ltr">$0.00</span> <span class="kulogo">kindle<b>unlimited</b></span><br><span data-i18n="book.buy.orBuy">or $4.99 to buy</span></div>
+          <div class="fmt-tile sel"><b data-i18n="book.buy.formatKindle">Kindle</b><span dir="ltr">$0.00</span> <span class="kulogo" lang="en">kindle<b>unlimited</b></span><br><span data-i18n="book.buy.orBuy">or $4.99 to buy</span></div>
           <div class="fmt-tile"><b data-i18n="book.buy.formatPaperback">Paperback</b><span dir="ltr">$14.95</span></div>
         </div>
-        <div class="ku-pitch"><span class="kulogo">kindle<b>unlimited</b></span> <span data-i18n="book.buy.kuPitch">Unlimited reading. Millions of titles.</span> <a href="#" data-i18n="common.learnMore">Learn more</a></div>
-        <span class="btn yellow" data-i18n="book.buy.readFree">Read for Free</span>
+        <div class="ku-pitch"><span class="kulogo" lang="en">kindle<b>unlimited</b></span> <span data-i18n="book.buy.kuPitch">Unlimited reading. Millions of titles.</span> <a href="#" data-i18n="common.learnMore">Learn more</a></div>
+        <button type="button" class="btn yellow" data-i18n="book.buy.readFree" aria-disabled="true">Read for Free</button>
         <div class="or" data-i18n="book.buy.or">OR</div>
         <div class="price"><span class="sym">$</span><span class="whole">4</span><span class="frac">99</span></div>
-        <span class="btn orange" data-i18n="book.buy.oneClick">Buy now with 1-Click</span>
-        <span class="btn ghost" data-i18n="book.buy.sendSample">Send a free sample</span>
+        <button type="button" class="btn orange" data-i18n="book.buy.oneClick" aria-disabled="true">Buy now with 1-Click</button>
+        <button type="button" class="btn ghost" data-i18n="book.buy.sendSample" aria-disabled="true">Send a free sample</button>
       </div>
+    </div>
+
+    <!-- FOURTH COLUMN CHILD, MOVED HERE FROM INSIDE .leftcol.
+         Why the markup moved rather than the CSS: nested in .leftcol, this panel was
+         laid out before .mid at every width where .detail is not three columns, and
+         it is the longest block on the page. Measured at 375px: .detail began at
+         y=288 and the book's own <h1> did not appear until y=1392 — the title of the
+         book arrived 1,100px, nearly two screens, below the top of the detail area on
+         a phone. A detail page whose subject is not on the first screen is broken.
+
+         The desktop rendering is unchanged, and not by luck: .mid is told to span both
+         grid rows, so row 1 is sized by the cover column and the buy box rather than by
+         the long middle column, and this panel still begins directly under the Follow
+         card exactly where it did before. See the .detail grid rules in the <style>
+         block above.
+
+         This is NOT the CSS reordering that the reflow note above rejects. Read the
+         grid row-major — cover, text, buy box, then this panel — and the visual order
+         is the DOM order at every width, so tab order and reading order still agree.
+         The new sequence is also the better one to hear: a screen-reader user now
+         learns whose book this is and reads her attestation BEFORE being offered the
+         box to ask her a question. -->
+    <!-- INTERACTION 1 — the question flow (the "hook" layer).
+         Every state is written into this markup and toggled with [hidden]; ask.js never
+         builds a string. That is not tidiness, it is the i18n contract: i18n.js walks
+         the document once on load and again on every language change, so a state that
+         exists in the markup is translated in all six languages for free, whereas a
+         state assembled in JS would be English forever.
+
+         Controls that only work with JS ship [hidden] and are revealed by ask.js. With
+         scripting off, this panel degrades to what it was before: a description of the
+         mechanism — which is the meaningful default, since the argument of this page is
+         the mechanism, not the button. -->
+    <div class="abox ask" id="ask">
+      <h2 data-i18n="book.ask.h3">Ask Rosa a question</h2>
+      <!-- Was "Answers weekly". A cadence nobody measures is a promise Amazon cannot
+           keep, which is the same mistake as the retired "verified human" badge. The
+           replacement is a count, because a count is observed. -->
+      <div class="sub" data-i18n="book.ask.subState">Opted in · 9 of 14 reader questions answered</div>
+
+      <!-- idle: the tiers, plus the entry point -->
+      <div data-ask-state="idle">
+        <div class="tier">
+          <b data-i18n="book.ask.tier1Label">Questions about the book</b>
+          <p data-i18n="book.ask.tier1Body">One question per reader per book, open to verified purchases and KU borrows.
+          Nothing is public until Rosa publishes her answer.</p>
+        </div>
+        <div class="tier">
+          <b data-i18n="book.ask.tier2Label">Live reader Q&amp;A</b>
+          <p data-i18n="book.ask.tier2Body">Occasional live session, scheduled by the author.</p>
+        </div>
+        <button type="button" class="btn ghost ask-start" id="ask-start" data-i18n="book.ask.startBtn" hidden>Ask a question</button>
+      </div>
+
+      <!-- compose -->
+      <div data-ask-state="compose" hidden>
+        <label class="ask-label" for="ask-text" data-i18n="book.ask.composeLabel">Your question for Rosa</label>
+        <p id="ask-hint" data-i18n="book.ask.composeHint">Up to 300 characters. Ask about the book, or about the life behind it.</p>
+        <!-- maxlength rather than a validation message: the cap is enforced by the field
+             instead of scolding someone after they have written 400 words. -->
+        <textarea id="ask-text" rows="4" maxlength="300" aria-describedby="ask-err ask-hint ask-terms" data-ask-focus></textarea>
+        <p class="ask-err" id="ask-err" data-i18n="book.ask.composeEmpty" hidden>Write your question first.</p>
+        <p id="ask-terms" data-i18n="book.ask.composeTerms">This is your one question for this book. Rosa sees it, and can answer it or delete it.
+        Nothing you write appears on Amazon unless she publishes her answer with it. There is no private messaging here at any
+        level — not for you and not for her — and neither of you is shown the other's contact details.</p>
+        <div class="ask-actions">
+          <button type="button" class="btn yellow" id="ask-send" data-i18n="book.ask.composeSend">Send question</button>
+          <button type="button" class="btn ghost" id="ask-cancel" data-i18n="book.ask.composeCancel">Cancel</button>
+        </div>
+      </div>
+
+      <!-- sent -->
+      <div data-ask-state="sent" hidden>
+        <h3 tabindex="-1" data-ask-focus data-i18n="book.ask.sentH">Question sent to Rosa</h3>
+        <p data-i18n="book.ask.sentBody">It is with Rosa now. She moderates her own questions: she can answer it, or delete it,
+        and she is not required to do either.</p>
+        <!-- The confirmation deliberately refuses to give an ETA. Every other Amazon
+             confirmation gives one; this one cannot, because the thing being waited on
+             is a person who owes the reader nothing. Saying so is the honest version. -->
+        <p data-i18n="book.ask.sentNoEta">We are not telling you when to expect a reply, because we do not know. No response time
+        is promised here, and none has been measured.</p>
+        <p data-i18n="book.ask.sentWhere">If she answers, her answer and your question appear together on her author page.</p>
+        <p><a href="author.html" data-i18n="book.ask.sentWhereLink">See answered questions</a></p>
+        <div class="ask-actions">
+          <button type="button" class="btn ghost" id="ask-done" data-i18n="book.ask.sentDone">Done</button>
+        </div>
+      </div>
+
+      <!-- waiting: the state the whole flow exists to show honestly -->
+      <div data-ask-state="wait" hidden>
+        <h3 tabindex="-1" data-ask-focus data-i18n="book.ask.waitH">Your question is with Rosa</h3>
+        <!-- Fictional date, left as a fixed string on purpose: computing "today" would
+             mean formatting a date in JS, i.e. a user-visible string no translator ever
+             sees, for no gain in a mockup. -->
+        <p data-i18n="book.ask.waitSent">You asked this on 12 March 2026. It has not been answered.</p>
+        <div id="ask-yourq-wrap" hidden>
+          <p class="ask-label" data-i18n="book.ask.waitQLabel">Your question:</p>
+          <!-- The reader's own words. Not keyed, because it is not our string; written
+               with textContent so a typed &lt;script&gt; stays typed text. -->
+          <div class="yourq" id="ask-yourq"></div>
+        </div>
+        <p data-i18n="book.ask.waitTruth">It may stay like this. Some questions are never answered, and Rosa can delete one
+        without replying and without saying why. Amazon does not chase her, does not escalate this, and does not answer on
+        her behalf.</p>
+        <p data-i18n="book.ask.waitPublic">Nothing you wrote is public.</p>
+        <div class="ask-actions">
+          <button type="button" class="btn ghost" id="ask-withdraw" data-i18n="book.ask.waitWithdraw">Withdraw my question</button>
+        </div>
+        <p style="margin-top:8px" data-i18n="book.ask.waitWithdrawNote">Withdrawing deletes it. You can write a different one afterwards.</p>
+        <p><a href="#" data-i18n="book.ask.reportLink">Report a problem with this question or answer</a></p>
+      </div>
+
+      <!-- answered -->
+      <div data-ask-state="answered" hidden>
+        <h3 tabindex="-1" data-ask-focus data-i18n="book.ask.answeredH">Rosa answered your question</h3>
+        <p data-i18n="book.ask.answeredBody">She published your question with her answer on her author page, where other readers
+        can now read both.</p>
+        <p><a href="author.html" data-i18n="book.ask.answeredLink">Read her answer</a></p>
+        <p data-i18n="book.ask.answeredQuota">That was your one question for this book.</p>
+        <p><a href="#" data-i18n="book.ask.reportLink">Report a problem with this question or answer</a></p>
+      </div>
+
+      <!-- not a reader of this book yet -->
+      <div data-ask-state="ineligible" hidden>
+        <h3 tabindex="-1" data-ask-focus data-i18n="book.ask.ineligibleH">Questions are open to readers of this book</h3>
+        <p data-i18n="book.ask.ineligibleBody">Buy it or borrow it with Kindle Unlimited and the question box opens here. It is the
+        same check Amazon already uses to mark a review a verified purchase.</p>
+        <!-- Says who the gate protects. A gate whose reason is unstated reads as a
+             sales tactic; this one is a harassment surface being kept shut. -->
+        <p data-i18n="book.ask.ineligibleWhy">The check exists for Rosa, not for us. Without it, an author's question box is a
+        contact form open to the whole internet, and the authors most likely to be targeted are the ones this collection is
+        built around.</p>
+        <p data-i18n="book.ask.ineligibleWhere">The buying and borrowing options are in the box near the top of this page.</p>
+      </div>
+
+      <!-- author has questions switched off -->
+      <div data-ask-state="off" hidden>
+        <h3 tabindex="-1" data-ask-focus data-i18n="book.ask.offH">Rosa is not taking questions right now</h3>
+        <p data-i18n="book.ask.offBody">She has turned reader questions off. She may turn them back on; she may not. Either way
+        the book stays in the collection and her statement stays on this page — the access was always hers to choose, and
+        switching it off costs her nothing here.</p>
+        <p data-i18n="book.ask.offNoAlt">There is no other way to reach her through Amazon, and that is deliberate.</p>
+      </div>
+
+      <!-- switched off after the reader had already asked -->
+      <div data-ask-state="offAfter" hidden>
+        <h3 tabindex="-1" data-ask-focus data-i18n="book.ask.offAfterH">Questions are closed for this book</h3>
+        <p data-i18n="book.ask.offAfterBody">Rosa turned reader questions off after you asked. Your question was never published and
+        will not be answered; it was deleted along with the other open questions.</p>
+      </div>
+
+      <!-- send failed -->
+      <div data-ask-state="error" hidden>
+        <h3 tabindex="-1" data-ask-focus data-i18n="book.ask.errorH">Your question didn't send</h3>
+        <p data-i18n="book.ask.errorBody">Something went wrong on our side, not yours. Your draft is still here.</p>
+        <div class="ask-actions">
+          <button type="button" class="btn yellow" id="ask-retry" data-i18n="book.ask.errorRetry">Try again</button>
+          <button type="button" class="btn ghost" id="ask-discard" data-i18n="book.ask.errorDiscard">Discard draft</button>
+        </div>
+      </div>
+
+      <div class="note" data-i18n="book.ask.note">Authors choose their level of access — including none — and can change it
+      anytime. Author-moderated by default: the author sees, answers, or deletes; Amazon's existing
+      Community Guidelines report-and-block tools apply. Contact details are never shared.</div>
+
+      <p class="note mocknote" id="ask-mocknote" data-i18n="book.ask.mockNote" hidden>Prototype note: nothing is sent anywhere.
+      This flow exists so the states can be read — including the ones where nothing happens.</p>
+
+      <!-- Announcement text, keyed and translated like everything else, parked here for
+           ask.js to copy into the live region. Building these sentences in JS would put
+           six languages' worth of copy out of the translators' reach. -->
+      <div class="ask-strings" aria-hidden="true">
+        <span id="ask-s-sent" data-i18n="book.ask.liveSent">Question sent. Nothing is public unless Rosa publishes her answer.</span>
+        <span id="ask-s-withdrawn" data-i18n="book.ask.liveWithdrawn">Your question has been withdrawn and deleted.</span>
+        <span id="ask-s-limit" data-i18n="book.ask.liveLimit">You have reached the 300-character limit.</span>
+        <span id="ask-s-empty" data-i18n="book.ask.liveEmpty">Write your question first.</span>
+        <span id="ask-s-error" data-i18n="book.ask.liveError">Your question didn't send. Your draft was kept.</span>
+      </div>
+      <p class="ask-live" id="ask-live" role="status" aria-live="polite"></p>
     </div>
 
   </div>
 
-  <p class="credits" data-i18n="book.credits1">
+  </main>
+
+  <footer class="credits" data-i18n="book.credits1">
     Reader Discovery team — Jakob Picciotto · Pablo Ortega · Jalen Oscar Howard · Wanting Chao ·
     Author-statement gate: Wanting's mechanism (7/27) · Access tiers: Pablo's concept (7/27) ·
     "Translation welcome" eligibility: team research on KDP AI-content policy (7/27)
-  </p>
+  </footer>
 
 </div>
 
@@ -211,6 +678,11 @@
 <script src="i18n/strings.zh.js"></script>
 <script src="i18n/strings.fil.js"></script>
 <script src="i18n/strings.ar.js"></script>
+<script src="i18n/strings.fr.js"></script>
 <script src="i18n/i18n.js"></script>
+<!-- After i18n.js, always: ask.js reveals controls that i18n.js has already translated,
+     and copies already-translated text into the live region. Loaded first it would show
+     English for a beat, or show nothing at all. -->
+<script src="ask.js"></script>
 </body>
 </html>

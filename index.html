@@ -10,22 +10,53 @@
 <title>Lived Experience Collection — landing page (concept)</title>
 <link rel="stylesheet" href="amazon.css">
 <link rel="stylesheet" href="i18n/i18n.css">
+<!-- Loads third, and last: viewport adaptation overrides both of the above. -->
+<link rel="stylesheet" href="responsive.css">
 <style>
   /* page-specific: Editors'-Picks-style landing (interface-reference.md §4) */
+  /* DISPLAY TYPE, FLUID. The three sizes below were set for a 1180px column and
+     were never re-checked at 375px, where the headline took two lines 84px tall and
+     the banner's 28px heading took three. Measured together, the kicker + headline +
+     banner + gate note pushed the first cover to y=809 — the entire first screen of a
+     phone was type. clamp() rather than a breakpoint because the shrink has to be
+     continuous: this page is also read at 200% and 400% desktop zoom, where a step
+     change would land in the middle of the range instead of at a device edge.
+     The upper bound of each clamp is the original value, so nothing about the desktop
+     rendering that was matched against Amazon's Editors'-Picks page moves.
+     letter-spacing has to scale with the kicker or the tracking that looks like
+     small-caps display type at 13px becomes a word broken into letters at 11px —
+     and i18n.css already zeroes it entirely for Chinese and Arabic, where tracking
+     severs the joins between letters. */
   .kicker {
-    text-align: center; font-size: 13px; letter-spacing: 3px;
-    font-weight: 700; color: var(--soft); margin: 26px 0 6px;
+    text-align: center;
+    font-size: clamp(11px, 2.6vw, 13px);
+    letter-spacing: clamp(1.5px, 0.62vw, 3px);
+    font-weight: 700; color: var(--soft); margin: clamp(16px, 3vw, 26px) 0 6px;
   }
-  .headline { text-align: center; font-size: 30px; font-weight: 400; margin-bottom: 22px; }
+  .headline {
+    text-align: center;
+    font-size: clamp(21px, 4.6vw, 30px);
+    font-weight: 400; margin-bottom: clamp(16px, 2.4vw, 22px);
+  }
 
+  /* THE TWO COLOURS IN THIS PROTOTYPE THAT ARE NOT IN :root — flagged in the verification
+     pass so nobody has to re-derive this. #d8dee4 (banner copy) and #4a90d9 (the rule under
+     it) exist only here, on the dark hero. Both were measured in the accessibility pass
+     (10.01:1 and comfortably over 3:1 on --nav2) and both are the hero treatment captured
+     from Amazon's own Editors'-Picks-style banner, so they are reproduced values rather than
+     invented ones. Do not copy the pattern onto another page, and do not add a third: every
+     other colour in the prototype is a :root custom property. */
   .banner {
     background: var(--nav2);
     color: #fff; text-align: center;
-    padding: 30px 20px; margin-bottom: 8px;
+    padding: clamp(18px, 3.4vw, 30px) clamp(14px, 2vw, 20px); margin-bottom: 8px;
   }
-  .banner h2 { font-size: 28px; font-weight: 700; }
+  .banner h2 { font-size: clamp(19px, 4.2vw, 28px); font-weight: 700; }
   .banner p { color: #d8dee4; font-size: 15px; margin-top: 8px; max-width: 640px; margin-left: auto; margin-right: auto; }
-  .banner .underline { width: 240px; height: 3px; background: #4a90d9; margin: 14px auto 0; }
+  /* max-width, because the 240px rule was the last fixed pixel width on this page
+     and it was the one element still forcing a horizontal scrollbar — at a 240px
+     viewport, which is a 1280px desktop window at 533% zoom. */
+  .banner .underline { width: 240px; max-width: 100%; height: 3px; background: #4a90d9; margin: 14px auto 0; }
 
   .gate-note {
     background: var(--altbg);
@@ -37,10 +68,71 @@
   }
   .gate-note b { font-weight: 700; }
 
+  /* Four across, twice — a fixed column count rather than auto-fill, because the point of
+     the second row is that it is a FULL row. auto-fill would reflow to 5-and-3 on a wide
+     window and to 3-and-3-and-2, and a collection that ends in a ragged half-row reads as
+     "here is all we could find" instead of "here is a shelf". */
   .grid {
+    list-style: none;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 26px 22px;
+  }
+
+  /* TWO ACROSS, AND WHY THERE IS NO ONE-ACROSS.
+     This grid used to go 4 → 2 at 900px and 2 → 1 at 460px, and the single column was
+     the worst thing on the prototype at phone size. Measured at 375px: each 2:3 cover
+     became 335px wide and 503px tall, one book filled more than half a screen, and the
+     page ran to 7,223px — nineteen screens to see eight books, on the one page whose
+     whole argument is "here is a shelf you can walk". A shelf you can only see one book
+     of at a time is a stack.
+
+     So the one-column rule is deleted rather than adjusted. Two columns hold all the way
+     down to 320px, where each cover is 129px — which is the size Amazon's own phone grids
+     show covers at, and it keeps the eight books as FOUR FULL ROWS. The 8-book count was
+     chosen so the layout divides evenly by four and by two; it does not divide by three,
+     which is why there is no three-across band between them. Every arrangement this grid
+     can take is a complete rectangle, at every width, which is the same argument the
+     comment above makes about auto-fill.
+
+     700px, not 900px, for the 4 → 2 step. 900 was too early: the constraint on a card is
+     not the cover, it is the .voice quote box, which needs roughly 150px before an
+     author's sentence becomes a vertical ribbon of two-word lines. 4 × 150 + 3 × 22 of gap
+     + 28 of page gutter = 694px, so 700 is where four columns genuinely stop fitting —
+     and it means a tablet in portrait (768px) now gets the four-across shelf instead of
+     the phone layout.
+
+     Measured after, at 375px: 162px covers, 2,996px page — from nineteen screens to eight. */
+  @media (max-width: 700px) {
+    /* THE SHELF CAP, and why two columns needed one.
+       Two 1fr columns take whatever width they are given, so at the top of this band
+       — a 700px window, a Fire tablet, an iPad in Split View, a 1400px desktop at
+       200% zoom — each cover swelled to 328px wide and 492px tall and the page went
+       BACK up to 3,887px. Two columns is the right count there; two columns filling
+       700px is not.
+       480px = 2 × 232 + 16 of gap, and 232px is the cover width the four-across
+       desktop layout produces at 1024px. So a card is the same size on a tablet as on
+       a laptop, which is the point: the same shelf, fewer books per row. Below about
+       500px the content column is narrower than the cap and it stops applying on its
+       own, with no second breakpoint to keep in sync.
+
+       margin-inline-END and not `margin-inline: auto`: a centred capped shelf stopped
+       lining up with the page. Measured at 600px, the banner, the gate note, the
+       headline, the "see all" line and the credits all begin at x=14, and the centred
+       grid began at x=60 — a 46px inset on the one module that is supposed to read as
+       the shelf those other blocks are describing. Slack collects at the inline end
+       instead, which is what Amazon's carousels do with their fixed-width cards, and
+       `inline-end` rather than `right` so Arabic gets it the other way round. */
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px 16px;
+      max-width: 480px;
+      margin-inline-end: auto;
+    }
+    /* The title carries the click target and can afford to stay at its size; the
+       author line and the quote are what get cramped in a 162px column. */
+    .book .t { font-size: 14px; }
+    .book .voice { padding: 8px 9px; font-size: 12px; }
   }
   /* Flex column so the commerce block (rating, Kindle Unlimited) sits on the card's
      baseline and lines up across the row. Without it, a card whose author has not opted
@@ -77,6 +169,13 @@
 
   .book .row { display: flex; align-items: center; gap: 10px; margin-top: 6px; flex-wrap: wrap; }
 
+  /* The "see all" line under a merchandised grid — Amazon's own, and the only forward
+     control on this page besides the books. Plain text link, not a button: a button would
+     make it a call to action, and this is a location in the store, not an offer. The
+     wording says "in this category" rather than "more like these", because the second is a
+     recommendation and R7 is the line this project cannot cross. */
+  .seeall { font-size: 13px; margin-top: 26px; }
+
   /* THE BADGE — and why this one is allowed to be a badge.
      It sits under the author's NAME, not in the merchandising row, because it is a fact
      about the person, not the book, and it is the thing this collection actually offers.
@@ -107,22 +206,66 @@
 </head>
 <body data-i18n-title="index.docTitle">
 
-<div class="concept-banner"><strong data-i18n="chrome.conceptLabel">STUDENT CONCEPT — COMMLD 560, UW.</strong> <span data-i18n="index.disclaimer">Not an Amazon product. Books, authors, and ratings are fictional; controls are non-functional.</span></div>
+<!-- ============================ PAGE CHROME ============================
+     ACCESSIBILITY PASS. What changed here, and why, on all five pages:
 
-<header class="topnav">
-  <div class="logo">kindle<span>store</span></div>
-  <div class="searchbar"><input value="" placeholder="Search Kindle Store" aria-label="Search Kindle Store" data-i18n-attr="placeholder:chrome.searchPlaceholder;aria-label:chrome.searchAria" readonly><button aria-label="Search" data-i18n-attr="aria-label:chrome.searchButtonAria">🔍</button></div>
-  <!-- the language control is injected here by i18n/i18n.js, in Amazon's own locale-selector slot -->
-  <div class="acct"><span data-i18n="chrome.greeting">Hello, Reader</span><b data-i18n="chrome.account">Account &amp; Lists</b></div>
+     - The disclaimer, the brand row and the store nav are now one <header>
+       banner landmark instead of three sibling <div>s floating outside every
+       landmark on the page. The concept banner in particular was orphaned
+       content: announced, but belonging to nothing.
+     - A skip link, off-screen until focused. There are ~12 tab stops in front
+       of the first word of content, identically on five pages.
+     - .subnav is a <nav> with an accessible name wrapping a real list. Its six
+       items stay plain text: they are inert store scenery, and the rule this
+       prototype follows is that Amazon's .btn atom becomes a real button while
+       flat text stays text (see amazon.css, "what an inert control is allowed
+       to be").
+     - The search field is readonly and its button is aria-disabled: the box is
+       reachable and announced, and says out loud that it will not search.
+     - lang="en" on the wordmarks. They are never translated, so on the Arabic
+       or Chinese rendering of this page they are a foreign-language run inside
+       the document's language (WCAG 3.1.2).
+     ==================================================================== -->
+<a class="skiplink" href="#main" data-i18n="chrome.skipToContent">Skip to main content</a>
+
+<header class="sitehead">
+  <div class="concept-banner"><strong data-i18n="chrome.conceptLabel">STUDENT CONCEPT — COMMLD 560, UW.</strong> <span data-i18n="index.disclaimer">Not an Amazon product. Books, authors, and ratings are fictional; controls are non-functional.</span></div>
+  <div class="topnav">
+    <div class="logo" lang="en">kindle<span>store</span></div>
+    <div class="searchbar"><input value="" placeholder="Search Kindle Store" aria-label="Search Kindle Store" data-i18n-attr="placeholder:chrome.searchPlaceholder;aria-label:chrome.searchAria" readonly><button aria-label="Search" aria-disabled="true" data-i18n-attr="aria-label:chrome.searchButtonAria">🔍</button></div>
+    <!-- the language control is injected here by i18n/i18n.js, in Amazon's own locale-selector slot -->
+    <div class="acct"><span data-i18n="chrome.greeting">Hello, Reader</span><b data-i18n="chrome.account">Account &amp; Lists</b></div>
+  </div>
+  <nav class="subnav" aria-label="Store sections" data-i18n-attr="aria-label:chrome.subnavAria">
+    <ul>
+      <li data-i18n="chrome.nav.shop">Shop Books</li><li data-i18n="chrome.nav.categories">Categories</li><li data-i18n="chrome.nav.trending">New &amp; Trending</li>
+      <li data-i18n="chrome.nav.bestsellers">Best Sellers &amp; More</li><li data-i18n="chrome.nav.deals">Deals</li><li data-i18n="chrome.nav.yourbooks">Your Books</li>
+    </ul>
+  </nav>
 </header>
-<nav class="subnav">
-  <span data-i18n="chrome.nav.shop">Shop Books</span><span data-i18n="chrome.nav.categories">Categories</span><span data-i18n="chrome.nav.trending">New &amp; Trending</span>
-  <span data-i18n="chrome.nav.bestsellers">Best Sellers &amp; More</span><span data-i18n="chrome.nav.deals">Deals</span><span data-i18n="chrome.nav.yourbooks">Your Books</span>
-</nav>
 
 <div class="page">
 
-  <div class="crumbs"><a href="#" data-i18n="crumb.store">Kindle Store</a><a href="#" data-i18n="crumb.ebooks">Kindle eBooks</a><span data-i18n="collection.name">Lived Experience</span></div>
+<!-- MAIN LANDMARK. Everything between here and the credits was previously a bare
+     <div>, so a screen reader had no "jump to the content" target and the skip
+     link above would have had nowhere to land. <main> stays INSIDE div.page so the
+     max-width and padding are untouched, and the credits sit outside it as a
+     sibling — a <footer> whose nearest sectioning ancestor is <body>, which is what
+     makes it the contentinfo landmark rather than a generic block. -->
+<main id="main">
+  <!-- BREADCRUMB. Was a <div> of anonymous links with generated "›" separators —
+       no navigation landmark, no list, and nothing marking which item was the
+       page you are on. Now a named <nav> wrapping an <ol>, with aria-current on
+       the terminal item so the "you are here" convention that was carried only
+       by "this one is not a link" is stated programmatically too. Renders
+       identically: amazon.css keeps the same generated-chevron selector. -->
+  <nav aria-label="Breadcrumb" data-i18n-attr="aria-label:chrome.breadcrumbAria">
+    <ol class="crumbs">
+      <li><a href="#" data-i18n="crumb.store">Kindle Store</a></li>
+      <li><a href="#" data-i18n="crumb.ebooks">Kindle eBooks</a></li>
+      <li aria-current="page"><span data-i18n="collection.name">Lived Experience</span></li>
+    </ol>
+  </nav>
 
   <div class="kicker" data-i18n="index.kicker">LIVED EXPERIENCE</div>
   <h1 class="headline" data-i18n="index.headline">First-person stories, in the authors' own words</h1>
@@ -141,47 +284,117 @@
     Translation, including AI translation, is welcome.</span>
   </p>
 
-  <div class="grid">
+      <!-- LIST + HEADINGS (accessibility pass). Was a bare container of <div>s with the
+           titles as <div class="t">, which cost two things a screen-reader user actually
+           uses: no "list of 8 items" to tell them how much shelf there is, and no way to
+           jump book-to-book by heading. A collection page whose argument is "here is a
+           shelf" should be navigable as one. Renders identically; list-style is off. -->
+  <ul class="grid">
 
-    <div class="book">
-      <a href="book.html"><img src="covers/road-from-manila.png" alt="Cover of The Road from Manila" data-i18n-attr="alt:index.book1.coverAlt"></a>
-      <div class="t"><a href="book.html" data-i18n="index.book1.title">The Road from Manila</a></div>
+    <li class="book">
+      <a href="book.html"><img src="covers/road-from-manila.png" alt="Cover of The Road from Manila" data-i18n-attr="alt:index.book1.coverAlt" width="848" height="1264" fetchpriority="high" decoding="async"></a>
+      <h2 class="t"><a href="book.html" data-i18n="index.book1.title">The Road from Manila</a></h2>
       <div class="a" data-i18n="index.book1.author">Rosa Delgado</div>
       <div class="reachrow"><span class="reach" data-i18n="common.answersQuestions">✓ Answers reader questions</span></div>
       <div class="voice" data-i18n="index.book1.voice">"I left Manila in 1979. I wrote this in Tagalog first, because that is the language I remember it in."</div>
       <div class="stars" role="img" aria-label="4.4 out of 5 stars, 214 ratings" data-i18n-attr="aria-label:index.book1.starsAria">★★★★☆<span class="count">(<span data-i18n-num="214">214</span>)</span></div>
-      <div class="row"><span class="kulogo">kindle<b>unlimited</b></span></div>
-    </div>
+      <div class="row"><span class="kulogo" lang="en">kindle<b>unlimited</b></span></div>
+    </li>
 
-    <div class="book">
-      <img src="covers/unseen-memoir.png" alt="Cover of The Unseen Memoir" data-i18n-attr="alt:index.book2.coverAlt">
-      <div class="t" data-i18n="index.book2.title">The Unseen Memoir</div>
+    <li class="book">
+      <img src="covers/unseen-memoir.png" alt="Cover of The Unseen Memoir" data-i18n-attr="alt:index.book2.coverAlt" width="848" height="1264" fetchpriority="high" decoding="async">
+      <h2 class="t" data-i18n="index.book2.title">The Unseen Memoir</h2>
       <div class="a" data-i18n="index.book2.author">Marion Hale</div>
       <div class="reachrow"><span class="reach" data-i18n="common.answersQuestions">✓ Answers reader questions</span></div>
       <div class="voice" data-i18n="index.book2.voice">"I wrote this at my kitchen table over four years, about the year I stopped speaking."</div>
       <div class="stars" role="img" aria-label="4.3 out of 5 stars, 127 ratings" data-i18n-attr="aria-label:index.book2.starsAria">★★★★☆<span class="count">(<span data-i18n-num="127">127</span>)</span></div>
-      <div class="row"><span class="kulogo">kindle<b>unlimited</b></span></div>
-    </div>
+      <div class="row"><span class="kulogo" lang="en">kindle<b>unlimited</b></span></div>
+    </li>
 
-    <div class="book">
-      <img src="covers/letters-home.png" alt="Cover of Letters Home" data-i18n-attr="alt:index.book3.coverAlt">
-      <div class="t" data-i18n="index.book3.title">Letters Home</div>
+    <li class="book">
+      <img src="covers/letters-home.png" alt="Cover of Letters Home" data-i18n-attr="alt:index.book3.coverAlt" width="848" height="1264" loading="lazy" decoding="async">
+      <h2 class="t" data-i18n="index.book3.title">Letters Home</h2>
       <div class="a" data-i18n="index.book3.author">Emily Carter</div>
       <div class="voice" data-i18n="index.book3.voice">"These are my grandmother's letters, and mine. I typed every one of them myself."</div>
       <div class="stars" role="img" aria-label="4.5 out of 5 stars, 2,341 ratings" data-i18n-attr="aria-label:index.book3.starsAria">★★★★☆<span class="count">(<span data-i18n-num="2341">2,341</span>)</span></div>
-      <div class="row"><span class="kulogo">kindle<b>unlimited</b></span></div>
-    </div>
+      <div class="row"><span class="kulogo" lang="en">kindle<b>unlimited</b></span></div>
+    </li>
 
-  </div>
+    <li class="book">
+      <img src="covers/last-ninety-acres.png" alt="Cover of The Last Ninety Acres" data-i18n-attr="alt:index.book4.coverAlt" width="853" height="1272" loading="lazy" decoding="async">
+      <h2 class="t" data-i18n="index.book4.title">The Last Ninety Acres</h2>
+      <div class="a" data-i18n="index.book4.author">Dale Whitcomb</div>
+      <div class="reachrow"><span class="reach" data-i18n="common.answersQuestions">✓ Answers reader questions</span></div>
+      <div class="voice" data-i18n="index.book4.voice">"Four generations farmed this ground. I wrote down the year we lost it, because nobody else was going to."</div>
+      <div class="stars" role="img" aria-label="4.2 out of 5 stars, 86 ratings" data-i18n-attr="aria-label:index.book4.starsAria">★★★★☆<span class="count">(<span data-i18n-num="86">86</span>)</span></div>
+      <div class="row"><span class="kulogo" lang="en">kindle<b>unlimited</b></span></div>
+    </li>
 
-  <p class="credits">
+    <li class="book">
+      <img src="covers/eleven-addresses.png" alt="Cover of Eleven Addresses" data-i18n-attr="alt:index.book5.coverAlt" width="853" height="1272" loading="lazy" decoding="async">
+      <h2 class="t" data-i18n="index.book5.title">Eleven Addresses</h2>
+      <div class="a" data-i18n="index.book5.author">Terrance Boyd</div>
+      <div class="reachrow"><span class="reach" data-i18n="common.answersQuestions">✓ Answers reader questions</span></div>
+      <div class="voice" data-i18n="index.book5.voice">"Eleven places in six years after I got out. I wrote most of this on a library computer, an hour at a time."</div>
+      <div class="stars" role="img" aria-label="4.6 out of 5 stars, 438 ratings" data-i18n-attr="aria-label:index.book5.starsAria">★★★★☆<span class="count">(<span data-i18n-num="438">438</span>)</span></div>
+      <div class="row"><span class="kulogo" lang="en">kindle<b>unlimited</b></span></div>
+    </li>
+
+    <li class="book">
+      <img src="covers/loud-in-here.png" alt="Cover of Loud in Here" data-i18n-attr="alt:index.book6.coverAlt" width="853" height="1272" loading="lazy" decoding="async">
+      <h2 class="t" data-i18n="index.book6.title">Loud in Here</h2>
+      <div class="a" data-i18n="index.book6.author">Nadia Haddad</div>
+      <div class="reachrow"><span class="reach" data-i18n="common.answersQuestions">✓ Answers reader questions</span></div>
+      <div class="voice" data-i18n="index.book6.voice">"I have been deaf since I was four. This is what a quiet house is actually like from the inside."</div>
+      <div class="stars" role="img" aria-label="4.4 out of 5 stars, 309 ratings" data-i18n-attr="aria-label:index.book6.starsAria">★★★★☆<span class="count">(<span data-i18n-num="309">309</span>)</span></div>
+      <div class="row"><span class="kulogo" lang="en">kindle<b>unlimited</b></span></div>
+    </li>
+
+    <li class="book">
+      <img src="covers/sixteen-hundred-miles.png" alt="Cover of Sixteen Hundred Miles a Week" data-i18n-attr="alt:index.book7.coverAlt" width="853" height="1272" loading="lazy" decoding="async">
+      <h2 class="t" data-i18n="index.book7.title">Sixteen Hundred Miles a Week</h2>
+      <div class="a" data-i18n="index.book7.author">Ray Okonkwo</div>
+      <div class="voice" data-i18n="index.book7.voice">"I can't spell to save my life. I talked this book into my phone between Laredo and Toledo."</div>
+      <div class="stars" role="img" aria-label="4.1 out of 5 stars, 52 ratings" data-i18n-attr="aria-label:index.book7.starsAria">★★★★☆<span class="count">(<span data-i18n-num="52">52</span>)</span></div>
+      <div class="row"><span class="kulogo" lang="en">kindle<b>unlimited</b></span></div>
+    </li>
+
+    <li class="book">
+      <img src="covers/coming-back-slow.png" alt="Cover of Coming Back Slow" data-i18n-attr="alt:index.book8.coverAlt" width="853" height="1272" loading="lazy" decoding="async">
+      <h2 class="t" data-i18n="index.book8.title">Coming Back Slow</h2>
+      <div class="a" data-i18n="index.book8.author">Deborah Aoki</div>
+      <div class="reachrow"><span class="reach" data-i18n="common.answersQuestions">✓ Answers reader questions</span></div>
+      <div class="voice" data-i18n="index.book8.voice">"I had a stroke at fifty-one. Relearning to write took two years. This book took four."</div>
+      <div class="stars" role="img" aria-label="4.7 out of 5 stars, 1,608 ratings" data-i18n-attr="aria-label:index.book8.starsAria">★★★★★<span class="count">(<span data-i18n-num="1608">1,608</span>)</span></div>
+      <div class="row"><span class="kulogo" lang="en">kindle<b>unlimited</b></span></div>
+    </li>
+
+  </ul>
+
+  <!-- ADDED IN THE VERIFICATION PASS. This page was a dead end: browse.html linked forward
+       to it and nothing linked back, so a reviewer who started here could not reach the
+       category node — the page that carries the "a category is a location, not an
+       endorsement" argument — and the "(48 books)" that book.html states had no page on
+       which the 48 could be seen. The eight books above ARE the first eight of those
+       forty-eight, in the same order, which is why this reads "see all" and not "see
+       more like these". -->
+  <p class="seeall"><a href="browse.html" data-i18n="index.seeAll">See all 48 books in this category</a></p>
+
+  </main>
+
+  <footer class="credits">
     <span data-i18n="index.credits1">Reader Discovery team — Jakob Picciotto · Pablo Ortega · Jalen Oscar Howard · Wanting Chao ·
     Author-statement gate: Wanting's mechanism (7/27) · Reader→author access tiers: Pablo's concept (7/27) ·
     Collection framing: Chang's StoryCorps reframe (7/24) · Community-discovery research informing launch: Jalen (in progress)</span><br>
     <span data-i18n="index.credits2">Example authors are illustrative fiction pending our survey's open-text data — not personas.
     Rosa Delgado's profile draws on the documented Filipino nurse-migration diaspora (sources in the PRD),
-    not on invented demographics.</span>
-  </p>
+    not on invented demographics.</span><br>
+    <span data-i18n="index.credits3">KDP already has real books that belong in this collection; the shelf exists,
+    what is missing is a way to walk it. These titles are invented anyway, because the access shown here is the
+    author's to grant and no real author granted it — putting a living author's name beside a tier she never
+    agreed to would invert the idea. Invented copy also carries the states a real listing does not have, in six
+    languages, without rewriting anyone's own words.</span>
+  </footer>
 
 </div>
 
@@ -190,6 +403,7 @@
 <script src="i18n/strings.zh.js"></script>
 <script src="i18n/strings.fil.js"></script>
 <script src="i18n/strings.ar.js"></script>
+<script src="i18n/strings.fr.js"></script>
 <script src="i18n/i18n.js"></script>
 </body>
 </html>
