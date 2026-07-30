@@ -421,5 +421,39 @@ window.I18N.ar = {
   "search.r16.starsAria": "4.2 من 5 نجوم، 143 تقييمًا",
 
   "search.credits1": "فريق Reader Discovery — Jakob Picciotto · Pablo Ortega · Jalen Oscar Howard · Wanting Chao · الانتماء إلى المجموعة يظهر بسطر السلسلة «جزء من:» الموجود أصلًا لدى Amazon ولا شيء غيره — لا واجهة بحث جديدة، ولا أداة تصفية، ولا تغيير في الترتيب · بوابة الإقرار الذاتي: آلية Wanting (27/7) · حدّ النطاق القاضي بعدم تغيير الخوارزميات: Chang 20/7، Rachel 23/7",
-  "search.credits2": "أربع عشرة من هذه النتائج الست عشرة حشوٌ مُختلق كي يظهر كتابا المجموعة داخل قائمة نتائج عادية لا قائمة مُعدّة للعرض. وهذه الأربع عشرة ليست شخصيات ولا شخصيات مستخدمين ولا ناتج بحث؛ لا سيرة لها ولا تظهر في أي صفحة أخرى."
+  "search.credits2": "أربع عشرة من هذه النتائج الست عشرة حشوٌ مُختلق كي يظهر كتابا المجموعة داخل قائمة نتائج عادية لا قائمة مُعدّة للعرض. وهذه الأربع عشرة ليست شخصيات ولا شخصيات مستخدمين ولا ناتج بحث؛ لا سيرة لها ولا تظهر في أي صفحة أخرى.",
+
+  /* ---------- the reviewer bar and its notes ----------
+     Chrome addressed to whoever is reviewing this, not to a shopper: the
+     walkthrough labels across the top, the one-line caption naming what each
+     screen is for, and the notes behind the Show-notes toggle. Translated like
+     everything else — a reviewer reading in Arabic should not hit an English
+     signpost. */
+  "demo.navAria": "جولة في النموذج الأولي",
+  "demo.step.search": "البحث",
+  "demo.step.category": "الفئة",
+  "demo.step.collection": "المجموعة",
+  "demo.step.book": "الكتاب",
+  "demo.step.author": "المؤلفة",
+  "demo.notesShow": "إظهار الملاحظات",
+  "demo.notesHide": "إخفاء الملاحظات",
+  "index.demoCaption": "المجموعة نفسها، والجملة التي تبيّن كيف يدخل كتاب إليها.",
+  "browse.demoCaption": "المجموعة داخل صفحة فئة، إلى جانب كتب ليست منها.",
+  "search.demoCaption": "كيف تُصادَف المجموعة دون البحث عنها.",
+  "book.demoCaption": "كتاب واحد: إقرار المؤلفة، ومسار طرح سؤال عليها.",
+  "author.demoCaption": "ما تختار المؤلفة إتاحته — مستويات الوصول، باختيارها وقابلة للتراجع.",
+  "revnote.index.1Label": "الواجهة.",
+  "revnote.index.1Body": "مجموعة، لا شارة على مستوى المتجر ولا تغيير في ترتيب نتائج البحث. دُرس الاقتراحان واستُبعدا.",
+  "revnote.index.2Label": "الشرط.",
+  "revnote.index.2Body": "الإقرار يصدر عمّن كتب الكتاب. أمازون تستضيفه ولا تصادق عليه.",
+  "revnote.book.1Label": "بكلماتها هي.",
+  "revnote.book.1Body": "أمازون تمنح شارة لما تستطيع قياسه، وتقتبس ما لا تستطيع. وهذا هو الشطر المقتبس.",
+  "revnote.book.2Label": "نقطة الجذب.",
+  "revnote.book.2Body": "الوصول اختياري وقابل للتراجع. كل الحالات متاحة هنا، بما فيها الحالة التي لا يحدث فيها شيء.",
+  "revnote.author.1Label": "القرار للمؤلفة.",
+  "revnote.author.1Body": "هي التي تختار كل مستوى، ويمكنها إيقافه في أي وقت.",
+  "revnote.search.1Label": "ليست مقترحًا لترتيب النتائج.",
+  "revnote.search.1Body": "ترتيب هذه النتائج متخيَّل. كل ما نطلبه هو حضور المجموعة.",
+  "revnote.browse.1Label": "أين تقع.",
+  "revnote.browse.1Body": "مكان في المتجر يمكن تصفحه، إلى جانب فئات تعمل كما تعمل الآن."
 };

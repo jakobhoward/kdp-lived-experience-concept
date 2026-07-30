@@ -9,9 +9,11 @@
 <meta name="robots" content="noindex, nofollow">
 <title>The Road from Manila — book detail (concept)</title>
 <link rel="stylesheet" href="amazon.css">
+<link rel="stylesheet" href="demobar.css">
 <link rel="stylesheet" href="i18n/i18n.css">
 <!-- Loads third, and last: viewport adaptation overrides both of the above. -->
 <link rel="stylesheet" href="responsive.css">
+<link rel="stylesheet" href="notes.css">
 <style>
   /* page-specific: 3-column detail layout (interface-reference.md §2) */
   .detail { display: grid; grid-template-columns: 260px 1fr 260px; gap: 28px; align-items: start; }
@@ -323,7 +325,31 @@
 <a class="skiplink" href="#main" data-i18n="chrome.skipToContent">Skip to main content</a>
 
 <header class="sitehead">
-  <div class="concept-banner"><strong data-i18n="chrome.conceptLabel">STUDENT CONCEPT — COMMLD 560, UW.</strong> <span data-i18n="book.disclaimer">Not an Amazon product. This book, its author, and all ratings are fictional; controls are non-functional.</span></div>
+  <div class="concept-banner">
+    <div class="demobar-row">
+      <strong class="demobar-mark" data-i18n="chrome.conceptLabel">STUDENT CONCEPT — COMMLD 560, UW.</strong>
+      <span class="demobar-note" data-i18n="book.disclaimer">Not an Amazon product. This book, its author, and all ratings are fictional; controls are non-functional.</span>
+      <!-- The reviewer's own controls are injected here, in this order: the notes
+           toggle by notes.js, then the language picker by i18n/i18n.js. Both are
+           absent if their script is not loaded, and the row simply collapses. -->
+      <div class="demobar-tools"></div>
+    </div>
+    <div class="demobar-row demobar-row-nav">
+      <!-- THE WALKTHROUGH. An <ol> because the order is the point: the five screens are
+           one reader's path through the concept, and a row of equal-weight links does
+           not say that. Numbers come from a CSS counter, never typed. -->
+      <nav class="demobar-nav" aria-label="Prototype walkthrough" data-i18n-attr="aria-label:demo.navAria">
+        <ol>
+        <li><a class="demobar-step" href="search.html"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.search">Search</span></a></li>
+        <li><a class="demobar-step" href="browse.html"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.category">Category</span></a></li>
+        <li><a class="demobar-step" href="index.html"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.collection">Collection</span></a></li>
+        <li><span class="demobar-step" aria-current="page"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.book">Book</span></span></li>
+        <li><a class="demobar-step" href="author.html"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.author">Author</span></a></li>
+        </ol>
+      </nav>
+      <p class="demobar-caption" data-i18n="book.demoCaption">One book: the author's attestation, and the flow for asking her a question.</p>
+    </div>
+  </div>
   <div class="topnav">
     <div class="logo" lang="en">kindle<span>store</span></div>
     <div class="searchbar"><input value="" placeholder="Search Kindle Store" aria-label="Search Kindle Store" data-i18n-attr="placeholder:chrome.searchPlaceholder;aria-label:chrome.searchAria" readonly><button aria-label="Search" aria-disabled="true" data-i18n-attr="aria-label:chrome.searchButtonAria">🔍</button></div>
@@ -396,6 +422,7 @@
 
       <!-- A2: the attestation, in the author's-own-voice slot (§2 row 6).
            Rendered as an Amazon a-box, the same module shape as "Great on Kindle". -->
+      <div class="revnote" role="note"><span class="revnote-n" aria-hidden="true"></span><b data-i18n="revnote.book.1Label">In her own words.</b> <span data-i18n="revnote.book.1Body">Amazon badges what it can measure and quotes what it cannot. This is the quoted half.</span></div>
       <div class="abox alt attest" style="margin-top:14px">
         <h2 data-i18n="book.attest.h3">In the author's own words</h2>
         <p class="quote" data-i18n="book.attest.quote">"I left Manila in 1979 with one suitcase and my mother's rosary. I am not
@@ -521,6 +548,7 @@
       <div class="sub" data-i18n="book.ask.subState">Opted in · 9 of 14 reader questions answered</div>
 
       <!-- idle: the tiers, plus the entry point -->
+      <div class="revnote" role="note"><span class="revnote-n" aria-hidden="true"></span><b data-i18n="revnote.book.2Label">The hook.</b> <span data-i18n="revnote.book.2Body">Reader access is opt-in and reversible. Every state is reachable here, including the one where nothing happens.</span></div>
       <div data-ask-state="idle">
         <div class="tier">
           <b data-i18n="book.ask.tier1Label">Questions about the book</b>
@@ -680,9 +708,18 @@
 <script src="i18n/strings.ar.js"></script>
 <script src="i18n/strings.fr.js"></script>
 <script src="i18n/i18n.js"></script>
+<script src="notes.js"></script>
 <!-- After i18n.js, always: ask.js reveals controls that i18n.js has already translated,
      and copies already-translated text into the live region. Loaded first it would show
      English for a beat, or show nothing at all. -->
 <script src="ask.js"></script>
+
+<!-- Labels for the reviewer-notes toggle. They live here, already translated, because
+     notes.js is not allowed to build a string — see the note at the top of that file.
+     Hidden by notes.css. -->
+<div class="revnote-strings" aria-hidden="true">
+  <span data-revnote-label="show" data-i18n="demo.notesShow">Show notes</span>
+  <span data-revnote-label="hide" data-i18n="demo.notesHide">Hide notes</span>
+</div>
 </body>
 </html>

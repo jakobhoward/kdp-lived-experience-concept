@@ -214,7 +214,14 @@
   var button, menu, live, notice;
 
   function buildControl() {
-    var host = document.querySelector('.topnav');
+    /* The control now lives in the reviewer bar, not in the dark Amazon nav. The reason
+       is in demobar.css, and it is not a cosmetic one: this is the only working control
+       on the page, and it was sitting in a row of deliberately dead ones directly under
+       a banner reading "controls are non-functional".
+       .topnav is kept as a fallback so the control still appears — in its old slot, with
+       its old styling, both of which still work — on any page that has not been given a
+       reviewer bar. */
+    var host = document.querySelector('.demobar-tools') || document.querySelector('.topnav');
     if (!host) return;
 
     var wrap = document.createElement('div');
@@ -348,6 +355,25 @@
     var loc = find(id);
     live.setAttribute('lang', loc.htmlLang);
     live.textContent = t('lang.notice', { name: loc.sentence || loc.endonym });
+    announce(id);
+  }
+
+  /* Anything outside this file that has copied a translated string into a control it
+     owns needs to know the language moved under it — otherwise its label stays in the
+     old language until the page is reloaded. notes.js is the one listener today.
+     An event rather than exporting t(): the rule that no other file may build a
+     sentence is what keeps every string in the six translated tables, and handing out
+     t() is exactly how that rule would get broken. */
+  function announce(id) {
+    var ev;
+    try {
+      ev = new CustomEvent('le:langchange', { detail: { lang: id } });
+    } catch (e) {
+      /* older engines: the constructor is the only part that differs */
+      ev = document.createEvent('CustomEvent');
+      ev.initCustomEvent('le:langchange', false, false, { lang: id });
+    }
+    document.dispatchEvent(ev);
   }
 
   function refreshControl() {

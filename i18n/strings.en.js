@@ -489,5 +489,39 @@ window.I18N.en = {
   "search.r16.starsAria": "4.2 out of 5 stars, 143 ratings",
 
   "search.credits1": "Reader Discovery team — Jakob Picciotto · Pablo Ortega · Jalen Oscar Howard · Wanting Chao · Collection membership is shown with Amazon's existing “Part of:” series line and nothing else — no new search UI, no refinement, no ranking change · Author-statement gate: Wanting's mechanism (7/27) · The no-algorithm-changes scope line: Chang 7/20, Rachel 7/23",
-  "search.credits2": "Fourteen of these sixteen results are invented filler so that the two collection titles sit in an ordinary result list rather than a staged one. Those fourteen are not characters, personas, or research output; they carry no biography and appear on no other page."
+  "search.credits2": "Fourteen of these sixteen results are invented filler so that the two collection titles sit in an ordinary result list rather than a staged one. Those fourteen are not characters, personas, or research output; they carry no biography and appear on no other page.",
+
+  /* ---------- the reviewer bar and its notes ----------
+     Chrome addressed to whoever is reviewing this, not to a shopper: the
+     walkthrough labels across the top, the one-line caption naming what each
+     screen is for, and the notes behind the Show-notes toggle. Translated like
+     everything else — a reviewer reading in Arabic should not hit an English
+     signpost. */
+  "demo.navAria": "Prototype walkthrough",
+  "demo.step.search": "Search",
+  "demo.step.category": "Category",
+  "demo.step.collection": "Collection",
+  "demo.step.book": "Book",
+  "demo.step.author": "Author",
+  "demo.notesShow": "Show notes",
+  "demo.notesHide": "Hide notes",
+  "index.demoCaption": "The collection itself, and the sentence that says how a book gets in.",
+  "browse.demoCaption": "The collection inside a category page, beside books that are not in it.",
+  "search.demoCaption": "How a reader meets the collection without having gone looking for it.",
+  "book.demoCaption": "One book: the author's attestation, and the flow for asking her a question.",
+  "author.demoCaption": "What an author opens up — the access tiers, opt-in and reversible.",
+  "revnote.index.1Label": "The surface.",
+  "revnote.index.1Body": "A collection, not a store-wide badge and not a change to search ranking. Both were considered and retired.",
+  "revnote.index.2Label": "The gate.",
+  "revnote.index.2Body": "The attestation comes from whoever wrote the book. Amazon hosts that statement; it does not certify it.",
+  "revnote.book.1Label": "In her own words.",
+  "revnote.book.1Body": "Amazon badges what it can measure and quotes what it cannot. This is the quoted half.",
+  "revnote.book.2Label": "The hook.",
+  "revnote.book.2Body": "Reader access is opt-in and reversible. Every state is reachable here, including the one where nothing happens.",
+  "revnote.author.1Label": "The author decides.",
+  "revnote.author.1Body": "She chooses each tier and can switch it off at any time.",
+  "revnote.search.1Label": "Not a ranking proposal.",
+  "revnote.search.1Body": "This result order is invented. All we are asking for is that the collection be present.",
+  "revnote.browse.1Label": "Where it lives.",
+  "revnote.browse.1Body": "A place in the store a reader can browse, beside categories that work as they already do."
 };

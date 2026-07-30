@@ -469,5 +469,39 @@ window.I18N.fr = {
   "search.r16.starsAria": "4,2 sur 5 étoiles, 143 évaluations",
 
   "search.credits1": "Équipe Reader Discovery — Jakob Picciotto · Pablo Ortega · Jalen Oscar Howard · Wanting Chao · L'appartenance à la collection est indiquée avec la mention de série « Fait partie de : » qu'Amazon possède déjà, et rien d'autre — aucune nouvelle interface de recherche, aucun filtre, aucun changement de classement · Déclaration d'autorat : mécanisme de Wanting (27/7) · La limite « aucun changement d'algorithme » : Chang 20/7, Rachel 23/7",
-  "search.credits2": "Quatorze de ces seize résultats sont du remplissage inventé, pour que les deux titres de la collection figurent dans une liste de résultats ordinaire plutôt que mise en scène. Ces quatorze-là ne sont ni des personnages, ni des personas, ni le fruit d'une recherche ; ils n'ont pas de biographie et n'apparaissent sur aucune autre page."
+  "search.credits2": "Quatorze de ces seize résultats sont du remplissage inventé, pour que les deux titres de la collection figurent dans une liste de résultats ordinaire plutôt que mise en scène. Ces quatorze-là ne sont ni des personnages, ni des personas, ni le fruit d'une recherche ; ils n'ont pas de biographie et n'apparaissent sur aucune autre page.",
+
+  /* ---------- the reviewer bar and its notes ----------
+     Chrome addressed to whoever is reviewing this, not to a shopper: the
+     walkthrough labels across the top, the one-line caption naming what each
+     screen is for, and the notes behind the Show-notes toggle. Translated like
+     everything else — a reviewer reading in Arabic should not hit an English
+     signpost. */
+  "demo.navAria": "Parcours du prototype",
+  "demo.step.search": "Recherche",
+  "demo.step.category": "Catégorie",
+  "demo.step.collection": "Collection",
+  "demo.step.book": "Livre",
+  "demo.step.author": "Autrice",
+  "demo.notesShow": "Afficher les notes",
+  "demo.notesHide": "Masquer les notes",
+  "index.demoCaption": "La collection elle-même, et la phrase qui dit comment un livre y entre.",
+  "browse.demoCaption": "La collection dans une page de catégorie, à côté de livres qui n'en font pas partie.",
+  "search.demoCaption": "Comment on tombe sur la collection sans l'avoir cherchée.",
+  "book.demoCaption": "Un livre : l'attestation de l'autrice, et le parcours pour lui poser une question.",
+  "author.demoCaption": "Ce que l'autrice ouvre — les niveaux d'accès, volontaires et réversibles.",
+  "revnote.index.1Label": "La surface.",
+  "revnote.index.1Body": "Une collection, pas un badge à l'échelle de la boutique ni une modification du classement des recherches. Les deux ont été envisagés, puis écartés.",
+  "revnote.index.2Label": "La condition.",
+  "revnote.index.2Body": "L'attestation vient de qui a écrit le livre. Amazon l'héberge ; elle ne la certifie pas.",
+  "revnote.book.1Label": "Avec ses propres mots.",
+  "revnote.book.1Body": "Amazon appose un badge sur ce qu'elle peut mesurer et cite ce qu'elle ne peut pas. Voici la moitié citée.",
+  "revnote.book.2Label": "L'accroche.",
+  "revnote.book.2Body": "L'accès est volontaire et réversible. Tous les états sont accessibles ici, y compris celui où rien ne se passe.",
+  "revnote.author.1Label": "C'est l'autrice qui décide.",
+  "revnote.author.1Body": "Elle choisit chaque niveau et peut le désactiver à tout moment.",
+  "revnote.search.1Label": "Ce n'est pas une proposition de classement.",
+  "revnote.search.1Body": "Cet ordre de résultats est inventé. Nous demandons seulement que la collection soit présente.",
+  "revnote.browse.1Label": "Où elle se trouve.",
+  "revnote.browse.1Body": "Un endroit de la boutique que l'on peut parcourir, à côté de catégories qui fonctionnent comme elles fonctionnent déjà."
 };

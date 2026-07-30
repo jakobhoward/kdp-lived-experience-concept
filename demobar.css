@@ -1,0 +1,204 @@
+/* Lived Experience prototype — the reviewer bar.
+   Loads after amazon.css, before i18n.css.
+
+   WHAT THIS IS, AND WHY IT IS ITS OWN FILE
+   amazon.css is the mockup's trade dress: everything in it is imitating a real store.
+   This file is the opposite — it is the only chrome on the page that is *ours*, spoken
+   in our voice, to a reviewer rather than to a shopper. Keeping the two in one
+   stylesheet made it easy to forget which side of that line a rule was on. The bar was
+   already commented "not Amazon; deliberately foreign" when it was three lines of CSS
+   in amazon.css; now that it carries navigation it earns the separation.
+
+   WHY THE LANGUAGE PICKER MOVED HERE, out of the dark Amazon nav where it started:
+   it is the only control on any of these pages that actually does something. Sitting in
+   a row of deliberately dead controls, underneath a banner that says "controls are
+   non-functional", it was contradicting the disclaimer directly above it. It also
+   needed a pulsing ring to be findable at all — a cue that exists to compensate for the
+   placement. In the reviewer bar the ring is doing less work, because the bar is where
+   a reviewer already looks for things addressed to them.
+   The cost is real and worth stating: the picker no longer demonstrates itself sitting
+   in Amazon's own locale slot. The PRD, not the mockup, now has to carry the claim that
+   this is a native mechanism rather than a bolt-on.
+
+   WHY STICKY: the bar stopped being a disclaimer the moment it became the way through
+   the prototype. A reviewer three screens down a search-results page cannot navigate
+   with something parked at the top of the document. The disclaimer benefits too — it is
+   now true on screen the whole time, not only before anyone scrolls. */
+
+.concept-banner {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: #fff8e8;
+  border-bottom: 1px solid #e0c48a;
+  color: #7a5c1f;
+  font-size: 12px;
+  padding: 0;
+  text-align: start;
+}
+
+/* Rows are padded rather than the container, so the hairline between them can run the
+   full width of the bar. */
+.demobar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px 16px;
+  flex-wrap: wrap;
+  padding: 6px 14px;
+}
+.demobar-row + .demobar-row { border-top: 1px solid rgba(224, 196, 138, .55); }
+
+/* ---------- row 1: who made this and what it isn't ---------- */
+.demobar-mark {
+  font-weight: 700;
+  letter-spacing: .02em;
+  white-space: nowrap;
+}
+.demobar-note { flex: 1 1 320px; min-width: 0; }
+
+/* The controls that belong to the reviewer, not to the store: language, and (when
+   notes.js is loaded) the notes toggle. Pushed to the far end of the row. */
+.demobar-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-inline-start: auto;
+  flex: none;
+}
+
+/* ---------- row 2: the walkthrough ----------
+   An ordered list, because the numbering is the whole point: the complaint this bar
+   answers is "it isn't obvious where to click to see the full journey", and a row of
+   equal-weight links does not imply a sequence. <ol> says it to a screen reader too —
+   "list of 5 items", each announced with its position. */
+.demobar-nav ol {
+  counter-reset: step;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex-wrap: wrap;
+}
+.demobar-nav li { display: flex; align-items: center; }
+
+/* The chevron between steps is generated, never typed, so it is not in the accessible
+   name of anything and never gets read out as "greater than". */
+.demobar-nav li + li::before {
+  content: "›";
+  opacity: .5;
+  margin-inline: 2px;
+  font-size: 13px;
+}
+
+.demobar-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 9px;
+  border-radius: 100px;
+  border: 1px solid transparent;
+  color: #6b4f18;
+  text-decoration: none;
+  font-size: 12px;
+  line-height: 1;
+  white-space: nowrap;
+}
+a.demobar-step:hover {
+  background: rgba(224, 196, 138, .34);
+  border-color: #cfae74;
+  text-decoration: none;
+  color: #4d3910;
+}
+a.demobar-step:focus-visible { outline: 2px solid #2162a1; outline-offset: 2px; }
+
+/* The number is drawn, not written. Five pages each carry their own copy of this bar —
+   the same duplication the header, search box and store nav already live with here — so
+   a hand-typed "3" is five chances to renumber four of them and miss one. The counter
+   cannot drift. It is aria-hidden because the <ol> already conveys position to assistive
+   tech, and hearing "3, step 3 of 5, Collection" is worse than hearing it once. */
+.demobar-num::before {
+  counter-increment: step;
+  content: counter(step);
+}
+.demobar-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: rgba(224, 196, 138, .5);
+  border: 1px solid #cfae74;
+  font-size: 10px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* You-are-here. Marked with aria-current="page" in the markup; this is only its
+   appearance. Not a link on its own page — a link to where you already are is a dead
+   control, which is the thing this prototype keeps promising not to draw. */
+.demobar-step[aria-current="page"] {
+  background: #7a5c1f;
+  border-color: #7a5c1f;
+  color: #fff8e8;
+  font-weight: 700;
+  cursor: default;
+}
+.demobar-step[aria-current="page"] .demobar-num {
+  background: rgba(255, 248, 232, .22);
+  border-color: rgba(255, 248, 232, .5);
+  color: #fff8e8;
+}
+
+/* ---------- the per-page caption ----------
+   One sentence naming what this screen is for. It is the cheap version of drawing
+   arrows on the mockup: it orients a reviewer without putting a single mark on the
+   thing being reviewed, which is what the trade dress is buying us. */
+.demobar-caption {
+  flex: 1 1 260px;
+  min-width: 0;
+  margin: 0;
+  font-style: italic;
+  opacity: .92;
+}
+
+/* ---------- the language picker, restyled for a light bar ----------
+   i18n.css dresses .langpick-btn for the dark nav it used to live in: white text on a
+   translucent white fill. Both disappear on cream. Overridden here rather than edited
+   there, so i18n.css keeps working unchanged if the control is ever put back. */
+.demobar-tools .langpick-btn {
+  color: #6b4f18;
+  background: rgba(255, 255, 255, .6);
+  border-color: #cfae74;
+  padding: 5px 11px;
+  font-size: 12px;
+}
+.demobar-tools .langpick-btn:hover {
+  background: #fff;
+  border-color: #7a5c1f;
+  color: #4d3910;
+}
+.demobar-tools .langpick-btn:focus-visible { outline-color: #2162a1; }
+
+/* The first-visit ring is amber-on-cream now; the yellow it used in the dark nav had
+   almost no contrast here. */
+@keyframes langpick-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(122, 92, 31, .5); }
+  55%  { box-shadow: 0 0 0 9px rgba(122, 92, 31, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(122, 92, 31, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .demobar-tools .langpick-btn.is-new { border-color: #7a5c1f; border-width: 2px; }
+}
+
+/* ---------- print ----------
+   responsive.css already forces the banner to plain black-on-white for print. Here we
+   only undo the parts that are meaningless on paper: a sticky bar has nowhere to stick,
+   and a walkthrough of links nobody can click is noise on a handout. The disclaimer
+   row is the one thing that must survive, so it is the one thing left alone. */
+@media print {
+  .concept-banner { position: static; }
+  .demobar-row-nav, .demobar-tools { display: none; }
+}

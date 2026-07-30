@@ -9,9 +9,11 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Rosa Delgado — author page (concept)</title>
 <link rel="stylesheet" href="amazon.css">
+<link rel="stylesheet" href="demobar.css">
 <link rel="stylesheet" href="i18n/i18n.css">
 <!-- Loads third, and last: viewport adaptation overrides both of the above. -->
 <link rel="stylesheet" href="responsive.css">
+<link rel="stylesheet" href="notes.css">
 <style>
   /* page-specific: author page (interface-reference.md §3) */
   .authhead {
@@ -128,7 +130,31 @@
 <a class="skiplink" href="#main" data-i18n="chrome.skipToContent">Skip to main content</a>
 
 <header class="sitehead">
-  <div class="concept-banner"><strong data-i18n="chrome.conceptLabel">STUDENT CONCEPT — COMMLD 560, UW.</strong> <span data-i18n="author.disclaimer">Not an Amazon product. This author and all content are fictional; controls are non-functional.</span></div>
+  <div class="concept-banner">
+    <div class="demobar-row">
+      <strong class="demobar-mark" data-i18n="chrome.conceptLabel">STUDENT CONCEPT — COMMLD 560, UW.</strong>
+      <span class="demobar-note" data-i18n="author.disclaimer">Not an Amazon product. This author and all content are fictional; controls are non-functional.</span>
+      <!-- The reviewer's own controls are injected here, in this order: the notes
+           toggle by notes.js, then the language picker by i18n/i18n.js. Both are
+           absent if their script is not loaded, and the row simply collapses. -->
+      <div class="demobar-tools"></div>
+    </div>
+    <div class="demobar-row demobar-row-nav">
+      <!-- THE WALKTHROUGH. An <ol> because the order is the point: the five screens are
+           one reader's path through the concept, and a row of equal-weight links does
+           not say that. Numbers come from a CSS counter, never typed. -->
+      <nav class="demobar-nav" aria-label="Prototype walkthrough" data-i18n-attr="aria-label:demo.navAria">
+        <ol>
+        <li><a class="demobar-step" href="search.html"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.search">Search</span></a></li>
+        <li><a class="demobar-step" href="browse.html"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.category">Category</span></a></li>
+        <li><a class="demobar-step" href="index.html"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.collection">Collection</span></a></li>
+        <li><a class="demobar-step" href="book.html"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.book">Book</span></a></li>
+        <li><span class="demobar-step" aria-current="page"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.author">Author</span></span></li>
+        </ol>
+      </nav>
+      <p class="demobar-caption" data-i18n="author.demoCaption">What an author opens up — the access tiers, opt-in and reversible.</p>
+    </div>
+  </div>
   <div class="topnav">
     <div class="logo" lang="en">kindle<span>store</span></div>
     <div class="searchbar"><input value="" placeholder="Search Kindle Store" aria-label="Search Kindle Store" data-i18n-attr="placeholder:chrome.searchPlaceholder;aria-label:chrome.searchAria" readonly><button aria-label="Search" aria-disabled="true" data-i18n-attr="aria-label:chrome.searchButtonAria">🔍</button></div>
@@ -220,6 +246,7 @@
 
       <div style="margin-top:16px">
         <div class="abox">
+          <div class="revnote" role="note"><span class="revnote-n" aria-hidden="true"></span><b data-i18n="revnote.author.1Label">The author decides.</b> <span data-i18n="revnote.author.1Body">Each tier is chosen by her and can be switched off at any time.</span></div>
           <h2 data-i18n="author.access.h3">Rosa's access settings</h2>
           <div class="sub" data-i18n="author.access.sub">Chosen by the author · Changeable anytime</div>
           <div class="tier">
@@ -260,5 +287,14 @@
 <script src="i18n/strings.ar.js"></script>
 <script src="i18n/strings.fr.js"></script>
 <script src="i18n/i18n.js"></script>
+<script src="notes.js"></script>
+
+<!-- Labels for the reviewer-notes toggle. They live here, already translated, because
+     notes.js is not allowed to build a string — see the note at the top of that file.
+     Hidden by notes.css. -->
+<div class="revnote-strings" aria-hidden="true">
+  <span data-revnote-label="show" data-i18n="demo.notesShow">Show notes</span>
+  <span data-revnote-label="hide" data-i18n="demo.notesHide">Hide notes</span>
+</div>
 </body>
 </html>

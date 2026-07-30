@@ -165,9 +165,12 @@ img { max-width: 100%; height: auto; }
 /* ================================================================
    THE PAGE CHROME
    ================================================================
-   Identical markup on all five pages: concept banner, .topnav (logo, search box,
-   the language control i18n.js injects, account block), .subnav, then .page.
-   Everything below is one of those five things getting smaller. */
+   Identical markup on all five pages: the reviewer bar (disclaimer, walkthrough nav,
+   and the two controls that belong to the reviewer — the notes toggle notes.js injects
+   and the language control i18n.js injects), .topnav (logo, search box, account block),
+   .subnav, then .page. Everything below is one of those things getting smaller.
+   The language control used to sit in .topnav and moved into the reviewer bar; the
+   reason is at the top of demobar.css. */
 
 /* ---------- the search box, and the wrap that makes it exist ----------
    THE FIX, and the reason it is three declarations instead of a media query.
@@ -271,7 +274,24 @@ img { max-width: 100%; height: auto; }
 .topnav .logo { font-size: clamp(18px, 2.2vw, 20px); }
 
 @media (max-width: 700px) {
-  .concept-banner { padding: 8px 14px; }
+  /* The reviewer bar pads its rows, not itself, so the hairline between them can run
+     edge to edge — hence .demobar-row here rather than .concept-banner. */
+  .demobar-row { padding: 7px 14px; }
+
+  /* The caption is the first thing to go. It is a courtesy sentence naming what the
+     screen is for; the numbered walkthrough beside it is the part that navigates, and
+     on a 375px screen the two of them together push the mockup below the fold. The
+     notes carry the same explanation for anyone who wants it. */
+  .demobar-caption { display: none; }
+
+  /* Unstuck. Measured on a 375px screen: the disclaimer wraps to three lines, the two
+     controls drop to their own line, and the walkthrough wraps to two rows — about
+     400px of an 812px viewport. Pinned, that is half the phone gone for the whole
+     session, permanently, to save one scroll back to the top. The bar is still the
+     first thing on the page, so nothing about the disclaimer's prominence changes;
+     it just scrolls with everything else. Same trade as the short-landscape rule
+     further down, reached from the other direction. */
+  .concept-banner { position: static; }
 
   /* The store nav already wrapped — amazon.css gave it flex-wrap and a 6px
      row-gap because translated labels run longer than the English. At phone width
@@ -513,7 +533,14 @@ img { max-width: 100%; height: auto; }
    neither can go; what can go is their padding. Keyed on height, so a tall phone
    in portrait keeps the roomier chrome. */
 @media (max-height: 500px) and (orientation: landscape) {
-  .concept-banner { padding: 4px 14px; }
+  .demobar-row { padding: 3px 14px; }
+
+  /* Unstuck here, and only here. A two-row bar pinned to the top of a 390px-tall
+     viewport is holding about a sixth of the screen permanently, which costs more than
+     the scrolling it saves. The bar is still the first thing on the page, so the
+     disclaimer is still the first thing read — it just scrolls away like everything
+     else once the reader is into the content. */
+  .concept-banner { position: static; }
   .topnav { padding: 6px 14px; row-gap: 6px; }
   .subnav { padding: 5px 14px; }
   .subnav ul { row-gap: 3px; }

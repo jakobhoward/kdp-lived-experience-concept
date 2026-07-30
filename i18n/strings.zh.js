@@ -428,5 +428,39 @@ window.I18N.zh = {
   "search.r16.starsAria": "4.2 星（满分 5 星），143 条评分",
 
   "search.credits1": "Reader Discovery 团队：Jakob Picciotto · Pablo Ortega · Jalen Oscar Howard · Wanting Chao · 合集归属只用 Amazon 本来就有的“所属合集：”系列行来显示，除此之外什么都没有——没有新的搜索界面，没有新的筛选项，也没有排序上的改动 · 作者声明机制：Wanting 的方案（7 月 27 日）· 不改动算法这条边界：Chang 7 月 20 日、Rachel 7 月 23 日",
-  "search.credits2": "这十六条结果里有十四条是编出来的填充内容，好让那两本合集图书出现在一份普通的结果列表里，而不是一份摆拍的列表里。那十四条不是人物、用户画像，也不是研究产出；它们没有任何背景资料，也不出现在别的页面上。"
+  "search.credits2": "这十六条结果里有十四条是编出来的填充内容，好让那两本合集图书出现在一份普通的结果列表里，而不是一份摆拍的列表里。那十四条不是人物、用户画像，也不是研究产出；它们没有任何背景资料，也不出现在别的页面上。",
+
+  /* ---------- the reviewer bar and its notes ----------
+     Chrome addressed to whoever is reviewing this, not to a shopper: the
+     walkthrough labels across the top, the one-line caption naming what each
+     screen is for, and the notes behind the Show-notes toggle. Translated like
+     everything else — a reviewer reading in Arabic should not hit an English
+     signpost. */
+  "demo.navAria": "原型导览",
+  "demo.step.search": "搜索",
+  "demo.step.category": "分类",
+  "demo.step.collection": "合集",
+  "demo.step.book": "书籍",
+  "demo.step.author": "作者",
+  "demo.notesShow": "显示批注",
+  "demo.notesHide": "隐藏批注",
+  "index.demoCaption": "合集本身，以及说明一本书如何进入合集的那句话。",
+  "browse.demoCaption": "分类页面中的合集，旁边是并不属于它的书。",
+  "search.demoCaption": "读者并非刻意寻找，却遇见这个合集的方式。",
+  "book.demoCaption": "一本书：作者的自述声明，以及向她提问的流程。",
+  "author.demoCaption": "作者选择开放的部分——访问层级，自愿加入，随时可撤回。",
+  "revnote.index.1Label": "表层。",
+  "revnote.index.1Body": "这是一个合集，不是全站徽章，也不改动搜索排序。两者都考虑过，也都已放弃。",
+  "revnote.index.2Label": "门槛。",
+  "revnote.index.2Body": "声明来自写这本书的人。亚马逊只负责呈现这份声明，并不为其背书。",
+  "revnote.book.1Label": "她自己的话。",
+  "revnote.book.1Body": "能测量的，亚马逊给标识；不能测量的，就原样引用。这里是被引用的那一半。",
+  "revnote.book.2Label": "落点。",
+  "revnote.book.2Body": "读者访问由作者自愿开启，且可随时关闭。这里可以看到每一种状态，包括什么也没有发生的那一种。",
+  "revnote.author.1Label": "由作者决定。",
+  "revnote.author.1Body": "每一个层级都由她选择，也可以随时关闭。",
+  "revnote.search.1Label": "这不是排序方案。",
+  "revnote.search.1Body": "这里的结果顺序是虚构的。我们提出的只是让这个合集出现。",
+  "revnote.browse.1Label": "它所在的位置。",
+  "revnote.browse.1Body": "商店中一处可以浏览的地方，旁边的分类仍按原有方式运作。"
 };

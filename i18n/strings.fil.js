@@ -465,5 +465,39 @@ window.I18N.fil = {
   "search.r16.starsAria": "4.2 sa 5 na bituin, 143 na rating",
 
   "search.credits1": "Reader Discovery team — Jakob Picciotto · Pablo Ortega · Jalen Oscar Howard · Wanting Chao · Ipinapakita ang pagiging kabilang sa koleksyon gamit ang “Bahagi ng:” na linya ng serye na mayroon na ang Amazon, at wala nang iba — walang bagong search UI, walang refinement, walang pagbabago sa ranking · Gate ng pahayag ng may-akda: mekanismo ni Wanting (7/27) · Ang hangganang walang binabagong algorithm: Chang 7/20, Rachel 7/23",
-  "search.credits2": "Labing-apat sa labing-anim na resultang ito ay imbentong panakip lang, para maupo ang dalawang pamagat mula sa koleksyon sa ordinaryong listahan ng resulta at hindi sa isang inayos na eksena. Ang labing-apat na iyon ay hindi mga tauhan, persona, o bunga ng pananaliksik; wala silang talambuhay at wala silang lalabas sa ibang pahina."
+  "search.credits2": "Labing-apat sa labing-anim na resultang ito ay imbentong panakip lang, para maupo ang dalawang pamagat mula sa koleksyon sa ordinaryong listahan ng resulta at hindi sa isang inayos na eksena. Ang labing-apat na iyon ay hindi mga tauhan, persona, o bunga ng pananaliksik; wala silang talambuhay at wala silang lalabas sa ibang pahina.",
+
+  /* ---------- the reviewer bar and its notes ----------
+     Chrome addressed to whoever is reviewing this, not to a shopper: the
+     walkthrough labels across the top, the one-line caption naming what each
+     screen is for, and the notes behind the Show-notes toggle. Translated like
+     everything else — a reviewer reading in Arabic should not hit an English
+     signpost. */
+  "demo.navAria": "Paglilibot sa prototype",
+  "demo.step.search": "Paghahanap",
+  "demo.step.category": "Kategorya",
+  "demo.step.collection": "Koleksiyon",
+  "demo.step.book": "Aklat",
+  "demo.step.author": "May-akda",
+  "demo.notesShow": "Ipakita ang mga tala",
+  "demo.notesHide": "Itago ang mga tala",
+  "index.demoCaption": "Ang koleksiyon mismo, at ang pangungusap na nagsasabi kung paano nakakapasok ang isang aklat.",
+  "browse.demoCaption": "Ang koleksiyon sa loob ng pahina ng kategorya, katabi ng mga aklat na wala rito.",
+  "search.demoCaption": "Kung paano natatagpuan ng mambabasa ang koleksiyon nang hindi ito hinahanap.",
+  "book.demoCaption": "Isang aklat: ang patotoo ng may-akda, at ang daloy ng pagtatanong sa kanya.",
+  "author.demoCaption": "Kung ano ang binubuksan ng may-akda — ang mga antas ng akses, kusang-loob at maaaring bawiin.",
+  "revnote.index.1Label": "Ang ibabaw.",
+  "revnote.index.1Body": "Isang koleksiyon, hindi badge sa buong tindahan at hindi pagbabago sa ranggo ng paghahanap. Pinag-isipan ang dalawa, at parehong itinigil.",
+  "revnote.index.2Label": "Ang pintuan.",
+  "revnote.index.2Body": "Nagmumula ang patotoo sa sumulat ng aklat. Inilalagay ito ng Amazon sa pahina; hindi nito pinatototohanan.",
+  "revnote.book.1Label": "Sa kanyang sariling salita.",
+  "revnote.book.1Body": "Nilalagyan ng badge ng Amazon ang kayang sukatin, at sinisipi ang hindi kaya. Ito ang bahaging sinipi.",
+  "revnote.book.2Label": "Ang kawit.",
+  "revnote.book.2Body": "Kusang-loob at maaaring bawiin ang akses ng mambabasa. Maaabot dito ang bawat kalagayan, pati ang isang walang nangyayari.",
+  "revnote.author.1Label": "Ang may-akda ang magpapasya.",
+  "revnote.author.1Body": "Siya ang pumipili ng bawat antas, at maaari niya itong isara anumang oras.",
+  "revnote.search.1Label": "Hindi ito panukala sa ranggo.",
+  "revnote.search.1Body": "Gawa-gawa ang pagkakasunod-sunod na ito. Ang hinihiling lamang namin ay ang presensya ng koleksiyon.",
+  "revnote.browse.1Label": "Kung saan ito naroon.",
+  "revnote.browse.1Body": "Isang lugar sa tindahan na maaaring tingnan-tingnan, katabi ng mga kategoryang gumagana gaya ng dati."
 };

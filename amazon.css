@@ -112,15 +112,12 @@ body {
 a { color: var(--link); text-decoration: none; }
 a:hover { text-decoration: underline; color: var(--hover); }
 
-/* ---------- concept banner (not Amazon; deliberately foreign) ---------- */
-.concept-banner {
-  background: #fff8e8;
-  border-bottom: 1px solid #e0c48a;
-  color: #7a5c1f;
-  text-align: center;
-  font-size: 12px;
-  padding: 6px 10px;
-}
+/* ---------- concept banner (not Amazon; deliberately foreign) ----------
+   Moved to demobar.css. Everything in this file is imitating a real store; that bar is
+   the one piece of chrome speaking to a reviewer instead of a shopper, and it now
+   carries the walkthrough nav and the language picker as well as the disclaimer. It
+   was easier to keep the two apart than to keep remembering which side of the line a
+   rule was on. Nothing else in amazon.css targets .concept-banner. */
 
 /* ---------- skip link ----------
    Every page puts a disclaimer bar, a brand row, a search box, a language control

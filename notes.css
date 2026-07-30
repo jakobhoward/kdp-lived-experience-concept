@@ -1,0 +1,134 @@
+/* Lived Experience prototype — reviewer notes layer.
+   Optional. Loads after demobar.css. Paired with notes.js.
+
+   WHY NOTES AND NOT ARROWS ON THE MOCKUP
+   Callouts drawn over the screen make it read as a marked-up screenshot rather than a
+   product, and the trade dress is the thing doing the persuading here — a reviewer has
+   to be able to look at this and see a store. So the notes are OFF by default, they are
+   inserted into the flow rather than floated over anything, and they speak in the
+   reviewer bar's amber rather than in Amazon's palette. Nothing about the mockup moves
+   when they are on; content is added below the thing being described.
+
+   HOW TO TURN THE WHOLE THING OFF
+   Set NOTES_ENABLED = false at the top of notes.js. The toggle disappears, the notes
+   stay hidden, and no other file needs editing — the <div class="revnote"> blocks in the
+   HTML are inert without the body class this file keys off. To remove it for good,
+   delete the two <link>/<script> lines and the revnote blocks.
+
+   NO JS DRAWS ANY OF THIS. Visibility is a body class and the numbering is a CSS
+   counter, so notes.js never has to know how many notes a page has or what order they
+   are in. */
+
+/* Off unless the body says otherwise. display:none rather than [hidden] so the notes
+   never enter the accessibility tree, and never add tab stops, while switched off. */
+.revnote { display: none; }
+body.revnotes-on .revnote { display: block; }
+
+/* The counter resets per page, so the numbers a reviewer reads are "note 1, 2, 3 on
+   this screen" rather than a running total across the walkthrough. */
+body.revnotes-on { counter-reset: revnote; }
+
+/* A note sits immediately BEFORE the thing it describes and points down at it. Placing
+   it after would read more naturally in prose, but every anchor here is a block whose
+   closing tag is dozens of lines from its opening one, and a note attached to the wrong
+   closing </div> is a bug nobody sees until a reviewer is looking at it. Before-and-
+   pointing-down attaches to an opening tag, which is unambiguous. */
+.revnote {
+  position: relative;
+  margin: 14px 0 10px;
+  /* Logical, not physical. The number is pinned with inset-inline-start, so the gutter
+     it needs has to flip with it — written as `padding: 10px 13px 10px 40px` the gutter
+     stayed on the physical left and the Arabic text ran straight under the badge. */
+  padding-block: 10px;
+  padding-inline: 40px 13px;
+  background: #fff8e8;
+  border: 1px solid #e0c48a;
+  border-radius: 6px;
+  color: #6b4f18;
+  font-size: 13px;
+  line-height: 1.5;
+  max-width: 640px;
+}
+
+/* The pointer, on the bottom edge, aimed at the block below. Two triangles: the border
+   colour behind, the fill a pixel in front, so the caret carries the same hairline as
+   the box instead of looking stuck on. */
+.revnote::after,
+.revnote::before {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  inset-inline-start: 16px;
+  border: 8px solid transparent;
+  border-bottom: 0;
+}
+.revnote::before { border-top-color: #e0c48a; }
+.revnote::after { bottom: -7px; border-top-color: #fff8e8; }
+
+/* The number. Drawn by the counter, so inserting a note anywhere renumbers the rest
+   for free. aria-hidden is not needed — generated content is not exposed as an element,
+   and the note's own sentence has to stand up without the number anyway. */
+.revnote-n {
+  position: absolute;
+  inset-inline-start: 11px;
+  top: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  background: #7a5c1f;
+  color: #fff8e8;
+  font-size: 11px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+body.revnotes-on .revnote-n::before {
+  counter-increment: revnote;
+  content: counter(revnote);
+}
+
+.revnote b { color: #4d3910; }
+
+/* ---------- the toggle, in the reviewer bar ---------- */
+.revnote-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: inherit;
+  font-size: 12px;
+  color: #6b4f18;
+  background: rgba(255, 255, 255, .6);
+  border: 1px solid #cfae74;
+  border-radius: 100px;
+  padding: 5px 11px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.revnote-toggle:hover { background: #fff; border-color: #7a5c1f; color: #4d3910; }
+.revnote-toggle:focus-visible { outline: 2px solid #2162a1; outline-offset: 2px; }
+.revnote-toggle[aria-pressed="true"] {
+  background: #7a5c1f;
+  border-color: #7a5c1f;
+  color: #fff8e8;
+}
+.revnote-toggle-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+}
+.revnote-toggle[aria-pressed="true"] .revnote-toggle-dot { background: currentColor; }
+
+/* The block holding the toggle's two labels, already translated by i18n.js. notes.js
+   copies text out of it rather than building a string it could never translate. */
+.revnote-strings { display: none; }
+
+@media print {
+  /* On paper the notes are the useful part — a handout of the walkthrough with the
+     reasoning attached — so they print if they were on, minus the toggle. */
+  .revnote-toggle { display: none; }
+  .revnote { break-inside: avoid; background: #fff; border-color: #999; color: #000; }
+  .revnote-n { background: #000; color: #fff; }
+}
