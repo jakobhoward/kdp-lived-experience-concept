@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>og card source</title>
+<!-- SOURCE FOR share/og-cover.png. Not linked from the prototype and not meant to be
+     browsed; it exists so the share image can be regenerated instead of being a binary
+     nobody can edit. Render with:
+
+       "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless \
+         --disable-gpu --window-size=1200,630 --default-background-color=00000000 \
+         --screenshot=share/og-cover.png share/og-card.html
+
+     WHY THIS DOES NOT LOOK LIKE THE PROTOTYPE. A link preview is the one place this
+     project appears with its banner stripped off — a card in a message thread, no page
+     around it, no disclaimer underneath. A cropped screenshot of the mockup there would
+     be an Amazon storefront with our name on it, which is the exact thing the noindex
+     rule and the README disclaimer exist to prevent. So the card is in the reviewer
+     bar's amber, not Amazon's navy, and it says STUDENT CONCEPT before it says anything
+     else. The covers are the only borrowed thing, and they are ours. -->
+<style>
+  @page { margin: 0 }
+  * { margin: 0; padding: 0; box-sizing: border-box }
+  html, body { width: 1200px; height: 630px; }
+  body {
+    font: 400 16px/1.4 -apple-system, "Helvetica Neue", Arial, sans-serif;
+    background: #fff8e8;
+    color: #4d3910;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* The same band that sits at the top of every page of the prototype, so the card and
+     the thing it links to are recognisably one object. */
+  .band {
+    background: #7a5c1f;
+    color: #fff8e8;
+    padding: 18px 56px;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .band .dot { width: 9px; height: 9px; border-radius: 50%; background: #ffd814; flex: none }
+  .band .sep { opacity: .55; font-weight: 400 }
+  .band .course { font-weight: 400; opacity: .95 }
+
+  .body { flex: 1; display: flex; align-items: center; gap: 48px; padding: 0 56px }
+  .copy { flex: 1; min-width: 0 }
+
+  .kicker {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: .22em;
+    color: #9a7526;
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-size: 48px;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    font-weight: 800;
+    color: #3d2c0c;
+    margin-bottom: 18px;
+  }
+  .sub { font-size: 23px; line-height: 1.35; color: #6b4f18; max-width: 20em }
+
+  .facts {
+    margin-top: 26px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    font-size: 15px;
+  }
+  .facts span {
+    border: 1px solid #cfae74;
+    border-radius: 100px;
+    padding: 6px 14px;
+    color: #6b4f18;
+    background: rgba(255, 255, 255, .55);
+  }
+
+  /* A shelf, slightly fanned — the collection is the product, so the card should show
+     a row of books rather than a logo. Rotations are hand-set, not random: the sequence
+     has to be stable so re-rendering the card does not silently produce a new image. */
+  .shelf { display: flex; flex: none; align-items: flex-end }
+  .shelf img {
+    width: 122px;
+    height: 182px;
+    object-fit: cover;
+    border-radius: 3px;
+    box-shadow: 0 10px 26px rgba(61, 44, 12, .3);
+    border: 1px solid rgba(61, 44, 12, .18);
+  }
+  .shelf img:nth-child(1) { transform: rotate(-7deg) translateY(10px); z-index: 1 }
+  .shelf img:nth-child(2) { transform: rotate(-2.5deg); margin-left: -26px; z-index: 2 }
+  .shelf img:nth-child(3) { transform: rotate(2deg) translateY(6px); margin-left: -26px; z-index: 3 }
+  .shelf img:nth-child(4) { transform: rotate(6.5deg) translateY(18px); margin-left: -26px; z-index: 4 }
+
+  .foot {
+    padding: 15px 56px;
+    border-top: 1px solid #e0c48a;
+    font-size: 16px;
+    color: #7a5c1f;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .foot b { color: #4d3910 }
+</style>
+</head>
+<body>
+
+<div class="band">
+  <span class="dot"></span>STUDENT CONCEPT
+  <span class="sep">—</span>
+  <span class="course">Inclusive Design &amp; Product Equity (COMMLD 560), University of Washington</span>
+</div>
+
+<div class="body">
+  <div class="copy">
+    <div class="kicker">LIVED EXPERIENCE</div>
+    <h1>First-person stories,<br>in the authors' own words</h1>
+    <div class="sub">A collection concept for Kindle Direct Publishing — where you can reach the person who lived it.</div>
+    <div class="facts">
+      <span>Interactive prototype</span>
+      <span>5 screens</span>
+      <span>6 languages</span>
+    </div>
+  </div>
+
+  <div class="shelf">
+    <img src="../covers/eleven-addresses.png" alt="">
+    <img src="../covers/coming-back-slow.png" alt="">
+    <img src="../covers/road-from-manila.png" alt="">
+    <img src="../covers/sixteen-hundred-miles.png" alt="">
+  </div>
+</div>
+
+<div class="foot">
+  <div><b>Not an Amazon product.</b> Books, authors and ratings are fictional; controls are non-functional.</div>
+  <div>Reader Discovery team</div>
+</div>
+
+</body>
+</html>

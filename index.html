@@ -8,6 +8,27 @@
      result stripped of the student-concept banner below. -->
 <meta name="robots" content="noindex, nofollow">
 <title>Lived Experience Collection — landing page (concept)</title>
+<!-- LINK PREVIEW. This is the one place the prototype travels without its banner: a
+     card in a message thread, no page around it. So og:title says "concept" and the
+     description leads with "Not an Amazon product" — the same job the banner does on
+     the page, done in the only two lines a preview will show.
+     NOT localized, and cannot be. Previews are built by the messaging platform's
+     crawler from this static HTML; the six languages are applied client-side by
+     i18n.js, which no crawler runs. Everyone sees this English card whatever their
+     phone is set to. og:locale:alternate is deliberately absent — the pages are not
+     served per-locale, and claiming otherwise would be a lie to the scraper. -->
+<meta name="description" content="A browsable collection of first-person books by authors who never saw themselves as writers — where the reason to pick one up is that you can reach the person who lived it. Not an Amazon product — a student concept for Kindle Direct Publishing. Books, authors and ratings are fictional; controls are non-functional.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Lived Experience — student concept, COMMLD 560 UW">
+<meta property="og:title" content="Lived Experience — a KDP collection concept">
+<meta property="og:description" content="A browsable collection of first-person books by authors who never saw themselves as writers — where the reason to pick one up is that you can reach the person who lived it. Not an Amazon product — a student concept for Kindle Direct Publishing. Books, authors and ratings are fictional; controls are non-functional.">
+<meta property="og:url" content="https://jakobhoward.github.io/kdp-lived-experience-concept/">
+<meta property="og:image" content="https://jakobhoward.github.io/kdp-lived-experience-concept/share/og-cover.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A cream card headed STUDENT CONCEPT — Inclusive Design &amp; Product Equity (COMMLD 560), University of Washington, reading &#x27;First-person stories, in the authors&#x27; own words&#x27;, with four book covers fanned beside it.">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="amazon.css">
 <link rel="stylesheet" href="demobar.css">
 <link rel="stylesheet" href="i18n/i18n.css">
