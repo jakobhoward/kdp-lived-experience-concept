@@ -10,7 +10,7 @@
    shape. To remove it permanently instead, delete the notes.css/notes.js tags from the
    five pages and the revnote blocks with them.
    ========================================================================== */
-var NOTES_ENABLED = true;
+var NOTES_ENABLED = false;
 
 (function () {
   'use strict';

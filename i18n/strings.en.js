@@ -69,7 +69,7 @@ window.I18N.en = {
   "search.docTitle": "memoir about leaving home — search results (concept)",
 
   /* ---------- shared chrome ---------- */
-  "chrome.conceptLabel": "STUDENT CONCEPT — COMMLD 560, UW.",
+  "chrome.conceptLabel": "STUDENT CONCEPT — <span lang=\"en\" dir=\"ltr\">Inclusive Design &amp; Product Equity (COMMLD 560), UW.</span>",
   "chrome.searchPlaceholder": "Search Kindle Store",
   "chrome.searchAria": "Search Kindle Store",
   "chrome.searchButtonAria": "Search",

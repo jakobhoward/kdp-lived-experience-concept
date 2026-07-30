@@ -51,7 +51,7 @@ window.I18N.fr = {
   "search.docTitle": "mémoires sur le départ de chez soi — résultats de recherche (concept)",
 
   /* ---------- shared chrome ---------- */
-  "chrome.conceptLabel": "PROJET DE COURS — COMMLD 560, UW.",
+  "chrome.conceptLabel": "PROJET DE COURS — <span lang=\"en\" dir=\"ltr\">Inclusive Design &amp; Product Equity (COMMLD 560), UW.</span>",
   "chrome.searchPlaceholder": "Rechercher dans la Boutique Kindle",
   "chrome.searchAria": "Rechercher dans la Boutique Kindle",
   "chrome.searchButtonAria": "Rechercher",

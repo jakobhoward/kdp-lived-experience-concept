@@ -11,7 +11,7 @@ window.I18N.ar = {
   "search.docTitle": "مذكرات عن مغادرة الوطن — نتائج البحث (تصور مبدئي)",
 
   /* ---------- shared chrome ---------- */
-  "chrome.conceptLabel": "مشروع طالب — COMMLD 560, UW.",
+  "chrome.conceptLabel": "مشروع طالب — <span lang=\"en\" dir=\"ltr\">Inclusive Design &amp; Product Equity (COMMLD 560), UW.</span>",
   "chrome.searchPlaceholder": "البحث في Kindle Store",
   "chrome.searchAria": "البحث في Kindle Store",
   "chrome.searchButtonAria": "بحث",

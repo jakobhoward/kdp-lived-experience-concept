@@ -11,7 +11,7 @@ window.I18N.es = {
   "search.docTitle": "memorias sobre irse de casa — resultados de búsqueda (concepto)",
 
   /* ---------- shared chrome ---------- */
-  "chrome.conceptLabel": "PROYECTO DE CLASE — COMMLD 560, UW.",
+  "chrome.conceptLabel": "PROYECTO DE CLASE — <span lang=\"en\" dir=\"ltr\">Inclusive Design &amp; Product Equity (COMMLD 560), UW.</span>",
   "chrome.searchPlaceholder": "Buscar en la Tienda Kindle",
   "chrome.searchAria": "Buscar en la Tienda Kindle",
   "chrome.searchButtonAria": "Buscar",

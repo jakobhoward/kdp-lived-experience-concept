@@ -49,10 +49,18 @@
 .demobar-row + .demobar-row { border-top: 1px solid rgba(224, 196, 138, .55); }
 
 /* ---------- row 1: who made this and what it isn't ---------- */
+/* Carries the course by name, not only by number: "COMMLD 560" identifies this to the
+   four people already in the room and to nobody else, and the bar exists for readers
+   who arrive without that context.
+   No nowrap. It held while the label was six words; at full length it would push the
+   disclaimer off a phone rather than wrap. It is a flex item that may take the whole
+   row and let the disclaimer drop below it — which is the right order to lose, since
+   the two read as one sentence either way. */
 .demobar-mark {
   font-weight: 700;
   letter-spacing: .02em;
-  white-space: nowrap;
+  flex: 0 1 auto;
+  min-width: 0;
 }
 .demobar-note { flex: 1 1 320px; min-width: 0; }
 

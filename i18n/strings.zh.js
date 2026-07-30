@@ -11,7 +11,7 @@ window.I18N.zh = {
   "search.docTitle": "离开家乡的回忆录｜搜索结果（概念稿）",
 
   /* ---------- shared chrome ---------- */
-  "chrome.conceptLabel": "学生概念稿：COMMLD 560，华盛顿大学。",
+  "chrome.conceptLabel": "学生概念稿：<span lang=\"en\" dir=\"ltr\">Inclusive Design &amp; Product Equity (COMMLD 560)</span>，华盛顿大学。",
   "chrome.searchPlaceholder": "搜索 Kindle 商店",
   "chrome.searchAria": "搜索 Kindle 商店",
   "chrome.searchButtonAria": "搜索",

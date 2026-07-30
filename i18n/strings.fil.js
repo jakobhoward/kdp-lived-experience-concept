@@ -52,7 +52,7 @@ window.I18N.fil = {
   "search.docTitle": "memoir tungkol sa pag-alis sa tahanan — mga resulta ng paghahanap (konsepto)",
 
   /* ---------- shared chrome ---------- */
-  "chrome.conceptLabel": "KONSEPTO NG ESTUDYANTE — COMMLD 560, UW.",
+  "chrome.conceptLabel": "KONSEPTO NG ESTUDYANTE — <span lang=\"en\" dir=\"ltr\">Inclusive Design &amp; Product Equity (COMMLD 560), UW.</span>",
   "chrome.searchPlaceholder": "Search Kindle Store",
   "chrome.searchAria": "Search Kindle Store",
   "chrome.searchButtonAria": "Search",
