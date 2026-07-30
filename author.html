@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Hosted so the team can just open a link, but deliberately not indexable: this page
+     borrows Amazon's store grammar on purpose, and it should never turn up in a search
+     result stripped of the student-concept banner below. -->
+<meta name="robots" content="noindex, nofollow">
+<title>Rosa Delgado — author page (concept)</title>
+<link rel="stylesheet" href="amazon.css">
+<link rel="stylesheet" href="i18n/i18n.css">
+<style>
+  /* page-specific: author page (interface-reference.md §3) */
+  .authhead {
+    display: flex; align-items: center; gap: 16px;
+    padding: 14px 0 12px; border-bottom: 1px solid var(--rule); margin-bottom: 22px;
+    flex-wrap: wrap;
+  }
+  .authhead .pic {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: #879596; /* neutral placeholder, identical for every author */
+    color: #fff; display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 26px;
+  }
+  .authhead .btn { width: auto; padding: 6px 22px; }
+  /* logical property so the tab row hangs off the trailing edge in either direction */
+  .authhead .tabs { margin-inline-start: auto; display: flex; gap: 26px; font-size: 13px; letter-spacing: 1px; }
+  .authhead .tabs .on { font-weight: 700; border-bottom: 3px solid #2162a1; padding-bottom: 6px; }
+
+  .bigname { text-align: center; font-size: 32px; font-weight: 700; margin: 10px 0 26px; }
+
+  .twocol { display: grid; grid-template-columns: 1.4fr 1fr; gap: 28px; align-items: start; }
+  .panel h2 { font-size: 19px; margin-bottom: 12px; }
+  .biocard {
+    border: 1px solid var(--rule); border-radius: 8px; padding: 16px; font-size: 14px; line-height: 1.55;
+  }
+
+  .bookcard { display: flex; gap: 14px; border: 1px solid var(--rule); border-radius: 8px; padding: 14px; }
+  .bookcard img { width: 92px; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,.18); }
+  .bookcard .t { font-size: 16px; font-weight: 700; }
+  .bookcard .orbuy { font-size: 12px; color: var(--soft); }
+
+  /* Q&A rows follow Amazon's product-question pattern: hairline-separated,
+     "Question:" / "Answer:" bold prefixes, no boxes and no accent bars. */
+  .qa { margin-top: 10px; }
+  .qa .q { border-top: 1px solid #E7E9E9; padding: 14px 0; font-size: 13px; }
+  .qa .q .line { line-height: 1.5; }
+  .qa .q .line b { font-weight: 700; }
+  .qa .q .ans { margin-top: 8px; }
+  .qa .q .who { color: var(--soft); font-size: 12px; margin-top: 4px; }
+</style>
+</head>
+<body data-i18n-title="author.docTitle">
+
+<div class="concept-banner"><strong data-i18n="chrome.conceptLabel">STUDENT CONCEPT — COMMLD 560, UW.</strong> <span data-i18n="author.disclaimer">Not an Amazon product. This author and all content are fictional; controls are non-functional.</span></div>
+
+<header class="topnav">
+  <div class="logo">kindle<span>store</span></div>
+  <div class="searchbar"><input value="" placeholder="Search Kindle Store" aria-label="Search Kindle Store" data-i18n-attr="placeholder:chrome.searchPlaceholder;aria-label:chrome.searchAria" readonly><button aria-label="Search" data-i18n-attr="aria-label:chrome.searchButtonAria">🔍</button></div>
+  <!-- the language control is injected here by i18n/i18n.js, in Amazon's own locale-selector slot -->
+  <div class="acct"><span data-i18n="chrome.greeting">Hello, Reader</span><b data-i18n="chrome.account">Account &amp; Lists</b></div>
+</header>
+<nav class="subnav">
+  <span data-i18n="chrome.nav.shop">Shop Books</span><span data-i18n="chrome.nav.categories">Categories</span><span data-i18n="chrome.nav.trending">New &amp; Trending</span>
+  <span data-i18n="chrome.nav.bestsellers">Best Sellers &amp; More</span><span data-i18n="chrome.nav.deals">Deals</span><span data-i18n="chrome.nav.yourbooks">Your Books</span>
+</nav>
+
+<div class="page">
+
+  <div class="crumbs"><a href="#" data-i18n="crumb.store">Kindle Store</a><a href="index.html" data-i18n="collection.name">Lived Experience</a><span data-i18n="author.name">Rosa Delgado</span></div>
+
+  <div class="authhead">
+    <div class="pic">RD</div>
+    <span class="btn ghost" data-i18n="common.follow">+ Follow</span>
+    <div class="tabs"><span class="on" data-i18n="author.tabHome">HOME</span><span data-i18n="author.tabAbout">ABOUT</span><span data-i18n="author.tabBooks">ALL BOOKS</span></div>
+  </div>
+
+  <div class="bigname" data-i18n="author.name">Rosa Delgado</div>
+
+  <div class="twocol">
+
+    <div class="panel">
+      <h2 data-i18n="author.aboutH2">About the author</h2>
+      <div class="biocard">
+        <p data-i18n-html="author.bioHtml">Rosa Delgado was a nurse for thirty-one years, in Manila and then in Chicago. <em>The Road
+        from Manila</em> is her first book, written in Tagalog and translated with her niece. She
+        did not plan to be a writer; she planned to remember. She lives near her grandchildren,
+        who are the reason the book exists.</p>
+      </div>
+
+      <!-- What today's page doesn't have: the reader→author channel, at author page level -->
+      <div class="qa">
+        <h2 data-i18n="author.qaH2">Questions readers asked Rosa</h2>
+        <div class="q">
+          <div class="line"><b data-i18n="author.qLabel">Question:</b> <span data-i18n="author.qa1.q">Did you ever think about going back for good?</span></div>
+          <div class="line ans"><b data-i18n="author.aLabel">Answer:</b> <span data-i18n="author.qa1.a">Every December for the first ten years. Then one year
+          I noticed I was homesick in both directions, and I understood I had two homes now. That is
+          what chapter 14 is about.</span></div>
+          <div class="who" data-i18n="author.answeredBy">Answered by Rosa Delgado, author</div>
+        </div>
+        <div class="q">
+          <div class="line"><b data-i18n="author.qLabel">Question:</b> <span data-i18n="author.qa2.q">What did writing in Tagalog first change about the book?</span></div>
+          <div class="line ans"><b data-i18n="author.aLabel">Answer:</b> <span data-i18n="author.qa2.a">Everything. Some memories only exist in the language
+          they happened in. My niece and I argued over every sentence of the translation, and the
+          arguing is where the book got honest.</span></div>
+          <div class="who" data-i18n="author.answeredBy">Answered by Rosa Delgado, author</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2 data-i18n="author.popularH2">Most popular</h2>
+      <div class="bookcard">
+        <a href="book.html"><img src="covers/road-from-manila.png" alt="Cover of The Road from Manila" data-i18n-attr="alt:author.coverAlt"></a>
+        <div>
+          <div class="t"><a href="book.html" data-i18n="author.bookTitle">The Road from Manila</a></div>
+          <div class="stars" role="img" aria-label="4.4 out of 5 stars, 214 ratings" data-i18n-attr="aria-label:author.starsAria">★★★★☆<span class="count">(<span data-i18n-num="214">214</span>)</span></div>
+          <div style="margin:6px 0"><span class="kulogo">kindle<b>unlimited</b></span></div>
+          <div><span class="price"><span class="sym">$</span><span class="whole">0</span><span class="frac">00</span></span> <span class="orbuy" data-i18n="author.orBuy">or $4.99 to buy</span></div>
+          <div class="partof" style="margin-top:6px"><span data-i18n="common.partOf">Part of:</span> <a href="index.html" data-i18n="author.partOfValue">Lived Experience</a></div>
+        </div>
+      </div>
+
+      <div style="margin-top:16px">
+        <div class="abox">
+          <h3 data-i18n="author.access.h3">Rosa's access settings</h3>
+          <div class="sub" data-i18n="author.access.sub">Chosen by the author · Changeable anytime</div>
+          <div class="tier">
+            <b data-i18n="author.access.tier1Label">Questions about the book</b> — <span class="state" data-i18n="author.access.tier1State">On</span>
+            <p data-i18n="author.access.tier1Body">Answers weekly; nothing public until Rosa publishes it.</p>
+          </div>
+          <div class="tier">
+            <b data-i18n="author.access.tier2Label">Live reader Q&amp;A</b> — <span class="state" data-i18n="author.access.tier2State">On</span>
+            <p data-i18n="author.access.tier2Body">Occasional, author-scheduled.</p>
+          </div>
+          <div class="tier">
+            <b data-i18n="author.access.tier3Label">No access</b> — <span class="state off" data-i18n="author.access.tier3State">Available to any author</span>
+            <p data-i18n="author.access.tier3Body">An author can turn everything off and remain in the collection.</p>
+          </div>
+          <div class="note" data-i18n="author.access.note">Access is the author's choice, tier by tier. No private messaging exists
+          at any tier — out of scope by design, for the author's safety. Today's author page has
+          exactly one reader action — Follow, one-way. This panel is the missing half.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="credits" data-i18n="author.credits1">
+    Reader Discovery team — Jakob Picciotto · Pablo Ortega · Jalen Oscar Howard · Wanting Chao ·
+    Access tiers: Pablo's concept (7/27) · Author-statement gate: Wanting's mechanism (7/27) ·
+    StoryCorps framing: Chang (7/24)
+  </p>
+
+</div>
+
+<script src="i18n/strings.en.js"></script>
+<script src="i18n/strings.es.js"></script>
+<script src="i18n/strings.zh.js"></script>
+<script src="i18n/strings.fil.js"></script>
+<script src="i18n/strings.ar.js"></script>
+<script src="i18n/i18n.js"></script>
+</body>
+</html>

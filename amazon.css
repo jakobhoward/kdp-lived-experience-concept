@@ -1,0 +1,150 @@
+/* Shared Amazon-grammar stylesheet for the Lived Experience prototype.
+   Visual reference: interface-reference.md (captured from live site 2026-07-29).
+
+   Rule for this file: every component must have a real counterpart on
+   Amazon.com. No pastel pills, no colored left-edge accent bars, no status
+   dots — Amazon uses bordered a-boxes, solid squared badges, "Part of:" text
+   links, and bold-label rows. When in doubt, copy the buy box. */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #0F1111;
+  --nav: #131921;
+  --nav2: #232f3e;
+  --link: #007185;
+  --hover: #C7511F;
+  --star: #DE7921;
+  --cta: #FFD814;
+  --cta-border: #FCD200;
+  --buy: #FFA41C;
+  --rule: #D5D9D9;
+  --soft: #565959;
+  --altbg: #F7FAFA;      /* Amazon a-color-alternate-background */
+  --ku: #E87722;
+  --green: #067D62;      /* Amazon's real green — "In Stock", savings */
+  --badge: #C45500;      /* Amazon's Best Seller badge orange */
+}
+
+body {
+  font-family: "Amazon Ember", Arial, Helvetica, sans-serif;
+  color: var(--ink);
+  background: #fff;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; color: var(--hover); }
+
+/* ---------- concept banner (not Amazon; deliberately foreign) ---------- */
+.concept-banner {
+  background: #fff8e8;
+  border-bottom: 1px solid #e0c48a;
+  color: #7a5c1f;
+  text-align: center;
+  font-size: 12px;
+  padding: 6px 10px;
+}
+
+/* ---------- header ---------- */
+.topnav {
+  background: var(--nav);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 10px 18px;
+}
+.topnav .logo { font-weight: 800; font-size: 20px; letter-spacing: -0.5px; }
+.topnav .logo span { color: var(--buy); }
+.topnav .searchbar { flex: 1; display: flex; border-radius: 6px; overflow: hidden; max-width: 720px; }
+.topnav .searchbar input { flex: 1; border: 0; padding: 9px 12px; font-size: 14px; }
+.topnav .searchbar button { border: 0; background: #febd69; padding: 0 14px; font-size: 15px; cursor: default; }
+.topnav .acct { font-size: 12px; line-height: 1.25; color: #ddd; }
+.topnav .acct b { color: #fff; display: block; font-size: 13px; }
+
+.subnav {
+  background: var(--nav2); color: #ddd; font-size: 13px;
+  padding: 8px 18px; display: flex; gap: 18px;
+  flex-wrap: wrap; row-gap: 6px;   /* translated labels run longer than the English */
+}
+
+.page { max-width: 1180px; margin: 0 auto; padding: 18px 20px 50px; }
+
+/* Chevrons are generated rather than typed, so they can point the way the reader is
+   travelling — see i18n.css for the right-to-left form. */
+.crumbs { font-size: 12px; color: var(--soft); margin-bottom: 14px; }
+.crumbs > * + *::before { content: " › "; color: var(--soft); }
+
+/* ---------- atoms ---------- */
+.stars { color: var(--star); letter-spacing: -1px; font-size: 15px; }
+.stars .count { color: var(--link); font-size: 13px; letter-spacing: 0; margin-inline-start: 4px; }
+.price .sym { font-size: 12px; vertical-align: top; }
+.price .whole { font-size: 20px; font-weight: 500; }
+.price .frac { font-size: 12px; vertical-align: top; }
+/* The wordmark is one lockup and must never break across lines — which only became
+   visible once the surrounding copy was translated and the tiles got tighter. */
+.kulogo { color: var(--ku); font-weight: 700; font-size: 13px; white-space: nowrap; }
+.kulogo b { color: #111; font-weight: 700; }
+
+.btn {
+  display: block; width: 100%; text-align: center;
+  border-radius: 100px; padding: 8px 14px;
+  font-size: 13px; border: 1px solid transparent; cursor: default;
+}
+.btn.yellow { background: var(--cta); border-color: var(--cta-border); }
+.btn.orange { background: var(--buy); }
+.btn.ghost { background: #fff; border-color: var(--rule); }
+
+/* Merchandising badge — modeled on Amazon's "#1 Best Seller" flag:
+   solid fill, near-square corners, white bold text. Not a pastel pill. */
+.badge {
+  display: inline-block;
+  background: var(--badge); color: #fff;
+  font-size: 11px; font-weight: 700;
+  padding: 3px 7px; border-radius: 2px;
+  vertical-align: middle;
+}
+
+/* Collection membership on a detail page — Amazon states series membership as
+   a plain "Part of:" text link. Same pattern here. */
+.partof { font-size: 13px; margin: 6px 0 2px; }
+
+/* ---------- a-box: Amazon's generic bordered module ----------
+   Used by the buy box, "Great on Kindle", and the "Customers say" summary.
+   This is the honest home for both the attestation and the access panel. */
+.abox {
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 14px 16px;
+  background: #fff;
+}
+.abox.alt { background: var(--altbg); }
+.abox h3 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+.abox .sub { font-size: 12px; color: var(--soft); margin: -4px 0 10px; }
+
+/* attestation body */
+.attest .quote { font-size: 14px; line-height: 1.55; }
+.attest .sig { font-size: 12px; color: var(--soft); margin-top: 10px; line-height: 1.5; }
+
+/* access tiers — bold label + gray description rows, hairline separated.
+   Amazon's account-settings and "See all details" rows look like this. */
+.tier { padding: 9px 0; border-top: 1px solid #E7E9E9; font-size: 13px; }
+.tier:first-of-type { border-top: 0; padding-top: 2px; }
+.tier b { font-weight: 700; }
+.tier .state { color: var(--green); font-weight: 700; }
+.tier .state.off { color: var(--soft); }
+.tier p { color: var(--soft); font-size: 12px; margin-top: 2px; line-height: 1.45; }
+.abox .note {
+  font-size: 12px; color: var(--soft); line-height: 1.5;
+  margin-top: 12px; padding-top: 10px; border-top: 1px solid #E7E9E9;
+}
+
+/* ---------- footer credits ---------- */
+.credits {
+  margin-top: 44px; padding-top: 14px;
+  border-top: 1px solid var(--rule);
+  font-size: 11.5px; color: var(--soft);
+  line-height: 1.6; text-align: center;
+}

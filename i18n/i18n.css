@@ -1,0 +1,179 @@
+/* Lived Experience prototype — localization layer.
+   Loads after amazon.css. Everything here is either the language control itself or a
+   rule that only exists because the page can now be read in another script.
+
+   Why these five languages, since "we support every language" is a non-answer:
+     English   — the source the collection's copy was written in
+     Español   — a first-language reader on the team
+     简体中文    — a first-language reader on the team
+     Filipino  — the language the author in this very mockup wrote her book in, before
+                 she translated it. The collection's whole claim is that translation is
+                 welcome; the prototype should be able to show it rather than assert it.
+     العربية    — a right-to-left script, so the layout is proven direction-agnostic
+                 instead of assumed to be. This is the one that finds the bugs. */
+
+/* ---------- the control ----------
+   Sits in the dark nav where Amazon puts its own locale selector. Given a resting
+   border and a faint fill so it reads as an interactive control at a glance — the rest
+   of that nav is flat text, so one outlined pill is the loudest thing there without
+   raising its voice. */
+.langpick { position: relative; flex: none; }
+
+.langpick-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font: inherit;
+  font-size: 13px;
+  color: #fff;
+  background: rgba(255, 255, 255, .10);
+  border: 1px solid rgba(255, 255, 255, .45);
+  border-radius: 100px;
+  padding: 6px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .15s ease, border-color .15s ease;
+}
+.langpick-btn:hover { background: rgba(255, 255, 255, .18); border-color: #fff; }
+.langpick-btn:focus-visible { outline: 2px solid #ffd814; outline-offset: 2px; }
+.langpick-globe { display: flex; opacity: .95; }
+.langpick-caret { font-size: 10px; opacity: .85; }
+
+/* First visit only, ~6s, then never again. Two slow rings: enough to pull an eye that
+   wasn't looking for it, not enough to demand anything. Nothing is blocked meanwhile. */
+.langpick-btn.is-new { animation: langpick-ring 3s ease-out 2; }
+@keyframes langpick-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(255, 216, 20, .55); }
+  55%  { box-shadow: 0 0 0 9px rgba(255, 216, 20, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 216, 20, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  /* No pulse. The control is already outlined, and stays a touch brighter instead. */
+  .langpick-btn.is-new { animation: none; border-color: #ffd814; }
+  .langpick-btn { transition: none; }
+}
+
+.langpick-menu {
+  position: absolute;
+  inset-inline-end: 0;
+  top: calc(100% + 8px);
+  z-index: 40;
+  min-width: 210px;
+  list-style: none;
+  background: #fff;
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, .22);
+  padding: 6px;
+}
+.langpick-menu [role="option"] {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.langpick-menu [role="option"]:hover { background: var(--altbg); }
+.langpick-menu [role="option"]:focus-visible { outline: 2px solid #2162a1; outline-offset: -2px; }
+.langpick-menu [role="option"].is-on { font-weight: 700; }
+.langpick-check { width: 12px; color: var(--green); visibility: hidden; }
+.langpick-menu [role="option"].is-on .langpick-check { visibility: visible; }
+/* Each option carries its own lang/dir attribute, so an endonym in a right-to-left
+   script sits the right way round inside a left-to-right menu. */
+.langpick-menu [role="option"][dir="rtl"] { flex-direction: row-reverse; }
+
+/* ---------- the auto-detect strip ----------
+   Only appears when the prototype chose the language for the reader rather than the
+   reader choosing it. One line, in that language, with the way back to English. */
+.langnotice {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--altbg);
+  border-bottom: 1px solid var(--rule);
+  color: var(--soft);
+  font-size: 12.5px;
+  padding: 7px 20px;
+}
+.langnotice-back {
+  font: inherit;
+  color: var(--link);
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.langnotice-back:hover { color: var(--hover); }
+.langnotice-x {
+  font: inherit;
+  margin-inline-start: auto;
+  background: none;
+  border: 0;
+  color: var(--soft);
+  cursor: pointer;
+  padding: 2px 4px;
+  line-height: 1;
+}
+.langnotice-x:hover { color: var(--ink); }
+.langnotice-back:focus-visible,
+.langnotice-x:focus-visible { outline: 2px solid #2162a1; outline-offset: 2px; }
+
+/* Announces the change to a screen reader without showing anything on screen. */
+.i18n-live {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------- per-script typography ----------
+   "Amazon Ember" has no CJK or Arabic glyphs, so without these the browser falls back
+   to whatever it likes and the page changes weight and rhythm mid-sentence. */
+html[lang^="zh"] body {
+  font-family: "Amazon Ember", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+               "Noto Sans CJK SC", "Source Han Sans SC", sans-serif;
+  line-height: 1.75;
+}
+html[lang="ar"] body {
+  font-family: "SF Arabic", "Geeza Pro", "Noto Naskh Arabic", "Al Bayan", Tahoma, sans-serif;
+  font-size: 15px;      /* Arabic reads small at the Latin size; +1px evens it out */
+  line-height: 1.85;    /* diacritics and descenders need the room */
+}
+
+/* Wide letter-spacing is a Latin display effect. It breaks CJK rhythm and, in Arabic,
+   severs the joins between letters — the word stops being a word. */
+html[lang^="zh"] .kicker,
+html[lang="ar"] .kicker,
+html[lang^="zh"] .authhead .tabs,
+html[lang="ar"] .authhead .tabs { letter-spacing: 0; }
+html[lang="ar"] .kicker { font-weight: 700; font-size: 15px; }
+html[lang^="zh"] .kicker { font-size: 15px; }
+
+/* ---------- right-to-left ---------- */
+/* Numerals, prices and Latin brand names inside Arabic text: isolate each run so the
+   bidi algorithm can't drag a price or a product name to the wrong end of the line. */
+[dir="rtl"] .price,
+[dir="rtl"] .stars,
+[dir="rtl"] .kulogo,
+[dir="rtl"] .metastrip b { unicode-bidi: isolate; }
+
+/* Breadcrumb chevrons are generated content (see amazon.css) so they can point the
+   way the reader is actually travelling. */
+[dir="rtl"] .crumbs > * + *::before { content: " ‹ "; }
+
+/* The star row is a fixed left-to-right glyph sequence; only its placement flips. */
+[dir="rtl"] .stars { direction: ltr; text-align: right; }
+
+/* Amazon's yellow CTA keeps its shape; only the internal alignment follows the script. */
+[dir="rtl"] .btn { text-align: center; }
+
+/* The tab underline and the account block hang off the inline edges, which the logical
+   properties in amazon.css already handle. Nothing to flip here — the three-column
+   detail grid and the card grid re-order themselves, which is correct: on an RTL page
+   the cover belongs on the right. */

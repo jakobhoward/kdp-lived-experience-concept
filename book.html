@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Hosted so the team can just open a link, but deliberately not indexable: this page
+     borrows Amazon's store grammar on purpose, and it should never turn up in a search
+     result stripped of the student-concept banner below. -->
+<meta name="robots" content="noindex, nofollow">
+<title>The Road from Manila — book detail (concept)</title>
+<link rel="stylesheet" href="amazon.css">
+<link rel="stylesheet" href="i18n/i18n.css">
+<style>
+  /* page-specific: 3-column detail layout (interface-reference.md §2) */
+  .detail { display: grid; grid-template-columns: 260px 1fr 260px; gap: 28px; align-items: start; }
+
+  .leftcol img {
+    width: 100%; border-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,.2); margin-bottom: 12px;
+  }
+  .sample-links { display: flex; gap: 8px; margin-bottom: 22px; }
+  .sample-links .btn { font-size: 12px; padding: 6px 10px; }
+
+  .followcard {
+    border: 1px solid var(--rule); border-radius: 8px; padding: 12px; margin-bottom: 14px;
+    display: flex; gap: 10px; align-items: center;
+  }
+  .followcard .pic {
+    width: 44px; height: 44px; border-radius: 50%; flex: none;
+    background: #879596; /* neutral placeholder, identical for every author */
+    color: #fff; display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 16px;
+  }
+  /* The name and the link each need a full line, and "Follow" is longer in most
+     languages than in English, so let the button drop below rather than crushing the
+     name into two lines. */
+  .followcard { flex-wrap: wrap; }
+  .followcard .who { flex: 1 1 130px; font-size: 13px; }
+  .followcard .who b { display: block; font-size: 14px; }
+  .followcard .btn { width: auto; padding: 5px 16px; }
+
+  .mid h1 { font-size: 26px; font-weight: 400; }
+  /* Flex, not inline text, because not every language needs a word before the author's
+     name — Chinese reads "Rosa Delgado（作者）" with no preposition at all. A flex row
+     drops the whitespace between items and the :empty rule removes the unused slot, so
+     an empty translation costs nothing instead of leaving a stray leading space. */
+  .mid .byline { font-size: 14px; margin: 2px 0 4px; display: flex; flex-wrap: wrap; gap: 0 5px; align-items: baseline; }
+  .mid .byline > span:empty { display: none; }
+  .mid .fmt { color: var(--soft); font-size: 13px; }
+  .ratingrow { margin: 8px 0 4px; }
+  .desc { margin-top: 14px; font-size: 14px; line-height: 1.55; }
+  .desc p { margin-bottom: 10px; }
+  .desc .lede { font-weight: 700; }
+
+  .metastrip {
+    display: flex; gap: 26px; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+    margin-top: 18px; padding: 12px 0; font-size: 12px; color: var(--soft); text-align: center;
+    flex-wrap: wrap; row-gap: 12px;   /* translated labels are longer than the English */
+  }
+  .metastrip > div { flex: 1 1 118px; }
+  .metastrip b { display: block; color: var(--ink); font-size: 13px; margin-bottom: 2px; }
+
+  .buybox { border: 1px solid var(--rule); border-radius: 8px; padding: 16px; margin-bottom: 14px; }
+  .buybox .formats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+  .buybox .fmt-tile {
+    border: 1px solid var(--rule); border-radius: 8px; padding: 8px; font-size: 12px;
+  }
+  .buybox .fmt-tile.sel { border: 2px solid #2162a1; background: #edf6ff; }
+  /* Direct child only — the Kindle Unlimited wordmark has its own nested <b>, and
+     blocking that one split the lockup onto two lines. */
+  .buybox .fmt-tile > b { display: block; }
+  .buybox .ku-pitch { font-size: 12.5px; margin: 10px 0; }
+  .buybox .or { text-align: center; color: var(--soft); font-size: 12px; margin: 10px 0 6px; }
+  .buybox .btn { margin-top: 8px; }
+
+  /* Shown only when the page is being read in translation — see the note in i18n.js. */
+  .attest .translated {
+    font-size: 12px; color: var(--soft); line-height: 1.5;
+    margin-top: 10px; padding-top: 9px; border-top: 1px solid #E7E9E9;
+  }
+</style>
+</head>
+<body data-i18n-title="book.docTitle">
+
+<div class="concept-banner"><strong data-i18n="chrome.conceptLabel">STUDENT CONCEPT — COMMLD 560, UW.</strong> <span data-i18n="book.disclaimer">Not an Amazon product. This book, its author, and all ratings are fictional; controls are non-functional.</span></div>
+
+<header class="topnav">
+  <div class="logo">kindle<span>store</span></div>
+  <div class="searchbar"><input value="" placeholder="Search Kindle Store" aria-label="Search Kindle Store" data-i18n-attr="placeholder:chrome.searchPlaceholder;aria-label:chrome.searchAria" readonly><button aria-label="Search" data-i18n-attr="aria-label:chrome.searchButtonAria">🔍</button></div>
+  <!-- the language control is injected here by i18n/i18n.js, in Amazon's own locale-selector slot -->
+  <div class="acct"><span data-i18n="chrome.greeting">Hello, Reader</span><b data-i18n="chrome.account">Account &amp; Lists</b></div>
+</header>
+<nav class="subnav">
+  <span data-i18n="chrome.nav.shop">Shop Books</span><span data-i18n="chrome.nav.categories">Categories</span><span data-i18n="chrome.nav.trending">New &amp; Trending</span>
+  <span data-i18n="chrome.nav.bestsellers">Best Sellers &amp; More</span><span data-i18n="chrome.nav.deals">Deals</span><span data-i18n="chrome.nav.yourbooks">Your Books</span>
+</nav>
+
+<div class="page">
+
+  <div class="crumbs"><a href="#" data-i18n="crumb.store">Kindle Store</a><a href="#" data-i18n="crumb.ebooks">Kindle eBooks</a><a href="#" data-i18n="crumb.memoirs">Biographies &amp; Memoirs</a><a href="index.html" data-i18n="collection.name">Lived Experience</a></div>
+
+  <div class="detail">
+
+    <!-- left column -->
+    <div class="leftcol">
+      <img src="covers/road-from-manila.png" alt="Cover of The Road from Manila" data-i18n-attr="alt:book.coverAlt">
+      <div class="sample-links">
+        <span class="btn ghost" data-i18n="book.readSample">Read sample</span>
+        <span class="btn ghost" data-i18n="book.audibleSample">Audible sample</span>
+      </div>
+
+      <!-- Follow block, deepened: A3 lives here (interface-reference.md §2 row 3) -->
+      <div class="followcard">
+        <div class="pic">RD</div>
+        <div class="who"><b>Rosa Delgado</b><a href="author.html" data-i18n="book.visitAuthorPage">Visit author page</a></div>
+        <span class="btn ghost" data-i18n="common.follow">+ Follow</span>
+      </div>
+
+      <div class="abox">
+        <h3 data-i18n="book.ask.h3">Ask Rosa a question</h3>
+        <div class="sub" data-i18n="book.ask.sub">Author has opted in · Answers weekly</div>
+        <div class="tier">
+          <b data-i18n="book.ask.tier1Label">Questions about the book</b>
+          <p data-i18n="book.ask.tier1Body">One question per reader per book, open to verified purchases and KU borrows.
+          Nothing is public until Rosa publishes her answer.</p>
+        </div>
+        <div class="tier">
+          <b data-i18n="book.ask.tier2Label">Live reader Q&amp;A</b>
+          <p data-i18n="book.ask.tier2Body">Occasional live session, scheduled by the author.</p>
+        </div>
+        <div class="note" data-i18n="book.ask.note">Authors choose their level of access — including none — and can change it
+        anytime. Author-moderated by default: the author sees, answers, or deletes; Amazon's existing
+        Community Guidelines report-and-block tools apply. Contact details are never shared.</div>
+      </div>
+    </div>
+
+    <!-- middle column -->
+    <div class="mid">
+      <h1 data-i18n="book.title">The Road from Manila</h1>
+      <div class="byline"><span data-i18n="book.bylinePrefix">by</span> <a href="author.html" data-i18n="book.bylineAuthor">Rosa Delgado</a> <span data-i18n="book.bylineRole">(Author)</span></div>
+      <div class="fmt" data-i18n="book.format">Format: Kindle Edition</div>
+      <div class="ratingrow stars" role="img" aria-label="4.4 out of 5 stars, 214 ratings" data-i18n-attr="aria-label:book.starsAria">★★★★☆<span class="count">(<span data-i18n-num="214">214</span>)</span></div>
+      <div class="partof"><span data-i18n="common.partOf">Part of:</span> <a href="index.html" data-i18n="book.partOfValue">Lived Experience (48 books)</a></div>
+
+      <!-- A2: the attestation, in the author's-own-voice slot (§2 row 6).
+           Rendered as an Amazon a-box, the same module shape as "Great on Kindle". -->
+      <div class="abox alt attest" style="margin-top:14px">
+        <h3 data-i18n="book.attest.h3">In the author's own words</h3>
+        <p class="quote" data-i18n="book.attest.quote">"I left Manila in 1979 with one suitcase and my mother's rosary. I am not
+        a writer — I was a nurse for thirty-one years. I wrote this in Tagalog first, because that
+        is the language I remember it in, and my niece and I translated it together with help from
+        a translation tool. Every word of the story is mine. I lived it."</p>
+        <!-- A translation tool can carry an author's words across languages; it does not become
+             their author. So when this page is read in translation, it says so, rather than
+             passing a translation off as her own wording. Absent in English, where there is
+             nothing to disclose. -->
+        <div class="translated" data-i18n-only="translated" data-i18n="book.attest.translationNote" hidden></div>
+        <div class="sig">
+          <span data-i18n="book.attest.sigName">Rosa Delgado, author attestation</span> · <a href="#" data-i18n="book.attest.sigLink">What happens if an attestation is false</a><br>
+          <span data-i18n="book.attest.sigBody">A false attestation removes the book from the collection; the account is handled under
+          KDP's existing content policies — no new enforcement machinery.</span>
+        </div>
+      </div>
+
+      <div class="desc">
+        <p class="lede" data-i18n="book.desc.lede">Because every ordinary life has an extraordinary story worth remembering.</p>
+        <p data-i18n-html="book.desc.p1Html">In 1979, Rosa Delgado boarded a plane in Manila with a nursing contract, a single
+        suitcase, and no way of knowing she would not see her mother again for eleven years.
+        <em>The Road from Manila</em> is the story of the years between — night shifts in a
+        country whose language she dreamed in translation, remittances folded into birthday
+        cards, and the slow work of building a home while homesick for another.</p>
+        <p data-i18n="book.desc.p2">Written first in Tagalog and translated with her niece, this memoir is for anyone
+        who has ever been the one who left — or the one who stayed.</p>
+      </div>
+
+      <div class="metastrip">
+        <div><b data-i18n="book.meta.pagesValue">287 pages</b><span data-i18n="book.meta.pagesLabel">Print length</span></div>
+        <div><b data-i18n="book.meta.langValue">English + Tagalog</b><span data-i18n="book.meta.langLabel">Language</span></div>
+        <div><b data-i18n="book.meta.a11yValue">Supported</b><span data-i18n="book.meta.a11yLabel">Screen Reader</span></div>
+        <div><b data-i18n="book.meta.dateValue">March 2026</b><span data-i18n="book.meta.dateLabel">Publication date</span></div>
+      </div>
+    </div>
+
+    <!-- right column: buy box -->
+    <div class="buybox-col">
+      <div class="buybox">
+        <div class="formats">
+          <div class="fmt-tile sel"><b data-i18n="book.buy.formatKindle">Kindle</b><span dir="ltr">$0.00</span> <span class="kulogo">kindle<b>unlimited</b></span><br><span data-i18n="book.buy.orBuy">or $4.99 to buy</span></div>
+          <div class="fmt-tile"><b data-i18n="book.buy.formatPaperback">Paperback</b><span dir="ltr">$14.95</span></div>
+        </div>
+        <div class="ku-pitch"><span class="kulogo">kindle<b>unlimited</b></span> <span data-i18n="book.buy.kuPitch">Unlimited reading. Millions of titles.</span> <a href="#" data-i18n="common.learnMore">Learn more</a></div>
+        <span class="btn yellow" data-i18n="book.buy.readFree">Read for Free</span>
+        <div class="or" data-i18n="book.buy.or">OR</div>
+        <div class="price"><span class="sym">$</span><span class="whole">4</span><span class="frac">99</span></div>
+        <span class="btn orange" data-i18n="book.buy.oneClick">Buy now with 1-Click</span>
+        <span class="btn ghost" data-i18n="book.buy.sendSample">Send a free sample</span>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="credits" data-i18n="book.credits1">
+    Reader Discovery team — Jakob Picciotto · Pablo Ortega · Jalen Oscar Howard · Wanting Chao ·
+    Author-statement gate: Wanting's mechanism (7/27) · Access tiers: Pablo's concept (7/27) ·
+    "Translation welcome" eligibility: team research on KDP AI-content policy (7/27)
+  </p>
+
+</div>
+
+<script src="i18n/strings.en.js"></script>
+<script src="i18n/strings.es.js"></script>
+<script src="i18n/strings.zh.js"></script>
+<script src="i18n/strings.fil.js"></script>
+<script src="i18n/strings.ar.js"></script>
+<script src="i18n/i18n.js"></script>
+</body>
+</html>

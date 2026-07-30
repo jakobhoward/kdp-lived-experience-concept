@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Hosted so the team can just open a link, but deliberately not indexable: this page
+     borrows Amazon's store grammar on purpose, and it should never turn up in a search
+     result stripped of the student-concept banner below. -->
+<meta name="robots" content="noindex, nofollow">
+<title>Lived Experience Collection — landing page (concept)</title>
+<link rel="stylesheet" href="amazon.css">
+<link rel="stylesheet" href="i18n/i18n.css">
+<style>
+  /* page-specific: Editors'-Picks-style landing (interface-reference.md §4) */
+  .kicker {
+    text-align: center; font-size: 13px; letter-spacing: 3px;
+    font-weight: 700; color: var(--soft); margin: 26px 0 6px;
+  }
+  .headline { text-align: center; font-size: 30px; font-weight: 400; margin-bottom: 22px; }
+
+  .banner {
+    background: var(--nav2);
+    color: #fff; text-align: center;
+    padding: 30px 20px; margin-bottom: 8px;
+  }
+  .banner h2 { font-size: 28px; font-weight: 700; }
+  .banner p { color: #d8dee4; font-size: 15px; margin-top: 8px; max-width: 640px; margin-left: auto; margin-right: auto; }
+  .banner .underline { width: 240px; height: 3px; background: #4a90d9; margin: 14px auto 0; }
+
+  .gate-note {
+    background: var(--altbg);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 12px 18px;
+    font-size: 13px; color: var(--ink);
+    max-width: 780px; margin: 0 auto 28px; line-height: 1.55;
+  }
+  .gate-note b { font-weight: 700; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+    gap: 26px 22px;
+  }
+  .book { font-size: 13px; }
+  .book img {
+    width: 100%; aspect-ratio: 2/3; object-fit: cover;
+    border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,.18);
+    margin-bottom: 10px;
+  }
+  .book .t { font-size: 15px; font-weight: 700; color: var(--link); }
+  .book .a { color: var(--soft); margin: 2px 0 6px; }
+  .book .voice { color: var(--ink); font-size: 12.5px; line-height: 1.45; margin: 8px 0; }
+  .book .row { display: flex; align-items: center; gap: 10px; margin-top: 6px; flex-wrap: wrap; }
+  .reach { font-size: 12px; color: var(--green); font-weight: 700; }
+</style>
+</head>
+<body data-i18n-title="index.docTitle">
+
+<div class="concept-banner"><strong data-i18n="chrome.conceptLabel">STUDENT CONCEPT — COMMLD 560, UW.</strong> <span data-i18n="index.disclaimer">Not an Amazon product. Books, authors, and ratings are fictional; controls are non-functional.</span></div>
+
+<header class="topnav">
+  <div class="logo">kindle<span>store</span></div>
+  <div class="searchbar"><input value="" placeholder="Search Kindle Store" aria-label="Search Kindle Store" data-i18n-attr="placeholder:chrome.searchPlaceholder;aria-label:chrome.searchAria" readonly><button aria-label="Search" data-i18n-attr="aria-label:chrome.searchButtonAria">🔍</button></div>
+  <!-- the language control is injected here by i18n/i18n.js, in Amazon's own locale-selector slot -->
+  <div class="acct"><span data-i18n="chrome.greeting">Hello, Reader</span><b data-i18n="chrome.account">Account &amp; Lists</b></div>
+</header>
+<nav class="subnav">
+  <span data-i18n="chrome.nav.shop">Shop Books</span><span data-i18n="chrome.nav.categories">Categories</span><span data-i18n="chrome.nav.trending">New &amp; Trending</span>
+  <span data-i18n="chrome.nav.bestsellers">Best Sellers &amp; More</span><span data-i18n="chrome.nav.deals">Deals</span><span data-i18n="chrome.nav.yourbooks">Your Books</span>
+</nav>
+
+<div class="page">
+
+  <div class="crumbs"><a href="#" data-i18n="crumb.store">Kindle Store</a><a href="#" data-i18n="crumb.ebooks">Kindle eBooks</a><span data-i18n="collection.name">Lived Experience</span></div>
+
+  <div class="kicker" data-i18n="index.kicker">LIVED EXPERIENCE</div>
+  <h1 class="headline" data-i18n="index.headline">First-person stories, in the authors' own words</h1>
+
+  <div class="banner">
+    <h2 data-i18n="index.bannerH2">Every book here opens with the author's own words.</h2>
+    <p data-i18n="index.bannerP">First books, first-person stories — and many of these authors have chosen to take
+       reader questions.</p>
+    <div class="underline"></div>
+  </div>
+
+  <p class="gate-note">
+    <b data-i18n="index.gateNoteLabel">How a book gets here:</b>
+    <span data-i18n="index.gateNoteBody">the author attests, in their own words, that they lived this
+    story and wrote it. Amazon hosts the author's statement — it doesn't certify it.
+    Translation, including AI translation, is welcome.</span>
+  </p>
+
+  <div class="grid">
+
+    <div class="book">
+      <a href="book.html"><img src="covers/road-from-manila.png" alt="Cover of The Road from Manila" data-i18n-attr="alt:index.book1.coverAlt"></a>
+      <div class="t"><a href="book.html" data-i18n="index.book1.title">The Road from Manila</a></div>
+      <div class="a" data-i18n="index.book1.author">Rosa Delgado</div>
+      <div class="voice" data-i18n="index.book1.voice">"I left Manila in 1979. I wrote this in Tagalog first, because that is the language I remember it in."</div>
+      <div class="stars" role="img" aria-label="4.4 out of 5 stars, 214 ratings" data-i18n-attr="aria-label:index.book1.starsAria">★★★★☆<span class="count">(<span data-i18n-num="214">214</span>)</span></div>
+      <div class="row"><span class="kulogo">kindle<b>unlimited</b></span></div>
+      <div class="row"><span class="reach" data-i18n="common.answersQuestions">✓ Answers reader questions</span></div>
+    </div>
+
+    <div class="book">
+      <img src="covers/unseen-memoir.png" alt="Cover of The Unseen Memoir" data-i18n-attr="alt:index.book2.coverAlt">
+      <div class="t" data-i18n="index.book2.title">The Unseen Memoir</div>
+      <div class="a" data-i18n="index.book2.author">A first-time author</div>
+      <div class="voice" data-i18n="index.book2.voice">"I wrote this at my kitchen table over four years, about the year I stopped speaking."</div>
+      <div class="stars" role="img" aria-label="4.3 out of 5 stars, 127 ratings" data-i18n-attr="aria-label:index.book2.starsAria">★★★★☆<span class="count">(<span data-i18n-num="127">127</span>)</span></div>
+      <div class="row"><span class="kulogo">kindle<b>unlimited</b></span></div>
+      <div class="row"><span class="reach" data-i18n="common.answersQuestions">✓ Answers reader questions</span></div>
+    </div>
+
+    <div class="book">
+      <img src="covers/letters-home.png" alt="Cover of Letters Home" data-i18n-attr="alt:index.book3.coverAlt">
+      <div class="t" data-i18n="index.book3.title">Letters Home</div>
+      <div class="a" data-i18n="index.book3.author">Emily Carter</div>
+      <div class="voice" data-i18n="index.book3.voice">"These are my grandmother's letters, and mine. I typed every one of them myself."</div>
+      <div class="stars" role="img" aria-label="4.5 out of 5 stars, 2,341 ratings" data-i18n-attr="aria-label:index.book3.starsAria">★★★★☆<span class="count">(<span data-i18n-num="2341">2,341</span>)</span></div>
+      <div class="row"><span class="kulogo">kindle<b>unlimited</b></span></div>
+    </div>
+
+  </div>
+
+  <p class="credits">
+    <span data-i18n="index.credits1">Reader Discovery team — Jakob Picciotto · Pablo Ortega · Jalen Oscar Howard · Wanting Chao ·
+    Author-statement gate: Wanting's mechanism (7/27) · Reader→author access tiers: Pablo's concept (7/27) ·
+    Collection framing: Chang's StoryCorps reframe (7/24) · Community-discovery research informing launch: Jalen (in progress)</span><br>
+    <span data-i18n="index.credits2">Example authors are illustrative fiction pending our survey's open-text data — not personas.
+    Rosa Delgado's profile draws on the documented Filipino nurse-migration diaspora (sources in the PRD),
+    not on invented demographics.</span>
+  </p>
+
+</div>
+
+<script src="i18n/strings.en.js"></script>
+<script src="i18n/strings.es.js"></script>
+<script src="i18n/strings.zh.js"></script>
+<script src="i18n/strings.fil.js"></script>
+<script src="i18n/strings.ar.js"></script>
+<script src="i18n/i18n.js"></script>
+</body>
+</html>
