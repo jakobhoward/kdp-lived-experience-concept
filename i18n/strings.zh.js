@@ -174,7 +174,7 @@ window.I18N.zh = {
   "book.meta.dateValue": "2026 年 3 月",
   "book.meta.dateLabel": "出版日期",
 
-  "book.ask.h3": "向 Rosa 提问",
+  "book.ask.h3": "读完这本书了？向 Rosa 提问",
   /* book.ask.sub（“每周回答”）已于 7 月 30 日在五个语言文件中一并删除，正如它自己的
      说明所要求。它承诺了一个没人统计的频率，这跟已被否掉的“真人写作认证”标是同一类
      毛病；book.ask.subState 换成了 Amazon 真能观察到的计数。 */

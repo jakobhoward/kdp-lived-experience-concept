@@ -215,7 +215,7 @@ window.I18N.fr = {
   "book.meta.dateValue": "mars 2026",
   "book.meta.dateLabel": "Date de publication",
 
-  "book.ask.h3": "Posez une question à Rosa",
+  "book.ask.h3": "Livre terminé ? Posez votre question à Rosa",
   /* book.ask.sub deleted 7/30 in all five locale files that existed then, per its own note.
      It promised a cadence nobody measures; book.ask.subState replaced it with an observed
      count. Not reintroduced here. */

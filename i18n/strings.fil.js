@@ -211,7 +211,7 @@ window.I18N.fil = {
   "book.meta.dateValue": "Marso 2026",
   "book.meta.dateLabel": "Petsa ng paglabas",
 
-  "book.ask.h3": "Magtanong kay Rosa",
+  "book.ask.h3": "Tapos na ang libro? Magtanong kay Rosa",
   /* INALIS na ang book.ask.sub noong 7/30, sabay-sabay sa limang locale file gaya ng hiling
      ng sarili nitong tala. Nangangako ito ng kadalasan ng pagsagot na walang sumusukat;
      pinalitan ito ng book.ask.subState, na binibilang ang isang bagay na talagang nakikita

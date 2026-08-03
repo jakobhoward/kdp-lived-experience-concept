@@ -232,7 +232,7 @@ window.I18N.en = {
   "book.meta.dateValue": "March 2026",
   "book.meta.dateLabel": "Publication date",
 
-  "book.ask.h3": "Ask Rosa a question",
+  "book.ask.h3": "Finished the book? Ask Rosa",
   /* book.ask.sub ("Author has opted in · Answers weekly") was DELETED here and in all four
      other locale files on 7/30, in the single pass its own note asked for. It promised a
      cadence nobody measures, which is the same failure as the retired "verified human-written"

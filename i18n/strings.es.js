@@ -178,7 +178,7 @@ window.I18N.es = {
   "book.meta.dateValue": "marzo de 2026",
   "book.meta.dateLabel": "Fecha de publicación",
 
-  "book.ask.h3": "Hazle una pregunta a Rosa",
+  "book.ask.h3": "¿Terminaste el libro? Pregúntale a Rosa",
   /* book.ask.sub deleted 7/30 in all five locale files at once, as its note asked. It promised
      a cadence nobody measures; book.ask.subState replaced it with an observed count. */
   /* "reader questions" is dropped rather than rendered "preguntas de lectores": the plural is
