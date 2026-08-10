@@ -38,7 +38,9 @@
   --rule: #D5D9D9;
   --soft: #565959;
   --altbg: #F7FAFA;      /* Amazon a-color-alternate-background */
-  --ku: #E87722;
+  --ku: #B45309;      /* Amazon's KU orange is #E87722, which is 2.9:1 on white —
+                         a WCAG 1.4.3 failure on Amazon's own store. Darkened to
+                         5.0:1; the same faithful-but-fixed rule as the focus rings. */
   --green: #067D62;      /* Amazon's real green — "In Stock", savings */
   --badge: #C45500;      /* Amazon's Best Seller badge orange */
 
