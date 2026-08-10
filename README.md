@@ -29,29 +29,37 @@ reasons:
 
 Curation from the real catalog is the thing to build; fiction is the thing to demo with.
 
-## The five pages
+## The six pages
 
 Only `The Road from Manila` has a detail page; every other title is deliberately left
-unlinked rather than pointing at a page that does not exist. `search.html` is not linked
-from anywhere — the store search box is inert on every page, and wiring it would
-contradict the banner that says no control works. Open it directly.
+unlinked rather than pointing at a page that does not exist. No **store** control leads
+to `search.html` — the store search box is inert on every page, and wiring it would
+contradict the banner that says no control works — but the reviewer bar's walkthrough
+links it as step 1, which is how you reach it.
 
 | File | What it is | Reachable from |
 |---|---|---|
 | `index.html` | The Lived Experience collection landing page — the first eight books, each with its author's statement on the card | `browse.html`, `book.html`, `author.html`, `search.html` |
 | `browse.html` | The Kindle Store category node the collection lives in: 48 books, the store's own rail and sort, unchanged | `index.html` |
-| `book.html` | The detail page — the attestation, and the ask-a-question flow with all eight of its states | `index.html`, `browse.html`, `search.html`, `author.html` |
+| `book.html` | The detail page — the attestation, and the ask-a-question flow with all nine of its states | `index.html`, `browse.html`, `search.html`, `author.html` |
 | `author.html` | Rosa Delgado's author page — answered questions, and her access settings | `book.html` |
-| `search.html` | An ordinary results page, to show what the concept does **not** change about search | open directly |
+| `search.html` | An ordinary results page, to show what the concept does **not** change about search | the walkthrough bar (the store search box stays inert) |
+| `author-dashboard.html` | The author's view — Rosa's question queue behind "9 of 14 answered", and her access tiers as real toggles, including off | the reviewer bar's "Author's view" link on `book.html` and `author.html` only — never store navigation |
 
 Readable in English, Español, 简体中文, Filipino, العربية, and Français. The page follows
 your browser's language preference on first load; the globe control in the nav changes it,
 and `?lang=es` (or `zh`, `fil`, `ar`, `fr`, `en`) opens it in a specific language.
+(Copy added 8/9 — the author dashboard, the four newest author-page Q&As, and the
+answered state's inline answer — is English-only so far and falls back to English in
+the other five languages; the keys are listed in `i18n/strings.en.js` next to their
+"English only so far" notes.)
 
 ## Screens
 
-All five pages are built for phone, tablet and desktop, and verified with no horizontal
-scrolling from 320px to 1920px in all six languages. `responsive.css` carries the shared
+The five store pages are built for phone, tablet and desktop, and verified with no
+horizontal scrolling from 320px to 1920px in all six languages; the author dashboard
+follows the same breakpoint scale but has not been through that full verification
+matrix. `responsive.css` carries the shared
 chrome and the breakpoint scale and explains every choice; each page's own `<style>` block
 carries its own grid. Breakpoints are in `em`, so the layout also reflows for a reader who
 has raised their browser's default text size rather than only for a narrower window.

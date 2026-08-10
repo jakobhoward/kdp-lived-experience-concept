@@ -160,6 +160,22 @@ a.demobar-step:focus-visible { outline: 2px solid #2162a1; outline-offset: 2px; 
   color: #fff8e8;
 }
 
+/* ---------- the author's-view detour ----------
+   Rosa's dashboard is not step 6: the <ol> is one reader's path, and the author
+   console is the other side of it. So the link sits INSIDE the walkthrough <nav>
+   but AFTER the list — unnumbered, no chevron (those are generated on li + li, so
+   it never gets one), and drawn as the bar's own chrome (solid hairline, faint
+   fill) rather than as a step. The nav becomes the flex container so the list and
+   the detour share a line; the 14px gap is the visual "and also" between them.
+   On author-dashboard.html the same class carries [aria-current="page"] and takes
+   the you-are-here treatment above. */
+.demobar-nav { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 14px; }
+.demobar-authorview {
+  border-color: #cfae74;
+  background: rgba(255, 255, 255, .55);
+  font-weight: 700;
+}
+
 /* ---------- the per-page caption ----------
    One sentence naming what this screen is for. It is the cheap version of drawing
    arrows on the mockup: it orients a reviewer without putting a single mark on the

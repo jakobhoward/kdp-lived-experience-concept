@@ -1,0 +1,148 @@
+/* focus-mode.css — presentation treatment for deck screenshots. Off by default.
+
+   WHY THIS EXISTS
+   Chang, 8/3, right after Rachel's feedback: "on your prototype you can like blur out
+   the other books… anytime you present a lot, the team can pick apart a lot… just let
+   them focus on what you want them to see, this book that feels very authentic with
+   the one good written description and that part where you can connect with the author,
+   and the rest of it, have them not focus on that because they can imagine what a
+   layout [looks like]."
+
+   So this is not a design change — the prototype is still the prototype. It is a
+   capture mode: add ?focus=shelf|book|author to the URL, screenshot, and the frame
+   carries one idea instead of twelve. Nothing here is on by default, nothing here is
+   in the live experience a visitor sees, and removing the query string removes it.
+
+   It does NOT answer Rachel's cover note — that was a product critique (the covers
+   looked AI-generated, and a cover-forward CX undercuts a shelf whose argument is
+   that a human wrote this). That is answered by covers/typo/*.svg, which are drawn
+   from title and author by code. This file is the presentation half only.
+
+   ACCESSIBILITY / MOTION
+   Blur is decorative and capture-only, but it still degrades text legibility, so it
+   is disabled entirely under prefers-reduced-transparency, and no transition is used
+   under prefers-reduced-motion. A reader who lands on a ?focus= URL by accident gets
+   a usable page, not a smeared one. */
+
+:root {
+  --focus-dim: 0.28;      /* opacity of de-emphasised content */
+  --focus-blur: 3px;      /* light touch: enough to defocus, not enough to look censored */
+}
+
+/* Everything that can be de-emphasised transitions together, so a screenshot taken
+   mid-load never catches half the shelf sharp and half of it dimmed. */
+html[data-focus] .focus-dimmed {
+  filter: blur(var(--focus-blur));
+  opacity: var(--focus-dim);
+  transition: opacity .18s ease, filter .18s ease;
+  pointer-events: none;   /* nothing dimmed should be clickable in a demo */
+}
+
+/* ---------- shelf: keep the walkthrough book, dim its neighbours ----------
+   Three pages use three different row classes — li.book (index), li.hitrow (browse),
+   li.res (search) — and the walkthrough book is NOT first on all of them: search.html
+   deliberately places it at row 6 ("same cover size, same type, same order, no badge,
+   no highlight"), which is the whole point of that page.
+
+   So the selector keys on the one thing that is already true everywhere: the focus
+   book is the only row linked to book.html. That is an existing decision in the
+   markup, not a new marker invented for this file, so nothing has to be kept in sync. */
+html[data-focus="shelf"] li:is(.book, .hitrow, .res):not(:has(a[href="book.html"])) {
+  filter: blur(var(--focus-blur));
+  opacity: var(--focus-dim);
+  pointer-events: none;
+}
+
+/* ---------- book page: keep the attestation and the ask, dim the commerce ----------
+   The two .abox blocks ARE the argument — the gate and the hook. Everything dimmed
+   here is a surface Amazon already runs and the audience can supply from memory:
+   cover column, format tiles, KU pitch, metadata strip, breadcrumb-ish "Part of".
+   The nav and search bar stay sharp on purpose: they are the evidence that this is
+   an insertion into Amazon's page rather than a new destination. */
+html[data-focus="book"] .leftcol,
+html[data-focus="book"] .buybox-col,
+html[data-focus="book"] .metastrip,
+html[data-focus="book"] .formats,
+html[data-focus="book"] .ku-pitch,
+html[data-focus="book"] .partof {
+  filter: blur(var(--focus-blur));
+  opacity: var(--focus-dim);
+  pointer-events: none;
+}
+
+/* ---------- book page, ask variant: the ask panel alone ----------
+   ?focus=book keeps the two .abox arguments (gate + hook) together; this keeps only
+   the hook. For the deck's flow shots — compose, sent/waiting, answered — where the
+   frame should carry one state of one panel, with the store as dimmed context. The
+   nav and search bar stay sharp for the same reason as focus=book: they are the
+   evidence this is an insertion into Amazon's page. */
+html[data-focus="ask"] .leftcol,
+html[data-focus="ask"] .mid,
+html[data-focus="ask"] .buybox-col {
+  filter: blur(var(--focus-blur));
+  opacity: var(--focus-dim);
+  pointer-events: none;
+}
+
+/* ---------- author dashboard: queue vs. tiers ----------
+   Two variants because the dashboard makes two different arguments: the queue is the
+   human labor behind "9 of 14 answered", the tiers are the choice behind "opt-in".
+   The summary strip stays sharp with the queue (its numbers ARE the queue's caption)
+   and dims with it when the tiers are the subject. .dash-main / .dash-side /
+   .dash-summary exist only on author-dashboard.html, so these selectors are inert
+   on every other page — same pattern as the per-page selectors above. */
+html[data-focus="queue"] .dash-side,
+html[data-focus="tiers"] .dash-main,
+html[data-focus="tiers"] .dash-summary {
+  filter: blur(var(--focus-blur));
+  opacity: var(--focus-dim);
+  pointer-events: none;
+}
+
+/* ---------- author page: keep the answered questions, dim the rest ----------
+   .qa lives inside the first .panel alongside the bio, so the bio is dimmed
+   directly rather than by dimming its parent — dimming .panel would take .qa
+   down with it. */
+html[data-focus="author"] .pic,
+html[data-focus="author"] .tabs,
+html[data-focus="author"] .biocard,
+html[data-focus="author"] .twocol > .panel:last-child {
+  filter: blur(var(--focus-blur));
+  opacity: var(--focus-dim);
+  pointer-events: none;
+}
+
+/* The kept element gets a hair of lift so the eye lands there in a flat screenshot.
+   Deliberately subtle — a glowing card would read as a mockup of a mockup. */
+html[data-focus] .focus-keep {
+  position: relative;
+  z-index: 2;
+}
+
+/* Capture hygiene: the walkthrough chrome is for us, not for Amazon. The step nav
+   ("1 Search › 2 Category › 3 Collection…"), its caption, and the margin review notes
+   come off, so the frame is just the product.
+
+   THE DISCLAIMER STAYS. It lives in the same .concept-banner as the walkthrough nav,
+   and it would be easy to hide the whole banner and get a cleaner frame — but the
+   line it carries is "Not an Amazon product. Books, authors, and ratings are
+   fictional; controls are non-functional." A screenshot of a fake Amazon page,
+   presented to Amazon, with the word "fictional" removed from it, is not a cleaner
+   frame; it is a misleading one. Hide the navigation, keep the label. */
+html[data-focus] .demobar-row-nav,
+html[data-focus] .demobar-caption,
+html[data-focus] .demobar-tools,
+html[data-focus] .revnote {
+  display: none !important;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  html[data-focus] * {
+    filter: none !important;
+    opacity: 1 !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-focus] .focus-dimmed { transition: none; }
+}

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 848 1264" width="848" height="1264" role="img">
+  <rect width="848" height="1264" fill="#F0E7DA"/>
+  <rect x="56" y="56" width="736" height="1152" fill="none" stroke="#8C6A3F" stroke-width="3" opacity="0.55"/>
+    <text x="424" y="395" font-family="Georgia, 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Times New Roman', serif" font-size="108" fill="#2A2622" text-anchor="middle">The Long Way</text>
+    <text x="424" y="519" font-family="Georgia, 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Times New Roman', serif" font-size="108" fill="#2A2622" text-anchor="middle">Round</text>
+  <line x1="304" y1="700" x2="544" y2="700" stroke="#8C6A3F" stroke-width="4"/>
+  <text x="424" y="792" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="46" letter-spacing="6" fill="#2A2622" text-anchor="middle" opacity="0.92">STEPHEN MAREK</text>
+  <text x="424" y="1150" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="30" letter-spacing="10" fill="#2A2622" text-anchor="middle" opacity="0.6">LIVED EXPERIENCE</text>
+</svg>

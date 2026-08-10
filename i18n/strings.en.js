@@ -274,6 +274,13 @@ window.I18N.en = {
   "book.ask.waitWithdrawNote": "Withdrawing deletes it. You can write a different one afterwards.",
 
   "book.ask.answeredH": "Rosa answered your question",
+  /* The answered state now closes the loop: the reader's own drafted question (held by
+     ask.js, never persisted) appears with Rosa's answer, so send → answered reads as one
+     story. The answer is a scripted example and says so — the state is still reachable
+     only by request (?ask=answered), never on a timer. English only so far. */
+  "book.ask.answeredALabel": "Rosa's answer:",
+  "book.ask.answeredA": "My grandchildren. They asked why I keep a 1979 bus ticket in my nightstand, and the true answer was too long to say out loud. So I wrote it down. Then I kept writing.",
+  "book.ask.answeredDemoNote": "Prototype note: this answer is a scripted example — this state is reached by request (?ask=answered), never on a timer.",
   "book.ask.answeredBody": "She published your question with her answer on her author page, where other readers can now read both.",
   "book.ask.answeredLink": "Read her answer",
   "book.ask.answeredQuota": "That was your one question for this book.",
@@ -334,6 +341,18 @@ window.I18N.en = {
   "author.qa1.a": "Every December for the first ten years. Then one year I noticed I was homesick in both directions, and I understood I had two homes now. That is what chapter 14 is about.",
   "author.qa2.q": "What did writing in Tagalog first change about the book?",
   "author.qa2.a": "Everything. Some memories only exist in the language they happened in. My niece and I argued over every sentence of the translation, and the arguing is where the book got honest.",
+
+  /* qa3–qa6 added 8/9. The questions are readers' own words: drawn nearly verbatim from
+     open-text answers in our survey (n = 42), lightly adapted to Rosa's book. English
+     only so far — the five other locales fall back to English until translated. */
+  "author.qa3.q": "What was the hardest part about writing this book?",
+  "author.qa3.a": "The chapter about my mother's funeral, which I could not fly home for. I wrote it four times in Tagalog and twice in English, and my niece finally told me to stop fixing it — it is supposed to hurt. She was right, so it stayed.",
+  "author.qa4.q": "What happened to everyone after the book ends? I got attached to them.",
+  "author.qa4.a": "People ask about Lita the most. She went home to Cebu in 1994 and we still talk every Sunday. My night-shift supervisor passed away two years ago; her daughter read the book and asked me a question here, which I still cannot quite believe.",
+  "author.qa5.q": "My mother was a nurse who left home the same year you did, and she never talks about it. Did writing it down make it easier to talk about?",
+  "author.qa5.a": "For thirty years my whole answer to “what was it like” was “it was fine.” The book is the long answer. Writing it did not make talking easier — it made being asked easier. Maybe leave the first chapter where your mother will find it.",
+  "author.qa6.q": "Thank you for writing this — I read it in two nights. What should I read next if your book meant this much to me?",
+  "author.qa6.a": "Thank you for reading it. From this collection: Letters Home, because Emily typed her grandmother's letters the way I kept my mother's, and Coming Back Slow, because Deborah relearned writing itself and still finished — which shames every excuse I ever made about chapter three.",
 
   "author.popularH2": "Most popular",
   "author.bookTitle": "The Road from Manila",
@@ -523,5 +542,61 @@ window.I18N.en = {
   "revnote.search.1Label": "Not a ranking proposal.",
   "revnote.search.1Body": "This result order is invented. All we are asking for is that the collection be present.",
   "revnote.browse.1Label": "Where it lives.",
-  "revnote.browse.1Body": "A place in the store a reader can browse, beside categories that work as they already do."
+  "revnote.browse.1Body": "A place in the store a reader can browse, beside categories that work as they already do.",
+
+  /* ---------- the author's view: author-dashboard.html ----------
+     Added 8/9, English only so far — the five other locales fall back to English until
+     translated (i18n.js warns per key in the console; nothing breaks). The dashboard is
+     demo chrome: it is reached from the reviewer bar, never from store navigation.
+     Conventions that carry over: Rosa is she/her (rule a); digits stay digits (14, 9,
+     3, 2); no promise of a reply, a cadence, or an escalation path may appear here
+     either — this page is where the ABSENCE of those obligations is shown from the
+     author's side. "Declined" here and "deleted" in book.ask.offAfterBody / waitTruth
+     describe the same act; keep them consistent if translating. */
+  "demo.authorView": "Author's view: Rosa's dashboard",
+  "demo.authorViewHere": "Author's view — what Rosa sees",
+  "dash.docTitle": "Rosa's reader questions — author dashboard (concept)",
+  "dash.disclaimer": "Not an Amazon product. The author's view of the same student concept: this author, her readers, and every question are fictional; controls are non-functional.",
+  "dash.demoCaption": "The author's side — the queue behind “9 of 14 answered”, and the tiers behind “opt-in”.",
+  "dash.subnavAria": "Author console sections",
+  "dash.nav.bookshelf": "Bookshelf",
+  "dash.nav.reports": "Reports",
+  "dash.nav.community": "Community",
+  "dash.nav.marketing": "Marketing",
+  "dash.nav.questions": "Reader Questions",
+  "dash.greeting": "Hello, Rosa Delgado",
+  "dash.account": "Your Bookshelf",
+  "dash.h1": "Reader questions — The Road from Manila",
+  "dash.intro": "The other half of the collection's question tier: what readers asked, what you have drafted, and what becomes public only when you publish it.",
+  "dash.sum.received": "received",
+  "dash.sum.answered": "answered & published",
+  "dash.sum.pending": "waiting for you",
+  "dash.sum.declined": "declined & deleted",
+  "dash.queueH2": "Waiting for you",
+  "dash.queueSub": "One question per reader per book · Nothing is public until you publish it",
+  "dash.q1.q": "What inspired you to write this?",
+  "dash.q1.meta": "From a verified reader · Asked 12 March 2026",
+  "dash.q2.q": "What inspired you to share your story?",
+  "dash.q2.meta": "From a verified reader · Asked 10 March 2026",
+  "dash.q3.q": "Why did you choose to write the book?",
+  "dash.q3.meta": "From a verified reader · Asked 8 March 2026",
+  "dash.draftLabel": "Your draft answer — not published:",
+  "dash.btnPublish": "Publish question & answer",
+  "dash.btnEdit": "Edit draft",
+  "dash.btnAnswer": "Answer",
+  "dash.btnDecline": "Decline",
+  "dash.declineNote": "Declining deletes the question. The reader is not told why — their panel simply continues to say the question has not been answered. You are never required to answer, and Amazon does not chase you.",
+  "dash.publishedH2": "Published on your author page",
+  "dash.publishedSub": "Published questions appear with your answers on your public author page.",
+  "dash.publishedLink": "See all 9 as readers see them — on your author page",
+  "dash.accessH2": "Your access settings",
+  "dash.accessSub": "Yours to change, tier by tier · Changing a tier is never penalized",
+  "dash.stateOff": "Off",
+  "dash.tier1Body": "9 of 14 reader questions answered; nothing is public until you publish it.",
+  "dash.tier2Body": "Occasional live session — you schedule it, or you never do.",
+  "dash.tier3State": "Always available",
+  "dash.tier3Body": "Switch every tier off and your book stays in the collection, your attestation stays on its page, and nothing about your listing changes.",
+  "dash.noMsgNote": "There is no private messaging at any tier — readers cannot write to you outside these questions, and you cannot write back except by publishing an answer. Contact details are never shared in either direction. That is out of scope by design, for your safety.",
+  "dash.mockNote": "Prototype note: nothing here is sent anywhere. The two toggles work so the choice can be seen being made; they change only this page.",
+  "dash.credits1": "Reader Discovery team — Jakob Picciotto · Pablo Ortega · Jalen Oscar Howard · Wanting Chao · The author's side of Pablo's access tiers (7/27) · The pending questions are readers' own words, drawn nearly verbatim from open-text answers in our survey (n = 42) and lightly adapted to Rosa's book."
 };

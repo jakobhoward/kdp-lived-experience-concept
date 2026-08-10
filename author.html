@@ -35,6 +35,8 @@
 <!-- Loads third, and last: viewport adaptation overrides both of the above. -->
 <link rel="stylesheet" href="responsive.css">
 <link rel="stylesheet" href="notes.css">
+<link rel="stylesheet" href="focus-mode.css">
+<script src="focus-mode.js"></script>
 <style>
   /* page-specific: author page (interface-reference.md §3) */
   .authhead {
@@ -172,6 +174,13 @@
         <li><a class="demobar-step" href="book.html"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.book">Book</span></a></li>
         <li><span class="demobar-step" aria-current="page"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.author">Author</span></span></li>
         </ol>
+        <!-- THE AUTHOR'S SIDE. A detour, not a sixth step: the walkthrough is one
+             reader's path, and Rosa's dashboard is not on it. So this link sits outside
+             the <ol> — no number, its own styling — and exists only in the reviewer
+             bar. Store navigation never points at the author console, on purpose:
+             a reader has no business there, and the demo should not imply otherwise.
+             Present on the two Rosa-side pages (this one and book.html) only. -->
+        <a class="demobar-step demobar-authorview" href="author-dashboard.html"><span data-i18n="demo.authorView">Author's view: Rosa's dashboard</span></a>
       </nav>
       <p class="demobar-caption" data-i18n="author.demoCaption">What an author opens up — the access tiers, opt-in and reversible.</p>
     </div>
@@ -249,13 +258,46 @@
           arguing is where the book got honest.</span></div>
           <div class="who" data-i18n="author.answeredBy">Answered by Rosa Delgado, author</div>
         </div>
+        <!-- qa3–qa6, added 8/9. The questions are readers' own words — drawn nearly
+             verbatim from open-text answers in our survey (n = 42), lightly adapted to
+             Rosa's book. Six shown of the 9 the count claims: this page shows recent
+             answers, not the archive, which is also what Amazon's own Q&A modules do. -->
+        <div class="q">
+          <div class="line"><b data-i18n="author.qLabel">Question:</b> <span data-i18n="author.qa3.q">What was the hardest part about writing this book?</span></div>
+          <div class="line ans"><b data-i18n="author.aLabel">Answer:</b> <span data-i18n="author.qa3.a">The chapter about my mother's funeral, which I could
+          not fly home for. I wrote it four times in Tagalog and twice in English, and my niece finally
+          told me to stop fixing it — it is supposed to hurt. She was right, so it stayed.</span></div>
+          <div class="who" data-i18n="author.answeredBy">Answered by Rosa Delgado, author</div>
+        </div>
+        <div class="q">
+          <div class="line"><b data-i18n="author.qLabel">Question:</b> <span data-i18n="author.qa4.q">What happened to everyone after the book ends? I got attached to them.</span></div>
+          <div class="line ans"><b data-i18n="author.aLabel">Answer:</b> <span data-i18n="author.qa4.a">People ask about Lita the most. She went home to Cebu
+          in 1994 and we still talk every Sunday. My night-shift supervisor passed away two years ago;
+          her daughter read the book and asked me a question here, which I still cannot quite believe.</span></div>
+          <div class="who" data-i18n="author.answeredBy">Answered by Rosa Delgado, author</div>
+        </div>
+        <div class="q">
+          <div class="line"><b data-i18n="author.qLabel">Question:</b> <span data-i18n="author.qa5.q">My mother was a nurse who left home the same year you did, and she never talks about it. Did writing it down make it easier to talk about?</span></div>
+          <div class="line ans"><b data-i18n="author.aLabel">Answer:</b> <span data-i18n="author.qa5.a">For thirty years my whole answer to “what was it like”
+          was “it was fine.” The book is the long answer. Writing it did not make talking easier — it
+          made being asked easier. Maybe leave the first chapter where your mother will find it.</span></div>
+          <div class="who" data-i18n="author.answeredBy">Answered by Rosa Delgado, author</div>
+        </div>
+        <div class="q">
+          <div class="line"><b data-i18n="author.qLabel">Question:</b> <span data-i18n="author.qa6.q">Thank you for writing this — I read it in two nights. What should I read next if your book meant this much to me?</span></div>
+          <div class="line ans"><b data-i18n="author.aLabel">Answer:</b> <span data-i18n="author.qa6.a">Thank you for reading it. From this collection: Letters
+          Home, because Emily typed her grandmother's letters the way I kept my mother's, and Coming
+          Back Slow, because Deborah relearned writing itself and still finished — which shames every
+          excuse I ever made about chapter three.</span></div>
+          <div class="who" data-i18n="author.answeredBy">Answered by Rosa Delgado, author</div>
+        </div>
       </div>
     </div>
 
     <div class="panel">
       <h2 data-i18n="author.popularH2">Most popular</h2>
       <div class="bookcard">
-        <a href="book.html"><img src="covers/road-from-manila.png" alt="Cover of The Road from Manila" data-i18n-attr="alt:author.coverAlt" width="848" height="1264" fetchpriority="high" decoding="async"></a>
+        <a href="book.html"><img src="covers/typo/road-from-manila.svg" alt="Cover of The Road from Manila" data-i18n-attr="alt:author.coverAlt" width="848" height="1264" fetchpriority="high" decoding="async"></a>
         <div>
           <div class="t"><a href="book.html" data-i18n="author.bookTitle">The Road from Manila</a></div>
           <div class="stars" role="img" aria-label="4.4 out of 5 stars, 214 ratings" data-i18n-attr="aria-label:author.starsAria">★★★★☆<span class="count">(<span data-i18n-num="214">214</span>)</span></div>
@@ -272,7 +314,11 @@
           <div class="sub" data-i18n="author.access.sub">Chosen by the author · Changeable anytime</div>
           <div class="tier">
             <b data-i18n="author.access.tier1Label">Questions about the book</b> — <span class="state" data-i18n="author.access.tier1State">On</span>
-            <p data-i18n="author.access.tier1Body">Answers weekly; nothing public until Rosa publishes it.</p>
+            <!-- Was "Answers weekly" — a cadence nobody measures is a promise Amazon cannot
+                 keep. strings.en.js retired it 7/30 (see the note at author.access.tier1Body);
+                 this fallback text lagged behind and only ever showed with scripting off.
+                 Now it states the same observed count book.html states. -->
+            <p data-i18n="author.access.tier1Body">9 of 14 reader questions answered; nothing public until Rosa publishes it.</p>
           </div>
           <div class="tier">
             <b data-i18n="author.access.tier2Label">Live reader Q&amp;A</b> — <span class="state" data-i18n="author.access.tier2State">On</span>

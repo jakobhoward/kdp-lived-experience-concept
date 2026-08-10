@@ -35,6 +35,8 @@
 <!-- Loads third, and last: viewport adaptation overrides both of the above. -->
 <link rel="stylesheet" href="responsive.css">
 <link rel="stylesheet" href="notes.css">
+<link rel="stylesheet" href="focus-mode.css">
+<script src="focus-mode.js"></script>
 <style>
   /* page-specific: 3-column detail layout (interface-reference.md §2) */
   .detail { display: grid; grid-template-columns: 260px 1fr 260px; gap: 28px; align-items: start; }
@@ -310,6 +312,10 @@
     /* Hairline rows, not a quote bar: an accent bar on the inline edge is the pastel
        grammar this project banned, and it also has to be re-sided for Arabic. */
   }
+  /* Rosa's answer in the answered state: her words at reading weight, darker than the
+     panel's 12px soft-gray plumbing — the answer is the payoff of the whole flow and
+     should not be set like a footnote next to the reader's own 13px question. */
+  .ask .youra { font-size: 13px; color: var(--ink); line-height: 1.5; margin-bottom: 8px; }
   .ask .ask-strings { display: none; }
   .ask .mocknote { font-size: 11.5px; }
   /* The live region is for the announcement only — everything it says is already on
@@ -367,6 +373,9 @@
         <li><span class="demobar-step" aria-current="page"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.book">Book</span></span></li>
         <li><a class="demobar-step" href="author.html"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.author">Author</span></a></li>
         </ol>
+        <!-- THE AUTHOR'S SIDE. A detour, not a sixth step — see the note on author.html.
+             Reviewer-bar chrome only; store navigation never points at the author console. -->
+        <a class="demobar-step demobar-authorview" href="author-dashboard.html"><span data-i18n="demo.authorView">Author's view: Rosa's dashboard</span></a>
       </nav>
       <p class="demobar-caption" data-i18n="book.demoCaption">One book: the author's attestation, and the flow for asking her a question.</p>
     </div>
@@ -418,7 +427,7 @@
 
     <!-- left column -->
     <div class="leftcol">
-      <img src="covers/road-from-manila.png" alt="Cover of The Road from Manila" data-i18n-attr="alt:book.coverAlt" width="848" height="1264" fetchpriority="high" decoding="async">
+      <img src="covers/typo/road-from-manila.svg" alt="Cover of The Road from Manila" data-i18n-attr="alt:book.coverAlt" width="848" height="1264" fetchpriority="high" decoding="async">
       <div class="sample-links">
         <button type="button" class="btn ghost" data-i18n="book.readSample" aria-disabled="true">Read sample</button>
         <button type="button" class="btn ghost" data-i18n="book.audibleSample" aria-disabled="true">Audible sample</button>
@@ -643,9 +652,25 @@
         <p><a href="#" data-i18n="book.ask.reportLink">Report a problem with this question or answer</a></p>
       </div>
 
-      <!-- answered -->
+      <!-- answered. CLOSES THE LOOP (8/9): the reader's own drafted question — held by
+           ask.js, never persisted — appears here with Rosa's answer, so compose → send →
+           answered reads as one story. The answer is scripted and the note below it says
+           so out loud; what has NOT changed is how you get here — by asking for the state
+           (?ask=answered / LEask.state), never on a timer. The wrap ships hidden and
+           ask.js reveals it only when a draft exists, so a deep link with nothing typed
+           still degrades to the plain confirmation it was before. -->
       <div data-ask-state="answered" hidden>
         <h3 tabindex="-1" data-ask-focus data-i18n="book.ask.answeredH">Rosa answered your question</h3>
+        <div id="ask-ansq-wrap" hidden>
+          <p class="ask-label" data-i18n="book.ask.waitQLabel">Your question:</p>
+          <!-- The reader's own words, same rules as the wait state: not keyed, textContent only. -->
+          <div class="yourq" id="ask-ansq"></div>
+          <p class="ask-label" data-i18n="book.ask.answeredALabel">Rosa's answer:</p>
+          <p class="youra" data-i18n="book.ask.answeredA">My grandchildren. They asked why I keep a 1979 bus ticket in my nightstand,
+          and the true answer was too long to say out loud. So I wrote it down. Then I kept writing.</p>
+          <p class="mocknote" data-i18n="book.ask.answeredDemoNote">Prototype note: this answer is a scripted example — this state is
+          reached by request (?ask=answered), never on a timer.</p>
+        </div>
         <p data-i18n="book.ask.answeredBody">She published your question with her answer on her author page, where other readers
         can now read both.</p>
         <p><a href="author.html" data-i18n="book.ask.answeredLink">Read her answer</a></p>

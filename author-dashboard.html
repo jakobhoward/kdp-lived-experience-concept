@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Hosted so the team can just open a link, but deliberately not indexable: this page
+     borrows Amazon's console grammar on purpose, and it should never turn up in a search
+     result stripped of the student-concept banner below. -->
+<meta name="robots" content="noindex, nofollow">
+<title>Rosa's reader questions — author dashboard (concept)</title>
+<!-- LINK PREVIEW. Same contract as the store pages: og:title says "concept", the
+     description leads with "Not an Amazon product", and none of it is localized,
+     because no crawler runs i18n.js. -->
+<meta name="description" content="The author&#x27;s side of the concept: the reader-question queue Rosa moderates, and the access tiers she controls — including off. Not an Amazon product — a student concept for Kindle Direct Publishing. The author, her readers, and every question are fictional; controls are non-functional.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Lived Experience — student concept, COMMLD 560 UW">
+<meta property="og:title" content="Rosa's author dashboard — KDP collection concept">
+<meta property="og:description" content="The author&#x27;s side of the concept: the reader-question queue Rosa moderates, and the access tiers she controls — including off. Not an Amazon product — a student concept for Kindle Direct Publishing. The author, her readers, and every question are fictional; controls are non-functional.">
+<meta property="og:url" content="https://jakobhoward.github.io/kdp-lived-experience-concept/author-dashboard.html">
+<meta property="og:image" content="https://jakobhoward.github.io/kdp-lived-experience-concept/share/og-cover.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A cream card headed STUDENT CONCEPT — Inclusive Design &amp; Product Equity (COMMLD 560), University of Washington, reading &#x27;First-person stories, in the authors&#x27; own words&#x27;, with four book covers fanned beside it.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="amazon.css">
+<link rel="stylesheet" href="demobar.css">
+<link rel="stylesheet" href="i18n/i18n.css">
+<!-- Loads third, and last: viewport adaptation overrides both of the above. -->
+<link rel="stylesheet" href="responsive.css">
+<link rel="stylesheet" href="focus-mode.css">
+<script src="focus-mode.js"></script>
+<style>
+  /* ============================ WHY THIS PAGE EXISTS ============================
+     author.html's access panel calls itself "the missing half". This is the other
+     half: what Rosa sees. It is DEMO CHROME, not store — reached only from the
+     reviewer bar's "Author's view" link, never from store navigation, because a
+     reader has no business in an author's console and the demo should not imply
+     otherwise.
+
+     THE CONSOLE FLAVOR, and where the store grammar was deliberately broken:
+     - The dark nav is KDP's, not the Kindle Store's: a "kdp" wordmark, the
+       Bookshelf/Reports/Community/Marketing tabs, and NO search box — the store
+       pages carry an inert one because Amazon's storefront always has one; the
+       author console's frame is navigation, not search, so an inert search box
+       here would be furniture from the wrong building.
+     - Everything below the nav reuses amazon.css's atoms (.abox, .tier, .btn,
+       .state) because KDP's console and the store share Amazon's component
+       language, and inventing a second design system for one page would be the
+       file-bloat this project bans.
+
+     THE NUMBERS ARE THE SAME NUMBERS. book.html and author.html both state
+     "9 of 14 reader questions answered". This page is the ledger behind that
+     line: 14 received = 9 answered & published + 3 waiting + 2 declined &
+     deleted. If any count changes, it changes in all three places.
+
+     WHAT THE CONTROLS ARE:
+     - The queue's Answer / Publish / Decline buttons are inert (.btn with
+       aria-disabled), same rule as the store's buy box: drawn controls that do
+       nothing, said out loud by the banner.
+     - The two tier TOGGLES are real, the same exception the ask flow and the
+       language picker already are: the whole argument of this page is that the
+       author can switch a tier off, so the demo lets a reviewer DO it. They ship
+       [hidden] and are revealed by dashboard.js (the JS-dependent-controls rule);
+       with scripting off the tiers degrade to the same static rows author.html
+       shows. The toggles change only this page and nothing persists.
+     ============================================================================ */
+
+  /* The console's dark bar is KDP's slate, not the store's near-black — one value
+     apart on purpose, so a reviewer flipping between tabs can feel which side of
+     the counter they are on. */
+  .topnav { background: #2b3541; }
+  .topnav .acct { margin-inline-start: auto; }
+  .subnav .on { color: #fff; font-weight: 700; }
+
+  .dash-h1 { font-size: clamp(20px, 3.6vw, 26px); font-weight: 400; margin: 4px 0 4px; }
+  .dash-intro { font-size: 13px; color: var(--soft); max-width: 68ch; line-height: 1.5; }
+
+  /* The ledger strip. Numbers big, labels small — Amazon's own report-card rhythm.
+     data-i18n-num on the figures so they group per locale like every other count. */
+  .dash-summary {
+    display: flex; flex-wrap: wrap; gap: 12px 34px;
+    border: 1px solid var(--rule); border-radius: 8px;
+    padding: 12px 18px; margin: 16px 0 22px;
+  }
+  .dash-summary > div { font-size: 12px; color: var(--soft); }
+  .dash-summary b { display: block; font-size: 21px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+
+  .dash-cols { display: grid; grid-template-columns: 1.55fr 1fr; gap: 28px; align-items: start; }
+  /* REFLOW: one breakpoint, stacking in DOM order (queue, then tiers), same shape
+     as author.html's .twocol and for the same WCAG 1.4.10 reason. */
+  @media (max-width: 760px) { .dash-cols { grid-template-columns: 1fr; gap: 22px; } }
+
+  /* A question card: the reader's words at reading size, the plumbing small. */
+  .qcard {
+    border: 1px solid var(--rule); border-radius: 8px; background: #fff;
+    padding: 12px 14px; margin-top: 10px;
+  }
+  .qcard .qtext { font-size: 14px; line-height: 1.5; }
+  .qcard .meta { font-size: 12px; color: var(--soft); margin-top: 4px; }
+  .qcard .draft { border-top: 1px solid #E7E9E9; margin-top: 10px; padding-top: 8px; }
+  .dash-label { display: block; font-size: 12px; font-weight: 700; margin-bottom: 4px; }
+  .qcard .drafttext { font-size: 13px; line-height: 1.5; }
+  .qcard .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .qcard .actions .btn { display: inline-block; width: auto; padding: 6px 18px; font-size: 12px; }
+
+  .dash-note { font-size: 12px; color: var(--soft); line-height: 1.5; margin-top: 12px; }
+
+  /* The published list: one line per question, quoting the same strings the public
+     author page renders in full — the reviewer can hold the two pages side by side
+     and watch the same sentence appear on both. */
+  .publist { list-style: none; margin-top: 8px; }
+  .publist li { border-top: 1px solid #E7E9E9; padding: 9px 0; font-size: 13px; line-height: 1.45; }
+  .publist li:first-child { border-top: 0; padding-top: 2px; }
+
+  /* The tier row grows a trailing switch. The row keeps amazon.css's .tier grammar;
+     only the control is new, and it is Amazon's own account-settings toggle shape.
+     Logical properties throughout, so the knob travels the correct way in Arabic. */
+  .tierrow { display: flex; align-items: flex-start; gap: 12px; }
+  .tierrow .tierbody { flex: 1 1 auto; min-width: 0; }
+  .switch {
+    position: relative; flex: none;
+    width: 44px; height: 24px; margin-top: 2px;
+    border: 1px solid var(--rule); border-radius: 100px;
+    background: #D5D9D9; cursor: pointer; padding: 0;
+  }
+  .switch::after {
+    content: ""; position: absolute; top: 2px; inset-inline-start: 2px;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.3);
+    transition: inset-inline-start .12s ease;
+  }
+  .switch[aria-checked="true"] { background: var(--green); border-color: var(--green); }
+  .switch[aria-checked="true"]::after { inset-inline-start: 22px; }
+  /* amazon.css's reduced-motion catch-all already zeroes the knob's transition. */
+
+  .mocknote { font-size: 11.5px; color: var(--soft); line-height: 1.5; margin-top: 10px; }
+</style>
+</head>
+<body data-i18n-title="dash.docTitle">
+
+<a class="skiplink" href="#main" data-i18n="chrome.skipToContent">Skip to main content</a>
+
+<header class="sitehead">
+  <div class="concept-banner">
+    <div class="demobar-row">
+      <strong class="demobar-mark" data-i18n-html="chrome.conceptLabel">STUDENT CONCEPT — <span lang="en" dir="ltr">Inclusive Design &amp; Product Equity (COMMLD 560), UW.</span></strong>
+      <span class="demobar-note" data-i18n="dash.disclaimer">Not an Amazon product. The author's view of the same student concept: this author, her readers, and every question are fictional; controls are non-functional.</span>
+      <!-- The language picker is injected here by i18n/i18n.js. -->
+      <div class="demobar-tools"></div>
+    </div>
+    <div class="demobar-row demobar-row-nav">
+      <!-- The walkthrough stays: all five reader-side steps remain links, because the
+           way back to the store side should be one click from here. What is current is
+           the detour chip — this page is beside the path, not on it, so no step is
+           marked current and no sixth number is minted. -->
+      <nav class="demobar-nav" aria-label="Prototype walkthrough" data-i18n-attr="aria-label:demo.navAria">
+        <ol>
+        <li><a class="demobar-step" href="search.html"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.search">Search</span></a></li>
+        <li><a class="demobar-step" href="browse.html"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.category">Category</span></a></li>
+        <li><a class="demobar-step" href="index.html"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.collection">Collection</span></a></li>
+        <li><a class="demobar-step" href="book.html"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.book">Book</span></a></li>
+        <li><a class="demobar-step" href="author.html"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.author">Author</span></a></li>
+        </ol>
+        <span class="demobar-step demobar-authorview" aria-current="page"><span data-i18n="demo.authorViewHere">Author's view — what Rosa sees</span></span>
+      </nav>
+      <p class="demobar-caption" data-i18n="dash.demoCaption">The author's side — the queue behind "9 of 14 answered", and the tiers behind "opt-in".</p>
+    </div>
+  </div>
+  <div class="topnav">
+    <!-- KDP's console, not the Kindle Store: kdp wordmark, no search box (see the
+         note at the top of the style block), tabs instead of departments. -->
+    <div class="logo" lang="en">kdp</div>
+    <div class="acct"><span data-i18n="dash.greeting">Hello, Rosa Delgado</span><b data-i18n="dash.account">Your Bookshelf</b></div>
+  </div>
+  <nav class="subnav" aria-label="Author console sections" data-i18n-attr="aria-label:dash.subnavAria">
+    <ul>
+      <li data-i18n="dash.nav.bookshelf">Bookshelf</li><li data-i18n="dash.nav.reports">Reports</li>
+      <li data-i18n="dash.nav.community">Community</li><li data-i18n="dash.nav.marketing">Marketing</li>
+      <li class="on" data-i18n="dash.nav.questions">Reader Questions</li>
+    </ul>
+  </nav>
+</header>
+
+<div class="page">
+
+<main id="main">
+
+  <h1 class="dash-h1" data-i18n="dash.h1">Reader questions — The Road from Manila</h1>
+  <p class="dash-intro" data-i18n="dash.intro">The other half of the collection's question tier: what readers asked, what you
+  have drafted, and what becomes public only when you publish it.</p>
+
+  <!-- The ledger behind the "9 of 14" line on book.html and author.html.
+       14 = 9 + 3 + 2, and the three pages must never disagree. -->
+  <div class="dash-summary">
+    <div><b data-i18n-num="14">14</b><span data-i18n="dash.sum.received">received</span></div>
+    <div><b data-i18n-num="9">9</b><span data-i18n="dash.sum.answered">answered &amp; published</span></div>
+    <div><b data-i18n-num="3">3</b><span data-i18n="dash.sum.pending">waiting for you</span></div>
+    <div><b data-i18n-num="2">2</b><span data-i18n="dash.sum.declined">declined &amp; deleted</span></div>
+  </div>
+
+  <div class="dash-cols">
+
+    <!-- ================= the queue ================= -->
+    <div class="dash-main">
+      <div class="abox">
+        <h2 data-i18n="dash.queueH2">Waiting for you</h2>
+        <div class="sub" data-i18n="dash.queueSub">One question per reader per book · Nothing is public until you publish it</div>
+
+        <!-- THE THREE PENDING QUESTIONS ARE READERS' OWN WORDS: drawn nearly verbatim
+             from open-text answers in our survey (n = 42), lightly adapted to Rosa's
+             book. The first is the same question the reader-side demo types on
+             book.html, asked on the same fictional date the wait state names
+             (12 March 2026), and its draft is the same sentence the answered state
+             publishes (data-i18n reuses book.ask.answeredA, one string, two pages) —
+             so compose → sent → this queue → answered is one question's whole life,
+             readable across the two views. -->
+        <div class="qcard">
+          <p class="qtext" data-i18n="dash.q1.q">What inspired you to write this?</p>
+          <p class="meta" data-i18n="dash.q1.meta">From a verified reader · Asked 12 March 2026</p>
+          <div class="draft">
+            <span class="dash-label" data-i18n="dash.draftLabel">Your draft answer — not published:</span>
+            <p class="drafttext" data-i18n="book.ask.answeredA">My grandchildren. They asked why I keep a 1979 bus ticket in my nightstand,
+            and the true answer was too long to say out loud. So I wrote it down. Then I kept writing.</p>
+          </div>
+          <div class="actions">
+            <button type="button" class="btn yellow" data-i18n="dash.btnPublish" aria-disabled="true">Publish question &amp; answer</button>
+            <button type="button" class="btn ghost" data-i18n="dash.btnEdit" aria-disabled="true">Edit draft</button>
+          </div>
+        </div>
+
+        <div class="qcard">
+          <p class="qtext" data-i18n="dash.q2.q">What inspired you to share your story?</p>
+          <p class="meta" data-i18n="dash.q2.meta">From a verified reader · Asked 10 March 2026</p>
+          <div class="actions">
+            <button type="button" class="btn yellow" data-i18n="dash.btnAnswer" aria-disabled="true">Answer</button>
+            <button type="button" class="btn ghost" data-i18n="dash.btnDecline" aria-disabled="true">Decline</button>
+          </div>
+        </div>
+
+        <div class="qcard">
+          <p class="qtext" data-i18n="dash.q3.q">Why did you choose to write the book?</p>
+          <p class="meta" data-i18n="dash.q3.meta">From a verified reader · Asked 8 March 2026</p>
+          <div class="actions">
+            <button type="button" class="btn yellow" data-i18n="dash.btnAnswer" aria-disabled="true">Answer</button>
+            <button type="button" class="btn ghost" data-i18n="dash.btnDecline" aria-disabled="true">Decline</button>
+          </div>
+        </div>
+
+        <!-- The queue's one rule, restated from the author's side. book.html's wait
+             state tells the reader "Rosa can delete one without replying and without
+             saying why"; this is the same fact facing the other way. -->
+        <p class="dash-note" data-i18n="dash.declineNote">Declining deletes the question. The reader is not told why — their panel
+        simply continues to say the question has not been answered. You are never required to answer, and Amazon does not
+        chase you.</p>
+      </div>
+
+      <div class="abox" style="margin-top:16px">
+        <h2 data-i18n="dash.publishedH2">Published on your author page</h2>
+        <div class="sub" data-i18n="dash.publishedSub">Published questions appear with your answers on your public author page.</div>
+        <!-- One line per question, quoting the SAME strings author.html renders in
+             full (author.qa*.q) — hold the two pages side by side and the sentence
+             is the same sentence. Three of nine shown; the link is the rest. -->
+        <ul class="publist">
+          <li data-i18n="author.qa3.q">What was the hardest part about writing this book?</li>
+          <li data-i18n="author.qa1.q">Did you ever think about going back for good?</li>
+          <li data-i18n="author.qa6.q">Thank you for writing this — I read it in two nights. What should I read next if your book meant this much to me?</li>
+        </ul>
+        <p style="margin-top:10px; font-size:13px"><a href="author.html" data-i18n="dash.publishedLink">See all 9 as readers see them — on your author page</a></p>
+      </div>
+    </div>
+
+    <!-- ================= the tiers ================= -->
+    <div class="dash-side">
+      <div class="abox">
+        <h2 data-i18n="dash.accessH2">Your access settings</h2>
+        <div class="sub" data-i18n="dash.accessSub">Yours to change, tier by tier · Changing a tier is never penalized</div>
+
+        <div class="tier">
+          <div class="tierrow">
+            <div class="tierbody">
+              <b id="tier1-label" data-i18n="author.access.tier1Label">Questions about the book</b> —
+              <span class="state" id="tier1-state" data-i18n="author.access.tier1State">On</span>
+              <p data-i18n="dash.tier1Body">9 of 14 reader questions answered; nothing is public until you publish it.</p>
+            </div>
+            <!-- The real control. Ships [hidden]; dashboard.js reveals and wires it.
+                 With scripting off this row degrades to author.html's static row. -->
+            <button type="button" class="switch" role="switch" aria-checked="true" hidden
+                    data-dash-tier="tier1" aria-labelledby="tier1-label"></button>
+          </div>
+        </div>
+
+        <div class="tier">
+          <div class="tierrow">
+            <div class="tierbody">
+              <b id="tier2-label" data-i18n="author.access.tier2Label">Live reader Q&amp;A</b> —
+              <span class="state" id="tier2-state" data-i18n="author.access.tier2State">On</span>
+              <p data-i18n="dash.tier2Body">Occasional live session — you schedule it, or you never do.</p>
+            </div>
+            <button type="button" class="switch" role="switch" aria-checked="true" hidden
+                    data-dash-tier="tier2" aria-labelledby="tier2-label"></button>
+          </div>
+        </div>
+
+        <div class="tier">
+          <b data-i18n="author.access.tier3Label">No access</b> —
+          <span class="state off" data-i18n="dash.tier3State">Always available</span>
+          <p data-i18n="dash.tier3Body">Switch every tier off and your book stays in the collection, your attestation stays
+          on its page, and nothing about your listing changes.</p>
+        </div>
+
+        <!-- The refusal, from the author's side. The reader-facing pages promise no
+             private messaging FOR the author's safety; this is where she reads it. -->
+        <div class="note" data-i18n="dash.noMsgNote">There is no private messaging at any tier — readers cannot write to you
+        outside these questions, and you cannot write back except by publishing an answer. Contact details are never shared
+        in either direction. That is out of scope by design, for your safety.</div>
+
+        <p class="mocknote" data-i18n="dash.mockNote">Prototype note: nothing here is sent anywhere. The two toggles work so
+        the choice can be seen being made; they change only this page.</p>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<footer class="credits" data-i18n="dash.credits1">
+  Reader Discovery team — Jakob Picciotto · Pablo Ortega · Jalen Oscar Howard · Wanting Chao ·
+  The author's side of Pablo's access tiers (7/27) · The pending questions are readers' own words,
+  drawn nearly verbatim from open-text answers in our survey (n = 42) and lightly adapted to Rosa's book.
+</footer>
+
+</div>
+
+<script src="i18n/strings.en.js"></script>
+<script src="i18n/strings.es.js"></script>
+<script src="i18n/strings.zh.js"></script>
+<script src="i18n/strings.fil.js"></script>
+<script src="i18n/strings.ar.js"></script>
+<script src="i18n/strings.fr.js"></script>
+<script src="i18n/i18n.js"></script>
+<!-- After i18n.js, always: dashboard.js reveals controls i18n.js has already
+     translated, and re-keys the state words it flips — see the note in that file. -->
+<script src="dashboard.js"></script>
+
+<!-- The two state words the toggles flip between, parked here already translated —
+     dashboard.js copies textContent out and never builds a string, the same contract
+     ask.js and notes.js follow. Kept fresh across language switches by i18n.js like
+     everything else. -->
+<div class="dash-strings" hidden aria-hidden="true">
+  <span data-dash-label="on" data-i18n="author.access.tier1State">On</span>
+  <span data-dash-label="off" data-i18n="dash.stateOff">Off</span>
+</div>
+</body>
+</html>

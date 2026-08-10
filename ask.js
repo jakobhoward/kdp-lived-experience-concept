@@ -80,6 +80,8 @@
     var start = document.getElementById('ask-start');
     var yourqWrap = document.getElementById('ask-yourq-wrap');
     var yourq = document.getElementById('ask-yourq');
+    var ansqWrap = document.getElementById('ask-ansq-wrap');
+    var ansq = document.getElementById('ask-ansq');
     var mocknote = document.getElementById('ask-mocknote');
 
     /* The draft lives here and nowhere else. Not localStorage: a question this page
@@ -204,6 +206,18 @@
       show('wait');
     }
 
+    /* The answered state closes the loop the same way the wait state opens it: the
+       reader's own draft, shown back beside Rosa's (scripted, and labelled scripted)
+       answer. Same rules as showWait — textContent only, and a deep link with nothing
+       typed gets the plain confirmation, not an empty quote box. */
+    function showAnswered() {
+      if (ansq && ansqWrap) {
+        ansq.textContent = draft;
+        ansqWrap.hidden = !draft;
+      }
+      show('answered');
+    }
+
     var withdrawBtn = document.getElementById('ask-withdraw');
     if (withdrawBtn) {
       withdrawBtn.addEventListener('click', function () {
@@ -251,6 +265,7 @@
     function go(name, focus) {
       if (!valid(name)) return false;
       if (name === 'wait') { showWait(); }
+      else if (name === 'answered') { showAnswered(); }
       else { show(name); }
       if (name === 'error') announce('ask-s-error');
       /* On first paint nothing should steal focus from the top of the document — a page
