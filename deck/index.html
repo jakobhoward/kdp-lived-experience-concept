@@ -1,0 +1,1000 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Same rule as the prototype: hosted so it opens from a link, never indexable. This is a
+     student concept deck that quotes Amazon surfaces and licensed stock; it should not turn
+     up in a search result stripped of that context. -->
+<meta name="robots" content="noindex, nofollow">
+<title>Reader Discovery — presentation previs</title>
+<meta property="og:title" content="Reader Discovery — student concept presentation">
+<meta property="og:description" content="COMMLD 560 (UW) final project previs. Not an Amazon product.">
+</head>
+<body>
+<style>
+  :root {
+    --cream: #F5EFE2;
+    --cream-deep: #EDE5D2;
+    --ink: #1F2A4A;
+    --dark: #10162B;
+    --muted: #6B6455;
+    --accent: #C0662A;
+    --accent-bright: #E08A3C;
+    --scrim: rgba(16, 21, 40, 0.62);
+    --chip-bg: #1F2A4A;
+    --serif: "Playfair Display", "Didot", "Bodoni 72", Georgia, serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    background: var(--cream); color: var(--ink); font-family: var(--sans);
+    display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow: hidden;
+  }
+
+  /* ---------- header ---------- */
+  header { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 12px 24px 8px; }
+  .brand { display: flex; align-items: baseline; gap: 10px; white-space: nowrap; }
+  .brand .word { font-family: var(--serif); font-weight: 800; font-size: 19px; }
+  .brand .tag { font-size: 11px; text-transform: uppercase; letter-spacing: 0.13em; color: var(--muted); }
+  .secnav { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .secbtn { font: inherit; font-size: 15px; line-height: 1; border: 1px solid rgba(31,42,74,0.3); background: transparent; color: var(--ink); border-radius: 999px; width: 30px; height: 30px; cursor: pointer; }
+  .secbtn:hover { border-color: var(--ink); }
+  .secbtn:focus-visible, .dot:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .seclabel { text-align: center; min-width: 340px; }
+  .seclabel .nm { font-weight: 700; font-size: 15px; }
+  .seclabel .meta { font-size: 12px; color: var(--muted); margin-top: 1px; }
+  .hud-right { display: flex; align-items: center; gap: 12px; white-space: nowrap; }
+  .dots { display: flex; gap: 6px; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid rgba(31,42,74,0.45); background: transparent; cursor: pointer; padding: 0; }
+  .dot.on { background: var(--accent); border-color: var(--accent); }
+  .hint { font-size: 11.5px; color: var(--muted); }
+  kbd { font-family: var(--sans); font-size: 10.5px; border: 1px solid rgba(31,42,74,0.3); border-bottom-width: 2px; border-radius: 4px; padding: 1px 4px; background: #fff8; }
+  #gprog { width: 100%; height: 3px; background: rgba(31,42,74,0.12); }
+  #gprog i { display: block; height: 100%; background: var(--accent); width: 0; transition: width .3s ease; }
+
+  /* ---------- stage ---------- */
+  #stagewrap { flex: 1; display: flex; align-items: center; justify-content: center; width: 100%; min-height: 0; }
+  #scaler { transform-origin: center center; }
+  #stage {
+    position: relative; width: 1600px; height: 900px; background: var(--cream-deep);
+    border-radius: 10px; overflow: hidden; cursor: pointer;
+    box-shadow: 0 22px 70px -28px rgba(31,42,74,0.5), 0 0 0 1px rgba(31,42,74,0.14);
+    transition: background .4s ease;
+  }
+  #stage.dark { background: var(--dark); }
+
+  .seq { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: opacity .35s ease, visibility 0s linear .35s; }
+  .seq.on { opacity: 1; visibility: visible; transition: opacity .35s ease; }
+
+  .base { position: absolute; overflow: hidden; border-radius: 4px; box-shadow: 0 10px 40px -18px rgba(31,42,74,0.55); }
+  .base img { position: absolute; display: block; }
+  .base.bleed { inset: 0; border-radius: 0; box-shadow: none; }
+  .base.bleed img { width: 1600px; height: 900px; left: 0; top: 0; }
+
+  .veil { position: absolute; inset: 0; opacity: 0; pointer-events: none; background: var(--scrim);
+    backdrop-filter: blur(7px) saturate(0.8); -webkit-backdrop-filter: blur(7px) saturate(0.8); transition: opacity .55s ease; }
+  .focused .veil { opacity: 1; }
+  /* the author dashboard is a near-white page — the standard scrim washes to pale gray on it */
+  #sq-rosa .veil { background: rgba(16,21,40,0.82); }
+
+  .lift { position: absolute; overflow: hidden; border-radius: 10px; background: #fff;
+    box-shadow: 0 30px 80px -20px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.22);
+    transform-origin: top left; transition: transform .65s cubic-bezier(.22,.9,.24,1), opacity .45s ease; opacity: 0; }
+  .lift img { position: absolute; display: block; }
+  .focused .lift { opacity: 1; }
+  .lift.gone { opacity: 0 !important; }
+
+  .col { position: absolute; left: 84px; top: 150px; width: 590px; color: var(--cream); }
+  .kicker { font-size: 15px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent-bright); font-weight: 600; margin-bottom: 18px; }
+  .col h1 { font-family: var(--serif); font-weight: 800; font-size: 76px; line-height: 1.04; text-wrap: balance; margin-bottom: 24px; }
+  .col .copy { font-size: 20px; line-height: 1.5; color: rgba(245,239,226,0.92); max-width: 32ch; }
+  .col .ask { margin-top: 26px; font-size: 19px; font-weight: 700; color: var(--accent-bright); }
+  .rise { opacity: 0; transform: translateY(16px); transition: opacity .5s ease, transform .5s ease; }
+  .focused .rise { opacity: 1; transform: none; }
+  .focused .rise:nth-child(2) { transition-delay: .12s; }
+  .focused .rise:nth-child(3) { transition-delay: .22s; }
+
+  .anno { position: absolute; opacity: 0; transform: translateY(8px); transition: opacity .4s ease, transform .4s ease; }
+  .anno.show { opacity: 1; transform: none; }
+  .chip { display: inline-block; background: var(--chip-bg); color: var(--cream); border: 1px solid rgba(245,239,226,0.35);
+    font-size: 16.5px; line-height: 1.35; padding: 10px 16px; border-radius: 10px; max-width: 340px;
+    box-shadow: 0 12px 30px -12px rgba(0,0,0,0.6); }
+  .chip b { color: var(--accent-bright); }
+  svg.arrows { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  svg.arrows path { fill: none; stroke: var(--accent-bright); stroke-width: 3.5; stroke-linecap: round; stroke-dasharray: 640; stroke-dashoffset: 640; }
+  svg.arrows path.show { transition: stroke-dashoffset .6s ease .1s; stroke-dashoffset: 0; }
+  svg.arrows .head { fill: var(--accent-bright); stroke: none; opacity: 0; transition: opacity .2s ease .6s; }
+  svg.arrows .head.show { opacity: 1; }
+  .ring { position: absolute; border: 2.5px solid var(--accent-bright); border-radius: 8px; box-shadow: 0 0 0 4px rgba(224,138,60,0.25); opacity: 0; transition: opacity .4s ease .25s; }
+  .ring.show { opacity: 1; }
+  /* marks where a lifted crop came from, after it departs */
+  .origin { position: absolute; border: 2px solid rgba(224,138,60,0.75); border-radius: 6px; box-shadow: 0 0 0 4px rgba(224,138,60,0.12); opacity: 0; transition: opacity .3s ease, border-color .5s ease 1.15s, box-shadow .5s ease 1.15s; pointer-events: none; }
+  .focused .origin { opacity: 1; border-color: rgba(255,255,255,0.8); box-shadow: 0 0 0 4px rgba(255,255,255,0.1); }
+  .focused .veil { transition-delay: .15s; }
+  .focused .lift { transition-delay: .28s, .2s; }
+  .origin.off { opacity: 0 !important; }
+
+  .datahead { position: absolute; left: 0; right: 0; top: 90px; text-align: center; color: var(--cream); padding: 0 150px; }
+  .datahead h2 { font-family: var(--serif); font-weight: 800; font-size: 42px; line-height: 1.15; text-wrap: balance; }
+  .datahead .sub { margin-top: 13px; font-size: 18.5px; color: rgba(245,239,226,0.85); }
+
+  /* typographic beats */
+  .typo { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; padding: 0 150px; }
+  .typo .kicker { margin-bottom: 26px; }
+  .typo .huge { font-family: var(--serif); font-weight: 800; font-size: 64px; line-height: 1.12; text-wrap: balance; max-width: 22ch; }
+  .typo.centered { align-items: center; text-align: center; }
+  .typo.centered .huge { max-width: 26ch; }
+  .typo .giant { font-family: var(--serif); font-weight: 800; font-size: 290px; line-height: 1; letter-spacing: -0.01em; }
+  .typo .lines { margin-top: 34px; display: flex; flex-direction: column; gap: 18px; }
+  .typo .line { font-size: 23px; line-height: 1.45; max-width: 52ch; }
+  .typo .line b { font-weight: 700; }
+  .typo .accent { color: var(--accent); }
+  .dark .typo, .dark .typo .huge { color: var(--cream); }
+  .dark .typo .accent { color: var(--accent-bright); }
+  .step { opacity: 0; transform: translateY(14px); transition: opacity .5s ease, transform .5s ease; }
+  .step.show { opacity: 1; transform: none; }
+
+  /* history frames */
+  .frame { position: absolute; inset: 0; opacity: 0; transition: opacity .45s ease; }
+  .frame.show { opacity: 1; }
+  .frame img { width: 1600px; height: 900px; display: block; object-fit: contain; }
+  .era { position: absolute; left: 0; right: 0; bottom: 40px; text-align: center; opacity: 0; transition: opacity .45s ease; }
+  .era.show { opacity: 1; }
+  .era span { display: inline-block; font-family: var(--serif); font-weight: 800; font-size: 30px; color: var(--cream); background: rgba(16,22,43,0.82); padding: 12px 28px; border-radius: 999px; }
+
+  #stage.pitch { background: #0A0F20; }
+  /* the licensed scene runs full-bleed in both sections — no blend mode, nothing to key out */
+  video.scene-fire { position: absolute; inset: 0; width: 1600px; height: 900px; object-fit: cover;
+    opacity: 0; transition: opacity .5s ease; pointer-events: none; }
+  video.scene-fire.on { opacity: 1; }
+  /* the title sits in the empty upper forest; this keeps it off the treeline */
+  #sq-fire .fire-title { text-shadow: 0 2px 30px rgba(0,0,0,0.85), 0 0 80px rgba(0,0,0,0.6); }
+  /* held back to 80% so the real flame stays the brightest thing on the slide */
+  .stick { position: absolute; transition: opacity .6s ease; filter: brightness(0.8); }
+  .stick.flip { transform: scaleX(-1); }
+  /* "leave" — the circle dims, the teller goes dark, the bubble becomes clay; "lone" — by print, the circle is gone */
+  #sq-hist.leave .stick.flip { opacity: 0; }   /* the teller has left */
+  #sq-hist.lone .stick { opacity: 0; }         /* by print, the circle is gone */
+  /* the four writing examples stand in a row on a common baseline, entering one at a time */
+  .evob { position: absolute; bottom: 420px;
+    opacity: 0; transform: translateX(-50%) scale(0.45) translateY(120px); transform-origin: 50% 100%;
+    transition: opacity .55s ease, transform .85s cubic-bezier(.22,.9,.3,1); }
+  .evob img { display: block;
+    filter: drop-shadow(0 26px 44px rgba(0,0,0,0.85)) drop-shadow(0 0 34px rgba(224,138,60,0.28)); }
+  .evob.page img { border-radius: 3px; }
+  .evob.show { opacity: 1; transform: translateX(-50%); }
+  #ev-clay { left: 347px; } #ev-pap { left: 694px; } #ev-bone { left: 1005px; } #ev-codex { left: 1270px; }
+  #ev-print { left: 800px; bottom: 360px; }
+  .shot { position: absolute; overflow: hidden; border-radius: 10px; background: #fff; box-shadow: 0 24px 60px -18px rgba(0,0,0,0.45); }
+  .shot img { position: absolute; display: block; }
+  .line.past { opacity: 0.32; font-size: 17px !important; }
+  .negrow { display: flex; flex-direction: column; gap: 16px; margin-top: 34px; }
+  .neg { background: rgba(31,42,74,0.07); border-radius: 12px; padding: 18px 22px; display: flex; gap: 17px; align-items: center; max-width: 560px; }
+  .neg svg { flex: none; }
+  .neg .t { font-size: 21px; line-height: 1.35; color: var(--ink); }
+  .neg .t b { font-weight: 700; }
+  .neg.pos { background: rgba(192,102,42,0.13); }
+  .neg.pos .t { font-family: var(--serif); font-weight: 800; font-size: 27px; color: var(--accent); }
+  #sq-arc .line { transition: opacity .4s ease, font-size .4s ease; }
+  /* §13 you already own the parts */
+  .pt-head { position: absolute; left: 110px; top: 96px; right: 110px; }
+  .pt-head .huge { font-family: var(--serif); font-weight: 800; font-size: 60px; line-height: 1.05; color: var(--ink); }
+  .pt-sub { margin-top: 16px; font-family: var(--serif); font-weight: 800; font-size: 27px; color: var(--accent); }
+  .pcard { position: absolute; top: 370px; width: 330px; height: 250px; background: #FFFDF7; border: 1px solid rgba(31,42,74,0.14); border-radius: 14px; box-shadow: 0 12px 30px rgba(31,42,74,0.08); padding: 24px 26px; display: flex; flex-direction: column; overflow: hidden;
+    transition: left .75s cubic-bezier(.25,.8,.25,1), top .75s cubic-bezier(.25,.8,.25,1), width .75s cubic-bezier(.25,.8,.25,1), height .75s cubic-bezier(.25,.8,.25,1), padding .75s cubic-bezier(.25,.8,.25,1), opacity .5s ease, transform .5s ease; }
+  .pcard.ext { border: 1.5px dashed rgba(31,42,74,0.4); }
+  .pcard .src { font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; white-space: nowrap; }
+  .pcard .nm { font-family: var(--serif); font-weight: 800; font-size: 26px; color: var(--ink); margin-bottom: 10px; white-space: nowrap; }
+  .pcard .pf { font-size: 17px; line-height: 1.42; color: var(--ink); opacity: 0.85; }
+  #p1 { left: 110px; } #p2 { left: 460px; } #p3 { left: 810px; } #p4 { left: 1160px; }
+  #sq-prior.asm .pcard { left: 470px; width: 1020px; height: 108px; flex-direction: row; align-items: center; gap: 24px; padding: 0 30px; }
+  #sq-prior.asm #p1 { top: 300px; } #sq-prior.asm #p2 { top: 432px; } #sq-prior.asm #p3 { top: 564px; } #sq-prior.asm #p4 { top: 696px; }
+  #sq-prior.asm .pcard .src { order: 3; margin: 0 0 0 auto; }
+  #sq-prior.asm .pcard .nm { order: 1; margin: 0; width: 285px; flex: 0 0 auto; }
+  #sq-prior.asm .pcard .pf { order: 2; margin: 0; font-size: 16.5px; }
+  .laylab { position: absolute; left: 110px; width: 330px; height: 108px; display: flex; flex-direction: column; justify-content: center; }
+  .laylab b { font-family: var(--serif); font-weight: 800; font-size: 28px; color: var(--ink); }
+  .laylab span { font-size: 13px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
+  #al1, #al2 { transition: font-size .5s ease; }
+  #sq-ans.s2 #al1 { font-size: 27px; }
+  #sq-ans.s2 #al2 { font-size: 62px; }
+  .ell { width: 292px; height: 150px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; text-align: center; font-family: var(--serif); font-weight: 800; font-size: 24px; color: var(--cream); line-height: 1.12; padding: 0 26px; transition: opacity .4s ease, transform .4s ease; }
+  .ellrow { position: absolute; left: 110px; right: 110px; top: 292px; display: flex; gap: 36px; justify-content: center; }
+  .stdetail { position: absolute; left: 200px; right: 200px; top: 540px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 44px; opacity: 0; transition: opacity .45s ease; }
+  .stdetail.show { opacity: 1; }
+  .stdetail .lab { font-size: 12.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .stdetail .val { font-size: 22px; line-height: 1.4; color: var(--ink); }
+  .stdetail .val.oc { font-weight: 700; }
+  #sq-stake[data-on] .ell { opacity: 0.28; }
+  #sq-stake[data-on="1"] .ell:nth-child(1), #sq-stake[data-on="2"] .ell:nth-child(2),
+  #sq-stake[data-on="3"] .ell:nth-child(3), #sq-stake[data-on="4"] .ell:nth-child(4) { opacity: 1; transform: scale(1.06); }
+  .gifover { position: absolute; }
+  .scene { position: absolute; inset: 0; opacity: 0; transition: opacity .45s ease; }
+  .scene.show { opacity: 1; }
+  .matrix { position: absolute; left: 110px; right: 110px; top: 296px; display: grid; grid-template-columns: 118px repeat(4, 1fr); column-gap: 30px; color: var(--ink); }
+  .matrix .mhead { font-family: var(--serif); font-weight: 800; font-size: 25px; line-height: 1.12; padding-bottom: 16px; transition: opacity .45s ease, color .45s ease; }
+  .matrix .mlabel { font-size: 12.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); text-align: right; padding: 20px 0 0; border-top: 1px solid rgba(31,42,74,0.16); }
+  .matrix .mcell { font-size: 19px; line-height: 1.42; padding: 17px 0 24px; border-top: 1px solid rgba(31,42,74,0.16); transition: opacity .45s ease; }
+  .matrix .mcell.outcome { font-weight: 700; }
+  .matrix .mspacer { border: 0; }
+  #sq-stake.fr .dim { opacity: 0.15; }
+  #sq-stake.fr .mhead.keep { color: var(--accent); }
+  .srcline { position: absolute; left: 110px; bottom: 40px; font-size: 12.5px; color: var(--muted); }
+  .scene .framewrap { position: absolute; background: #fff; padding: 12px; box-shadow: 0 24px 60px -18px rgba(0,0,0,0.6); }
+  .scene img { display: block; }
+  .bub, #lbl-act, #lbl-rea { transition: opacity .4s ease; }
+  .fire-title { position: absolute; left: 0; right: 0; top: 150px; text-align: center; color: var(--cream); }
+  .fire-title .big { font-family: var(--serif); font-weight: 800; font-size: 84px; }
+
+  /* §0 title card — quiet and typographic; on screen while the Zoom room fills */
+  #sq-title { background: #0A0F20; }
+  #sq-title .titlecard { position: absolute; left: 0; right: 0; top: 258px; text-align: center; color: var(--cream); }
+  #sq-title .kick { font-size: 17px; letter-spacing: .26em; color: var(--accent-bright); }
+  #sq-title .big { font-family: var(--serif); font-weight: 800; font-size: 74px; margin-top: 30px; }
+  #sq-title .sub { font-size: 23px; margin-top: 20px; color: rgba(245,239,226,0.82); }
+  #sq-title .team { position: absolute; left: 0; right: 0; bottom: 72px; text-align: center; font-size: 18px; letter-spacing: .06em; color: rgba(245,239,226,0.6); }
+
+  /* §2 print beat ground — licensed Chinese movable type under the Gutenberg page */
+  #print-ground { position: absolute; inset: 0; width: 1600px; height: 900px; object-fit: cover; opacity: 0; transition: opacity .6s ease; }
+  #print-ground.show { opacity: 1; }
+
+  /* performance mode (press p): chrome gone, stage alone for the screen share */
+  body.perform header, body.perform #gprog, body.perform #notes, body.perform #rot { display: none; }
+
+  .robotcard { position: absolute; left: 150px; top: 190px; width: 470px; background: #EFEDE8; border-radius: 14px; padding: 28px; box-shadow: 0 30px 80px -20px rgba(0,0,0,0.65); }
+  .robotcard img { width: 100%; display: block; }
+
+  /* notes strip */
+  #notes { width: 100%; max-width: 1280px; padding: 10px 24px 14px; text-align: center; min-height: 64px; }
+  #notes .say { font-size: 15px; color: var(--ink); }
+  #notes .say::before { content: "Say · "; color: var(--accent); font-weight: 700; }
+  #notes .build { font-size: 12.5px; color: var(--muted); margin-top: 3px; }
+  #notes .build::before { content: "Build · "; font-weight: 700; }
+
+  /* phone review: header was built for a wide screen */
+  @media (max-width: 900px) {
+    header { flex-wrap: wrap; justify-content: center; gap: 6px; padding: 8px 10px 4px; }
+    .brand { width: 100%; justify-content: center; }
+    .brand .tag, .hint { display: none; }
+    .secnav { order: 3; width: 100%; justify-content: center; }
+    .seclabel { min-width: 0; }
+    .seclabel .nm { font-size: 14px; }
+    .hud-right { order: 4; }
+    #notes { padding: 8px 14px 12px; min-height: 0; }
+    #notes .say { font-size: 14px; line-height: 1.35; }
+    #notes .build { font-size: 11.5px; line-height: 1.3; }
+  }
+  @media (max-width: 900px) and (orientation: portrait) {
+    #rot { display: block; }
+  }
+  #rot { display: none; position: fixed; left: 0; right: 0; bottom: 6px; text-align: center; font-size: 11.5px; color: var(--muted); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lift, .veil, .rise, .anno, .seq, .step, .frame, .era, svg.arrows path { transition-duration: 0.01s !important; transition-delay: 0s !important; }
+  }
+</style>
+
+<header>
+  <div class="brand">
+    <span class="word">Reader Discovery</span>
+    <span class="tag">full previs · 12 min</span>
+  </div>
+  <div class="secnav">
+    <button class="secbtn" id="prevsec" aria-label="Previous section">‹</button>
+    <div class="seclabel"><div class="nm" id="secnm">—</div><div class="meta" id="secmeta">—</div></div>
+    <button class="secbtn" id="nextsec" aria-label="Next section">›</button>
+  </div>
+  <div class="hud-right">
+    <div class="dots" aria-label="Beats in section"></div>
+    <span class="hint">click / <kbd>→</kbd> next · <kbd>←</kbd> back · <kbd>[</kbd><kbd>]</kbd> section · <kbd>p</kbd> present</span>
+  </div>
+</header>
+<div id="gprog"><i></i></div>
+
+<div id="stagewrap">
+  <div id="scaler">
+    <div id="stage" aria-live="polite">
+      <!-- §1 wide (title needs the treeline); §2 zoomed 1.45x so the fire reads at scale
+           against the figures. The alpha clip is retired — nothing keys out any more. -->
+      <video id="scenevid" class="scene-fire" src="campfire-scene.mp4" muted loop playsinline preload="auto"></video>
+      <video id="campvid" class="scene-fire" src="campfire-zoom.mp4" muted loop playsinline preload="auto"></video>
+
+      <!-- §1 COLD OPEN -->
+      <!-- §0 title — static; the show starts when the fire fades in -->
+      <section class="seq" id="sq-title">
+        <div class="titlecard">
+          <div class="kick">CASE STUDY · UW COMM LEAD × AMAZON KDP</div>
+          <div class="big">The Lived Experience Collection</div>
+          <div class="sub">Reach the person who lived it — a discovery surface for debut KDP authors</div>
+        </div>
+        <div class="team">Reader Discovery · Jakob · Pablo · Jalen · Wanting</div>
+      </section>
+
+      <section class="seq" id="sq-fire">
+        <div class="fire-title">
+          <div class="big step" id="fire-t">300,000 years ago</div>
+        </div>
+      </section>
+
+      <!-- §2 HISTORY -->
+      <section class="seq" id="sq-hist">
+        <!-- composed campfire scene: licensed stick figures (AdobeStock 2015814173) recolored cream, real fire where the icon was -->
+        <div class="scene" id="camp">
+          <img class="stick" src="fig1.webp" style="left:160px; top:518px; height:282px;" alt="">
+          <img class="stick flip" src="fig2.webp" style="left:346px; top:485px; height:315px;" alt="">
+          <img class="stick" src="fig4.webp" style="left:1078px; top:499px; height:301px;" alt="">
+          <img class="stick" src="fig1.webp" style="left:1353px; top:518px; height:282px;" alt="">
+        </div>
+        <svg class="scene" id="bubs" viewBox="0 0 1600 900" aria-hidden="true">
+          <g fill="#E9BC4F">
+            <!-- one bubble centred over each head; tails drop to the new figure tops -->
+            <g class="bub" id="bub1" opacity="0"><ellipse cx="434" cy="400" rx="80" ry="48"/><path d="M 418 443 L 430 481 L 452 441 Z"/></g>
+            <g class="bub" id="bub2" opacity="0"><ellipse cx="223" cy="430" rx="70" ry="42"/><path d="M 209 467 L 214 508 L 240 464 Z"/></g>
+            <g class="bub" id="bub3" opacity="0"><ellipse cx="1186" cy="412" rx="70" ry="42"/><path d="M 1172 449 L 1176 490 L 1202 446 Z"/></g>
+            <g class="bub" id="bub4" opacity="0"><ellipse cx="1416" cy="430" rx="70" ry="42"/><path d="M 1402 467 L 1406 508 L 1432 464 Z"/></g>
+          </g>
+        </svg>
+        <img id="print-ground" src="chinese-type.webp" alt="Chinese movable type blocks standing on a bed of set type">
+        <!-- the story without its teller: the last bubble hardens into clay, then evolves -->
+        <div class="evob" id="ev-clay"><img src="clay.webp" style="height:180px;" alt="Proto-cuneiform tablet, Sumer"></div>
+        <div class="evob page" id="ev-pap"><img src="w2.webp" style="height:190px;" alt="Papyrus of Ani, Egypt"></div>
+        <div class="evob" id="ev-bone"><img src="bone.webp" style="height:300px;" alt="Shang oracle bone, British Library Or. 1595"></div>
+        <div class="evob page" id="ev-codex"><img src="w4.webp" style="height:290px;" alt="Dresden Codex page, Maya"></div>
+        <div class="evob page" id="ev-print"><img src="gut.webp" style="height:420px;" alt="Gutenberg Bible, Genesis"></div>
+        <div class="frame" id="f10"><img src="e10.webp" alt="School of Athens"></div>
+        <div class="frame" id="f11"><img src="e11.webp" alt="Shakespeare reads to a crowd"></div>
+        <div class="frame" id="f13"><img src="e13.webp" alt="A Twitch stream with live chat"></div>
+        <div class="scene" id="abe-scene" style="background:#0F2610;">
+          <!-- mp4 here, not the GIF: same 8s loop at 1/6 the bytes, which keeps the inlined
+               build under the artifact size ceiling. The Slides pack still ships abe.gif. -->
+          <div class="framewrap" style="left:348px; top:88px;"><video src="abe.mp4" style="width:880px; display:block;" autoplay muted loop playsinline preload="auto" aria-label="Grandpa Simpson telling the lemon tree story"></video></div>
+        </div>
+      </section>
+
+      <!-- §3 THE QUESTION -->
+      <section class="seq" id="sq-q">
+        <div class="typo">
+          <div class="kicker">Round one · the question Rachel asked us</div>
+          <div class="huge">Why would a reader pick up a book by a debut KDP author?</div>
+          <div class="lines"><div class="line step show" style="color:var(--muted)">What makes that appealing — and to whom?</div></div>
+        </div>
+      </section>
+
+      <!-- §4 THE SHELF -->
+      <section class="seq" id="seq-a">
+        <div class="base" style="left:202px; top:20px; width:1197px; height:860px;">
+          <img src="shelf.webp" style="width:1197px; left:0; top:0;" alt="Lived Experience collection page">
+        </div>
+        <div class="veil"></div>
+        <div class="origin" style="left:379px; top:699px; width:204px; height:162px;"></div>
+        <div class="col" style="top:200px;">
+          <div class="kicker rise">In the prototype · the surface</div>
+          <h1 class="rise" style="font-size:84px;">The shelf</h1>
+          <p class="copy rise">Every card opens with the author&rsquo;s own words — membership is attestation plus metadata, so it scales with no editorial headcount.</p>
+          <p class="ask rise" id="a-ask" style="opacity:0">Ask 1 — would this earn placement?</p>
+        </div>
+        <div class="lift" id="a-lift" style="left:760px; top:140px; width:740px; height:588px;">
+          <img src="shelf.webp" style="width:4337px; left:-642px; top:-2461px;" alt="">
+        </div>
+        <svg class="arrows" viewBox="0 0 1600 900" aria-hidden="true">
+          <path id="a-arr1" d="M 452 600 C 600 622, 690 556, 756 492"/>
+          <polygon id="a-arr1h" class="head" points="768,480 758.5,501.9 745.9,488.9"/>
+          <path id="a-arr2" d="M 492 140 C 620 150, 720 220, 758 292"/>
+          <polygon id="a-arr2h" class="head" points="770,308 751.8,292.8 767.6,284.4"/>
+        </svg>
+        <div class="anno" id="a-anno1" style="left:140px; top:565px;">
+          <span class="chip"><b>Her own words.</b> The statement is the gate — an attestation, not an Amazon certification.</span>
+        </div>
+        <div class="anno" id="a-anno2" style="left:140px; top:88px;">
+          <span class="chip"><b>Observed, not awarded.</b> The badge only says she opted in to reader questions.</span>
+        </div>
+      </section>
+
+      <!-- §5 WHY NOT REVIEWS -->
+      <section class="seq" id="sq-50">
+        <div style="position:absolute; left:110px; top:100px;">
+          <div class="kicker">Why not just reviews?</div>
+        </div>
+        <div style="position:absolute; left:110px; top:168px;">
+          <div class="giant accent step" id="s50-num" style="font-family:var(--serif); font-weight:800; font-size:250px; line-height:1;">$50</div>
+          <div class="step" id="s50-l1" style="font-size:24px; line-height:1.4; max-width:33ch; margin-top:8px;">spent in the past year <b style="font-size:26px;">before a customer may write any review.</b></div>
+          <div class="step" id="s50-src" style="margin-top:12px; font-size:14px; color:var(--muted);">UK £40 · DE €50 · CA C$50 — Amazon Community Guidelines</div>
+          <div class="step" id="s50-l2" style="font-size:24px; line-height:1.4; max-width:33ch; margin-top:28px;">The debut&rsquo;s first readers are the <b>least likely to clear it</b>.</div>
+          <div class="step" id="s50-l3" style="font-size:27px; font-weight:700; margin-top:26px;">Reviews can&rsquo;t be the debut&rsquo;s trust signal.</div>
+          <div class="step" id="s50-ask" style="margin-top:16px; font-size:20px; font-weight:700; color:var(--accent);">For Amazon — does Kindle Unlimited spend count?</div>
+        </div>
+        <svg class="step" id="s50-viz" viewBox="0 0 480 310" style="position:absolute; right:90px; top:210px; width:580px;" aria-hidden="true">
+          <g fill="#CDC3AE">
+            <g transform="translate(60,60)"><polygon points="0,-34 10,-10.5 34,-10.5 14.6,5.2 22.2,29.5 0,15 -22.2,29.5 -14.6,5.2 -34,-10.5 -10,-10.5"/></g>
+            <g transform="translate(150,60)"><polygon points="0,-34 10,-10.5 34,-10.5 14.6,5.2 22.2,29.5 0,15 -22.2,29.5 -14.6,5.2 -34,-10.5 -10,-10.5"/></g>
+            <g transform="translate(240,60)"><polygon points="0,-34 10,-10.5 34,-10.5 14.6,5.2 22.2,29.5 0,15 -22.2,29.5 -14.6,5.2 -34,-10.5 -10,-10.5"/></g>
+            <g transform="translate(330,60)"><polygon points="0,-34 10,-10.5 34,-10.5 14.6,5.2 22.2,29.5 0,15 -22.2,29.5 -14.6,5.2 -34,-10.5 -10,-10.5"/></g>
+            <g transform="translate(420,60)"><polygon points="0,-34 10,-10.5 34,-10.5 14.6,5.2 22.2,29.5 0,15 -22.2,29.5 -14.6,5.2 -34,-10.5 -10,-10.5"/></g>
+          </g>
+          <path d="M 205 175 v -28 a 35 35 0 0 1 70 0 v 28" fill="none" stroke="#1F2A4A" stroke-width="15"/>
+          <rect x="182" y="172" width="116" height="92" rx="14" fill="#1F2A4A"/>
+          <circle cx="240" cy="210" r="12" fill="#F5EFE2"/>
+          <rect x="234" y="214" width="12" height="24" rx="6" fill="#F5EFE2"/>
+        </svg>
+      </section>
+
+      <!-- §6 OUR ANSWER -->
+      <section class="seq" id="sq-ans">
+        <div id="ans-stack" class="typo" style="transition: opacity .45s ease;">
+          <div class="kicker">Our answer</div>
+          <div id="al1" class="step" style="font-family:var(--serif); font-size:42px;">A collection of</div>
+          <div id="al2" class="step" style="font-family:var(--serif); font-weight:800; font-size:104px; line-height:1.04;">first-person books</div>
+          <div id="al3" class="step" style="font-family:var(--serif); font-weight:800; font-size:46px; line-height:1.15; margin-top:30px; max-width:24ch;">by authors who never saw themselves as writers</div>
+          <div id="al4" class="step" style="font-size:29px; line-height:1.45; margin-top:46px; max-width:44ch;">— where the reason to pick one up is that <b class="accent">you can reach the person who lived it</b>.</div>
+        </div>
+        <div id="ext" style="position:absolute; inset:0; opacity:0; transition:opacity .5s ease;">
+          <div class="typo" style="width:900px; padding:0 0 0 110px;">
+            <div class="kicker">Our answer &middot; why it holds</div>
+            <div class="huge" style="font-size:62px;">Extraordinary because it is real.</div>
+            <div class="negrow">
+              <div class="neg step" id="an1">
+                <svg width="40" height="40" viewBox="0 0 40 40"><rect x="8" y="8" width="24" height="24" rx="5" fill="#8C8270"/><rect x="15" y="15" width="10" height="10" rx="2" fill="#F5EFE2"/><rect x="12" y="1" width="4" height="6" rx="2" fill="#8C8270"/><rect x="24" y="1" width="4" height="6" rx="2" fill="#8C8270"/><rect x="12" y="33" width="4" height="6" rx="2" fill="#8C8270"/><rect x="24" y="33" width="4" height="6" rx="2" fill="#8C8270"/><rect x="1" y="12" width="6" height="4" rx="2" fill="#8C8270"/><rect x="1" y="24" width="6" height="4" rx="2" fill="#8C8270"/><rect x="33" y="12" width="6" height="4" rx="2" fill="#8C8270"/><rect x="33" y="24" width="6" height="4" rx="2" fill="#8C8270"/></svg>
+                <div class="t">An AI-written book <b>has no one behind it</b>.</div>
+              </div>
+              <div class="neg step" id="an2">
+                <svg width="40" height="40" viewBox="0 0 40 40"><polygon points="20,3 24.5,14.5 37,14.5 27,22.5 30.8,35 20,27.5 9.2,35 13,22.5 3,14.5 15.5,14.5" fill="#8C8270"/></svg>
+                <div class="t">A celebrity memoirist <b>won&rsquo;t answer you</b>.</div>
+              </div>
+              <div class="neg pos step" id="an3">
+                <svg width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="12" r="7" fill="#C0662A"/><path d="M 6 36 C 6 26 12 22 20 22 C 28 22 34 26 34 36 Z" fill="#C0662A"/></svg>
+                <div class="t">This author <b>will</b>.</div>
+              </div>
+            </div>
+          </div>
+          <div class="shot" style="left:1030px; top:90px; width:400px; height:730px;">
+            <img src="answered.webp" style="width:2462px; left:-372px; top:-1151px;" alt="Rosa&rsquo;s published answer">
+          </div>
+        </div>
+      </section>
+
+      <!-- §7 THE GATE -->
+      <section class="seq" id="seq-b">
+        <div class="base" style="left:290px; top:20px; width:1019px; height:860px;">
+          <img src="book.webp" style="width:1019px; left:0; top:0;" alt="Book page with author attestation">
+        </div>
+        <div class="veil"></div>
+        <div class="origin" style="left:621px; top:195px; width:357px; height:147px;"></div>
+        <div class="col" style="width:460px;">
+          <div class="kicker rise">In the prototype · the gate</div>
+          <h1 class="rise" style="font-size:72px;">Author attestation</h1>
+          <p class="copy rise">The gate is the author&rsquo;s own statement. No badge, no filter — no store can certify a life. Her name on her own words is the promise.</p>
+          <p class="ask rise" id="b-ask" style="opacity:0">Ask 2 — what should happen when an attestation is false?</p>
+        </div>
+        <div class="lift" id="b-lift" style="left:560px; top:160px; width:980px; height:402px;">
+          <img src="book.webp" style="width:2800px; left:-910px; top:-479px;" alt="">
+        </div>
+        <div class="ring" id="b-ring" style="left:920px; top:414px; width:400px; height:50px;"></div>
+        <svg class="arrows" viewBox="0 0 1600 900" aria-hidden="true">
+          <path id="b-arr1" d="M 470 662 C 660 700, 820 600, 905 470"/>
+          <polygon id="b-arr1h" class="head" points="910,452 890,462 908,476"/>
+        </svg>
+        <div class="anno" id="b-anno1" style="left:140px; top:630px;">
+          <span class="chip"><b>&ldquo;What if it&rsquo;s false&rdquo;</b> is answered one line away — existing report tools, existing policies, no new machinery.</span>
+        </div>
+      </section>
+
+      <!-- §8 ASK THE AUTHOR -->
+      <section class="seq" id="sq-ask">
+        <div class="base" style="left:343px; top:20px; width:914px; height:860px;">
+          <img src="ask.webp" style="width:914px; left:0; top:0;" alt="Book page with the ask panel open">
+        </div>
+        <div class="veil"></div>
+        <div class="origin" style="left:481px; top:448px; width:149px; height:369px;"></div>
+        <div class="col" style="width:560px; top:170px;">
+          <div class="kicker rise">In the prototype · the hook</div>
+          <h1 class="rise" style="font-size:64px;">Finished the book? Ask the author</h1>
+          <p class="copy rise">Rosa sees each question — answers it, or deletes it. Nothing appears anywhere unless she publishes it. No private messaging at any tier, by design.</p>
+          <p class="ask rise" id="k-ask" style="opacity:0">Ask 3 — what breaks first at scale?</p>
+        </div>
+        <div class="lift" id="k-lift" style="left:1090px; top:100px; width:280px; height:696px;">
+          <img src="ask.webp" style="width:1723px; left:-261px; top:-807px;" alt="">
+        </div>
+      </section>
+
+      <!-- §9 ROSA'S SIDE -->
+      <section class="seq" id="sq-rosa">
+        <div class="base" style="left:199px; top:20px; width:1202px; height:860px;">
+          <img src="dash.webp" style="width:1202px; left:0; top:0;" alt="Rosa's author dashboard">
+        </div>
+        <div class="veil"></div>
+        <div class="col" style="width:500px; top:190px;">
+          <div class="kicker rise">In the prototype · the author&rsquo;s side</div>
+          <h1 class="rise" style="font-size:60px;">Nothing is public until Rosa publishes it</h1>
+          <p class="copy rise">Answer, publish, or decline — declining deletes. She is never required to answer, and Amazon does not chase her.</p>
+        </div>
+        <div class="lift" id="r-lift" style="left:660px; top:90px; width:860px; height:721px;">
+          <img src="dash.webp" style="width:2082px; left:-315px; top:-386px;" alt="">
+        </div>
+      </section>
+
+      <!-- §10 THE LOOP -->
+      <section class="seq" id="sq-loop">
+        <div class="base" style="left:290px; top:20px; width:1019px; height:860px;">
+          <img src="answered.webp" style="width:1019px; left:0; top:0;" alt="Rosa answered your question">
+        </div>
+        <div class="veil"></div>
+        <div class="origin" style="left:444px; top:497px; width:166px; height:322px;"></div>
+        <div class="col" style="width:560px; top:190px;">
+          <div class="kicker rise">The loop closes</div>
+          <h1 class="rise" style="font-size:64px;">The person who lived it, answering</h1>
+          <p class="copy rise">Her answer publishes with the question to her author page — where every future reader can see the person behind the book. Goodreads proved the moderation model; our claim is placement, not novelty.</p>
+        </div>
+        <div class="lift" id="l-lift" style="left:1080px; top:90px; width:360px; height:700px;">
+          <img src="answered.webp" style="width:2213px; left:-335px; top:-1035px;" alt="">
+        </div>
+      </section>
+
+      <!-- §11 THE DATA -->
+      <section class="seq" id="seq-c">
+        <div class="base bleed" id="c-b24"><img src="bleed24.webp" alt="Slide: our own data killed our first hypothesis"></div>
+        <div class="base bleed" id="c-b25" style="opacity:0; transition:opacity .4s ease;"><img src="b25.webp" alt="Slide: the missing signal is quality"></div>
+        <div class="base bleed" id="c-b26" style="opacity:0; transition:opacity .4s ease;"><img src="b26.webp" alt="Slide: nobody rated human authorship below a 3"></div>
+        <div class="veil"></div>
+        <div class="datahead anno" id="c-head1">
+          <h2>Forced to choose, 16 took the memoir — but 19 refused the choice.</h2>
+          <div class="sub">n = 42 · Of the 19, 12 said the subject decides — so the shelf merchandises by subject, not by &ldquo;debut author.&rdquo;</div>
+        </div>
+        <div class="datahead anno" id="c-head2">
+          <h2>Under 55, reaching the author reads as a reason: 12 of 23 rated it 4–5. Among 55+, 1 of 15.</h2>
+          <div class="sub">Convenience sample — age and channel are confounded. We say it before Rachel asks.</div>
+        </div>
+        <div class="datahead anno" id="c-head3">
+          <h2>The hesitation that beat everything: &ldquo;no way to tell if it&rsquo;s any good.&rdquo;</h2>
+          <div class="sub">27 of 42 · 18 distrust the reviews that exist · price moved 3 — the receipt for keeping discounts retired.</div>
+        </div>
+        <div class="origin off" id="c-org1" style="left:18px; top:456px; width:824px; height:148px;"></div>
+        <div class="origin off" id="c-org2" style="left:842px; top:406px; width:729px; height:317px;"></div>
+        <div class="origin off" id="c-org3" style="left:73px; top:279px; width:1412px; height:465px;"></div>
+        <div class="lift" id="c-lift1" style="left:180px; top:350px; width:1240px; height:252px;">
+          <img src="slide24.webp" style="width:2543px; left:-95px; top:-686px;" alt="">
+        </div>
+        <div class="lift" id="c-lift2" style="left:225px; top:290px; width:1150px; height:500px;">
+          <img src="slide24.webp" style="width:2666px; left:-1400px; top:-640px;" alt="">
+        </div>
+        <div class="lift" id="c-lift3" style="left:50px; top:240px; width:1500px; height:494px;">
+          <img src="chart25.webp" style="width:1500px; left:0; top:0;" alt="">
+        </div>
+      </section>
+
+      <!-- §12 ARC -->
+      <section class="seq" id="sq-arc">
+        <div class="robotcard step" id="arc-img"><img src="robot.webp" alt="An ARC machine looming over a rubber duck"></div>
+        <div class="typo" style="left:680px; right:0; position:absolute; padding:0 100px 0 0;">
+          <div class="kicker step" id="arc-k">Trust signal · Jalen&rsquo;s beat</div>
+          <div class="huge step" id="arc-t" style="font-size:76px;">Let&rsquo;s talk ARC.</div>
+          <div class="lines">
+            <div class="line step" id="arc-l0" style="color:rgba(245,239,226,.75)">Advance Reader Copies — a debut&rsquo;s first audience.</div>
+            <div class="line step" id="arc-l1">The earliest trust signals — <b>blocked by the $50 rule</b>.</div>
+            <div class="line step" id="arc-l2">Not an ARC program — review-for-copy breaks the guidelines.</div>
+            <div class="line step" id="arc-lv"><b>Vine</b> already does it for products: invited, free, disclosed, inside policy.</div>
+            <div class="line step" id="arc-lm">ARC engagement as <b>metadata</b> — signal, never reviews.</div>
+            <div class="line step accent" id="arc-l3" style="font-weight:700;">Ask 4 — Vine seeds early reviews for products. Why not books?</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- §13 PRIOR ART — you already own the parts -->
+      <section class="seq" id="sq-prior">
+        <div class="pt-head">
+          <div class="huge step" id="pt-t">You already own the parts.</div>
+          <div class="pt-sub step" id="pt-sub" style="transition-delay:.34s;">Assembled, not invented.</div>
+        </div>
+        <div class="laylab step" id="lay1" style="top:300px; transition-delay:0s;"><b>Surface</b><span>The shelf</span></div>
+        <div class="laylab step" id="lay2" style="top:432px; transition-delay:.09s;"><b>Gate</b><span>The attestation</span></div>
+        <div class="laylab step" id="lay3" style="top:564px; transition-delay:.18s;"><b>Hook</b><span>Author access</span></div>
+        <div class="laylab step" id="lay4" style="top:696px; transition-delay:.27s;"><b>Order</b><span>Rotation</span></div>
+        <div class="pcard step" id="p1" style="transition-delay:0s;"><div class="src">Amazon · Editorial</div><div class="nm">First Reads</div><div class="pf">A curated shelf sells books.</div></div>
+        <div class="pcard step" id="p2" style="transition-delay:.09s;"><div class="src">Amazon · KDP</div><div class="nm">The publish flow</div><div class="pf">Authors already answer a question at publish — the AI disclosure.</div></div>
+        <div class="pcard step" id="p3" style="transition-delay:.18s;"><div class="src">Amazon · Goodreads</div><div class="nm">Ask the Author</div><div class="pf">Readers ask. Authors answer.</div></div>
+        <div class="pcard step ext" id="p4" style="transition-delay:.27s;"><div class="src">The one outside part</div><div class="nm">Royal Road</div><div class="pf">Rotation keeps a shelf fresh.</div></div>
+      </section>
+
+      <!-- §14 STAKEHOLDERS -->
+      <section class="seq" id="sq-stake">
+        <div class="typo" style="justify-content: flex-start; padding: 90px 110px 0;">
+          <div class="kicker">Stakeholder value proposition</div>
+          <div class="huge" style="font-size: 44px; max-width: none;">Who benefits from the Lived Experience Collection?</div>
+        </div>
+        <div class="ellrow">
+          <div class="ell">Readers</div>
+          <div class="ell">Multilingual Authors</div>
+          <div class="ell">First-Time Indie Authors</div>
+          <div class="ell">KDP</div>
+        </div>
+        <div class="stdetail" id="std1">
+          <div><div class="lab">Pain</div><div class="val">AI slop &amp; fake reviews</div></div>
+          <div><div class="lab">Solution</div><div class="val">Curated authentic stories</div></div>
+          <div><div class="lab">Outcome</div><div class="val oc">High completion &amp; trust</div></div>
+        </div>
+        <div class="stdetail" id="std2">
+          <div><div class="lab">Pain</div><div class="val">AI translation flagged as spam</div></div>
+          <div><div class="lab">Solution</div><div class="val">Contextual author statement</div></div>
+          <div><div class="lab">Outcome</div><div class="val oc">Unlocks English market</div></div>
+        </div>
+        <div class="stdetail" id="std3">
+          <div><div class="lab">Pain</div><div class="val">Locked out by expensive PPC ads</div></div>
+          <div><div class="lab">Solution</div><div class="val">Free organic collection placement</div></div>
+          <div><div class="lab">Outcome</div><div class="val oc">Discovery without ad budget</div></div>
+        </div>
+        <div class="stdetail" id="std4">
+          <div><div class="lab">Pain</div><div class="val">Brand risks &amp; KU subscriber churn</div></div>
+          <div><div class="lab">Solution</div><div class="val">Self-attestation &amp; community reporting</div></div>
+          <div><div class="lab">Outcome</div><div class="val oc">Reduced platform liability</div></div>
+        </div>
+        <div class="srcline">Sources: BookNet Canada (2025) · PNAS Nexus — Altay, Gilardi, Wittenberg (2024) · Amazon KDP Content Guidelines (2023) · YouBooks (2026)</div>
+      </section>
+
+      <!-- §15 EMPOWERING -->
+      <section class="seq" id="sq-emp">
+        <div class="base bleed"><img src="b33.webp" alt="Accessible, inclusive, equitable"></div>
+        <img class="gifover" src="i18n.gif" style="left:249px; top:173px; width:1102px; height:620px;" alt="Prototype flipping between six languages">
+      </section>
+
+      <!-- §16 CLOSING -->
+      <section class="seq" id="sq-close">
+        <div class="base bleed" id="close-qs"><img src="b34.webp" alt="Five questions for Amazon"></div>
+        <div class="typo centered" id="close-ty" style="opacity:0; transition:opacity .5s ease;">
+          <div class="huge">Thank you.</div>
+          <div class="lines" style="align-items:center;">
+            <div class="line accent step show" style="font-weight:700;">jakobhoward.github.io/kdp-lived-experience-concept</div>
+            <div class="step show" style="margin-top:26px; background:var(--cream); padding:13px 13px 9px; border-radius:14px;"><img src="qr.png" style="width:150px; display:block;" alt="QR code for the live prototype"></div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<div id="rot">rotate to landscape for a bigger stage</div>
+<div id="notes"><div class="say" id="n-say"></div><div class="build" id="n-build"></div></div>
+
+<script>
+(function () {
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const stage = $('stage');
+  const sceneVid = $('scenevid');
+  const campVid = $('campvid');
+
+  const DOCK = {
+    a: 'translate(-380.7px, 559.2px) scale(0.276)',
+    b: 'translate(61.3px, 34.5px) scale(0.364)',
+    k: 'translate(-608.7px, 348px) scale(0.5307)',
+    r: 'translate(-279.2px, 153.1px) scale(0.5773)',
+    l: 'translate(-635.8px, 406.5px) scale(0.46)',
+    c1: 'translate(-161.8px, 106.3px) scale(0.6644)',
+    c2: 'translate(617.2px, 115.7px) scale(0.6337)',
+    c3: 'translate(22.7px, 39.1px) scale(0.9415)'
+  };
+
+  /* Sections. Each: beats = [{say, build, go}]; reset() returns section to beat-0 state. */
+  const SEC = [];
+
+  function sec(id, name, presenter, budget, stage_, seqId, beats, reset) {
+    SEC.push({ id, name, presenter, budget, stage: stage_, el: $(seqId), beats, reset });
+  }
+
+  const show = (id, on = true) => $(id).classList.toggle('show', on);
+
+  /* §0 title — static; up while the Zoom room fills */
+  sec('title', 'Title', 'Jakob', '0:00', 'dark', 'sq-title', [
+    { say: '(pre-show — leave this up while people join; the show starts on the next beat)',
+      build: 'Proper title slide, restaged on the navy: case-study kicker, collection name, one-line frame, team. Deliberately static — the fire is held back so the cold open still lands.',
+      go() {} }
+  ], () => {});
+
+  /* §1 cold open */
+  sec('fire', 'Cold open', 'Jalen', '0:15', 'dark', 'sq-fire', [
+    { say: '“For three hundred thousand years, a story traveled only as far as its teller.”',
+      build: 'Licensed campfire scene (AdobeStock 447105443, ProRes master) full-bleed — a real fire in a dark forest, seamless 8s loop. Only the 300k line sits in the treeline now; the one-channel idea is carried verbally (wording is Jalen&rsquo;s call — the slide commits only to the number). 300k = the age of Homo sapiens (Jebel Irhoud), safe under fact-check; the old 400k figure predates our species.',
+      go() { show('fire-t'); } }
+  ], () => { show('fire-t', false); });
+
+  /* §2 history — the fire continues; figures inverted to cream around it */
+  const FR = ['f10', 'f11', 'f13'];
+  const SCENES = { abe: 'abe-scene' };
+  const EVO = ['ev-clay', 'ev-pap', 'ev-bone', 'ev-codex', 'ev-print'];
+  function sceneOn(on) {
+    $('camp').classList.toggle('show', on);
+    $('bubs').classList.toggle('show', on);
+  }
+  /* the evolution: ghosted circle, one object above the fire; lone = circle fully gone */
+  let evoTimers = [];
+  const EVO_HOLD = 1400;  /* ms between writing examples — tune to Jalen's pace */
+  const evoStop = () => { evoTimers.forEach(clearTimeout); evoTimers = []; };
+  function evoStage(lone) {
+    histShow(null); sceneOn(true); bubs(0);
+    $('sq-hist').classList.add('leave');
+    $('sq-hist').classList.toggle('lone', !!lone);
+  }
+  function evo(id, lone) { evoStage(lone); EVO.forEach(e => show(e, e === id)); }
+  /* one beat: each object rises into the row and takes the circle down a step with it,
+     so the beat ends on the four objects alone. No clicks. */
+  const CIRCLE_FADE = [0.62, 0.36, 0.15, 0];
+  /* the whole photographed world recedes to navy as the artifacts land — the fire is
+     baked into the footage, so the scene fades rather than the flame alone */
+  const SCENE_FADE = [0.78, 0.46, 0.2, 0];
+  const camplings = () => document.querySelectorAll('#camp .stick:not(.flip)');
+  function evoSeq(list) {
+    evoStage(false);
+    let i = 0;
+    (function step() {
+      show(list[i]);
+      camplings().forEach(el => { el.style.opacity = CIRCLE_FADE[i]; });
+      campVid.style.opacity = SCENE_FADE[i];
+      if (++i < list.length) evoTimers.push(setTimeout(step, EVO_HOLD));
+    })();
+  }
+  function bubs(n) {
+    ['bub1', 'bub2', 'bub3', 'bub4'].forEach((b, i) => { $(b).style.opacity = i < n ? 1 : 0; });
+  }
+  function histShow(key) {
+    sceneOn(false); bubs(0);
+    evoStop();
+    $('print-ground').classList.remove('show');
+    $('sq-hist').classList.remove('leave', 'lone');
+    document.querySelectorAll('#camp .stick').forEach(el => { el.style.opacity = ''; });
+    campVid.style.opacity = '';
+    EVO.forEach(e => $(e).classList.remove('show'));
+    FR.forEach(fr => show(fr, fr === key));
+    Object.entries(SCENES).forEach(([k, id]) => $(id).classList.toggle('show', k === key));
+  }
+  sec('hist', 'How stories travel', 'Jalen', '1:20', 'cream', 'sq-hist', [
+    { say: '“You gathered around the person who lived it.”', dark: true, build: 'Licensed campfire scene, zoomed 1.45x so the flame reads at scale, with the cream figures held to 80% brightness so the real fire stays brightest. No captions anywhere in this run — the say-lines carry it. In Slides: one still per beat, bubbles on Appear.', go() { histShow(null); sceneOn(true); bubs(0); } },
+    { say: '“Someone told —”', dark: true, build: 'One bubble — the teller’s. Action/Reaction labels cut; the bubbles say it.', go() { histShow(null); sceneOn(true); bubs(1); } },
+    { say: '“— and everyone answered. Teller, audience, response. That loop is old.”', dark: true, build: 'Three more bubbles. Fire still burning.', go() { histShow(null); sceneOn(true); bubs(4); } },
+    { say: '“The ancients scaled the circle.”', build: 'Say “the ancients” — the painting is Greek philosophers, not Romans.', go() { histShow('f10'); } },
+    { say: '“The circle became an audience.”', build: 'Shakespeare beat, moved before the writing evolution — all the live-speech beats now sit together.', go() { histShow('f11'); } },
+    { say: '“Then stories learned to travel without their teller — pressed into clay in Sumer &middot; inked onto papyrus in Egypt &middot; carved into oracle bones in China &middot; painted into codices by the Maya.” (one sentence, four beats — let each object land under its clause)', dark: true, build: 'ONE slide, no clicks. Each object rises into the row (~1.4s apart, ≈4s to fill) and takes the circle down a step with it — figures and fire dim on every entry and hit zero as the codex lands, so the beat ends on the four objects alone. Real artifacts: MET tablet, Papyrus of Ani, British Library Or. 1595, Dresden Codex. In Slides: four images each Appear on “After previous” with a 1.4s delay, and give the figure/fire group a Fade Out on the same chain. Tune EVO_HOLD to Jalen&rsquo;s pace.', go() { evoSeq(['ev-clay', 'ev-pap', 'ev-bone', 'ev-codex']); } },
+    { say: '“Movable type was born in China, four centuries before Gutenberg — then the press industrialized it: one teller, a million readers. And for the first time, the audience couldn&rsquo;t talk back.”', dark: true, build: 'Full-bleed licensed Chinese movable type (AdobeStock 2032558546) grounds the beat — print&rsquo;s origin is East Asian, said out loud rather than defaulting to Europe. The Gutenberg page stays the focal artifact, riding above the type field.', go() { evo('ev-print', true); show('print-ground'); } },
+    { say: '(pause — let the loop get its laugh)', build: 'No caption; the reference does the work. 8s loop, GIFs loop natively in Slides.', go() { histShow('abe'); } },
+    { say: '“And this is a campfire too — live, and the audience talks back.”', build: 'No caption. Pause one breath on the chat column, then hand to the question.', go() { histShow('f13'); } }
+  ], () => { histShow(null); });
+
+  /* §3 question */
+  sec('q', 'The question', 'Jalen → Jakob', '0:20', 'cream', 'sq-q', [
+    { say: '“Round one, Rachel asked us the question the whole deck answers.”', build: 'Typography only — this is current slide 2, restaged.', go() {} }
+  ], () => {});
+
+  /* §4 shelf */
+  function aReset() {
+    $('seq-a').classList.remove('focused');
+    $('a-lift').style.transform = DOCK.a;
+    ['a-anno1', 'a-anno2'].forEach(i => $(i).classList.remove('show'));
+    ['a-arr1', 'a-arr2', 'a-arr1h', 'a-arr2h'].forEach(i => $(i).classList.remove('show'));
+    $('a-ask').style.opacity = '0';
+  }
+  const aFocus = () => { $('seq-a').classList.add('focused'); $('a-lift').style.transform = 'none'; };
+  sec('shelf', 'The shelf', 'Jakob', '1:30', 'cream', 'seq-a', [
+    { say: '“Every book you&rsquo;re about to see is invented. The shelf isn&rsquo;t.”', build: 'UI full-bleed, nothing else. Let them read it.', go() {} },
+    { say: '“A browsable collection inside pages Amazon already runs. Membership is attestation plus metadata. First Reads proved a curated shelf works — and editorial attention is precious and scarce, so attestation is how a shelf scales past a hundred books a year.”', build: 'Focus pull: duplicate slide, dimmed screenshot + enlarged card + copy, Fade transition.', go: aFocus },
+    { say: '“Her own words are the gate.”', build: 'Arrow 1 + chip. Same slide duplicated, Fade.', go() { aFocus(); show('a-anno1'); show('a-arr1'); show('a-arr1h'); } },
+    { say: '“The badge is observed, not awarded. Ask one: would this earn placement?”', build: 'Arrow 2 + ask line. Stop talking when the ask lands.', go() { aFocus(); show('a-anno1'); show('a-arr1'); show('a-arr1h'); show('a-anno2'); show('a-arr2'); show('a-arr2h'); $('a-ask').style.opacity = 1; } }
+  ], aReset);
+
+  /* §5 $50 */
+  sec('fifty', 'Why not reviews', 'Jakob', '0:45', 'cream', 'sq-50', [
+    { say: '“Amazon requires fifty dollars of spend in the past year before a customer may write any review — a threshold that exists to stop review fraud, and it works.”', build: 'Yes-and posture: credit the policy&rsquo;s purpose out loud before describing its side effect. One stat + the locked-review visual.', go() { ['s50-num', 's50-l1', 's50-src', 's50-viz'].forEach(i => show(i)); } },
+    { say: '“It just wasn&rsquo;t built with a debut&rsquo;s first readers in mind — family, community, people who found the book off Amazon are exactly the customers least likely to clear it.”', build: 'The side effect, framed as a gap the policy wasn&rsquo;t designed for — not a flaw in it.', go() { ['s50-num', 's50-l1', 's50-src', 's50-viz', 's50-l2'].forEach(i => show(i)); } },
+    { say: '“So reviews can&rsquo;t be the debut&rsquo;s trust signal. And a genuine question for you — does Kindle Unlimited subscription spend count? We&rsquo;d love to know.”', build: 'KU reframed as a question — yes-and, never Amazon-did-wrong. If it joins the closing asks, five questions become six (team call).', go() { ['s50-num', 's50-l1', 's50-src', 's50-viz', 's50-l2', 's50-l3', 's50-ask'].forEach(i => show(i)); } }
+  ], () => ['s50-num', 's50-l1', 's50-src', 's50-viz', 's50-l2', 's50-l3', 's50-ask'].forEach(i => show(i, false)));
+
+  /* §6 answer */
+  function ansReset() {
+    $('sq-ans').classList.remove('s2');
+    ['al1', 'al2', 'al3', 'al4', 'an1', 'an2', 'an3'].forEach(i => show(i, false));
+    $('ans-stack').style.opacity = 1;
+    $('ext').style.opacity = 0;
+  }
+  sec('ans', 'Our answer', 'Jakob', '0:45', 'cream', 'sq-ans', [
+    { say: '“So here&rsquo;s our answer: a collection of first-person books —”', build: 'Type does the work — the noun lands huge first.', go() { show('al1'); show('al2'); } },
+    { say: '“— by authors who never saw themselves as writers.”', build: 'The first lines shrink to make room; same slide duplicated in Slides.', go() { show('al1'); show('al2'); $('sq-ans').classList.add('s2'); show('al3'); } },
+    { say: '“Where the reason to pick one up is that you can reach the person who lived it.” (slow down — this is the sentence to leave the room with)', build: 'The sentence assembles across three beats; color lands on the promise.', go() { show('al1'); show('al2'); $('sq-ans').classList.add('s2'); show('al3'); show('al4'); } },
+    { say: '“Extraordinary because it is real. An AI-written book has no one behind it. A celebrity memoirist won&rsquo;t answer you.”', build: 'Its own slide — headline + the two gray claims (Appear, After previous). Order matters: nobody behind it → somebody, but out of reach. The receipt screenshot sits right.', go() { $('ans-stack').style.opacity = 0; $('ext').style.opacity = 1; show('an1'); show('an2'); } },
+    { say: '“This author will.” (stop. let it sit, then hand to the gate)', build: 'One click adds the accent card. It sits directly under “won&rsquo;t answer you,” so “will” answers the line above it — same grammar, third rung of the ladder. In Slides: Appear on the card.', go() { $('ans-stack').style.opacity = 0; $('ext').style.opacity = 1; show('an1'); show('an2'); show('an3'); } }
+  ], ansReset);
+
+  /* §7 gate */
+  function bReset() {
+    $('seq-b').classList.remove('focused');
+    $('b-lift').style.transform = DOCK.b;
+    $('b-anno1').classList.remove('show');
+    ['b-arr1', 'b-arr1h'].forEach(i => $(i).classList.remove('show'));
+    $('b-ring').classList.remove('show');
+    $('b-ask').style.opacity = '0';
+  }
+  const bFocus = () => { $('seq-b').classList.add('focused'); $('b-lift').style.transform = 'none'; };
+  sec('gate', 'The gate', 'Wanting', '1:00', 'cream', 'seq-b', [
+    { say: '“This is Rosa&rsquo;s book page — the attestation lives where the store already talks about a book.”', build: 'UI alone first; the audience finds the statement before you name it.', go() {} },
+    { say: '“The gate is her own statement. Amazon hosts it — and hosting, not certifying, is the honest promise, because no store can certify a life. No badge and no filter, either: KDP counts AI translation as AI-generated, so a filter would catch exactly the multilingual authors this centers.”', build: 'Focus pull to the attestation block. Yes-and: certification is framed as a promise no store could keep, not a thing Amazon fails to do.', go: bFocus },
+    { say: '“What if she&rsquo;s lying? The answer is one line away — existing report tools, existing policies, no new machinery. Ask two: what should happen when an attestation is false?”', build: 'One arrow + ring on the collapsed line. Then the ask.', go() { bFocus(); show('b-anno1'); show('b-arr1'); show('b-arr1h'); show('b-ring'); $('b-ask').style.opacity = 1; } }
+  ], bReset);
+
+  /* §8 ask */
+  function kReset() {
+    $('sq-ask').classList.remove('focused');
+    $('k-lift').style.transform = DOCK.k;
+    $('k-ask').style.opacity = '0';
+  }
+  sec('ask', 'Ask the author', 'Pablo', '0:45', 'cream', 'sq-ask', [
+    { say: '“Finish the book, and you get one question.”', build: 'Book page with the composer open (?ask=compose), UI alone.', go() {} },
+    { say: '“Rosa sees each question — answers it, or deletes it. Nothing appears unless she publishes it. No private messaging at any tier. The prototype defaults to one question per reader per book — that&rsquo;s a dial, not a doctrine, and where it sits is part of ask three: what breaks first at scale?”', build: 'Focus pull to the composer — the typed question is a verbatim survey answer.', go() { $('sq-ask').classList.add('focused'); $('k-lift').style.transform = 'none'; $('k-ask').style.opacity = 1; } }
+  ], kReset);
+
+  /* §9 rosa */
+  function rReset() {
+    $('sq-rosa').classList.remove('focused');
+    $('r-lift').style.transform = DOCK.r;
+  }
+  sec('rosa', "Rosa's side", 'Pablo', '0:45', 'cream', 'sq-rosa', [
+    { say: '“And this is Rosa&rsquo;s side of it.”', build: 'Dashboard UI alone (author-dashboard.html).', go() {} },
+    { say: '“Nothing is public until she publishes it. Answer, publish, or decline — declining deletes. She is never required to answer, and Amazon does not chase her.”', build: 'Focus pull to the “Waiting for you” queue.', go() { $('sq-rosa').classList.add('focused'); $('r-lift').style.transform = 'none'; } }
+  ], rReset);
+
+  /* §10 loop */
+  function lReset() {
+    $('sq-loop').classList.remove('focused');
+    $('l-lift').style.transform = DOCK.l;
+  }
+  sec('loop', 'The loop closes', 'Pablo → Jakob', '0:30', 'cream', 'sq-loop', [
+    { say: '“And when she answers —”', build: 'Answered state (?ask=answered), UI alone.', go() {} },
+    { say: '“— it publishes with the question to her author page, where every future reader can see the person behind the book. Goodreads proved the moderation model; our claim is placement, not novelty.”', build: 'Focus pull to the answered panel.', go() { $('sq-loop').classList.add('focused'); $('l-lift').style.transform = 'none'; } }
+  ], lReset);
+
+  /* §11 data */
+  function cReset() {
+    $('seq-c').classList.remove('focused');
+    ['c-org1', 'c-org2', 'c-org3'].forEach(i => $(i).classList.add('off'));
+    ['c-lift1', 'c-lift2', 'c-lift3'].forEach(i => { $(i).classList.add('gone'); });
+    $('c-lift1').style.transform = DOCK.c1;
+    $('c-lift2').style.transform = DOCK.c2;
+    $('c-lift3').style.transform = DOCK.c3;
+    ['c-head1', 'c-head2', 'c-head3'].forEach(i => show(i, false));
+    $('c-b24').style.opacity = 1; $('c-b25').style.opacity = 0; $('c-b26').style.opacity = 0;
+  }
+  function cBase(which) { $('c-b24').style.opacity = which === 24 ? 1 : 0; $('c-b25').style.opacity = which === 25 ? 1 : 0; $('c-b26').style.opacity = which === 26 ? 1 : 0; }
+  sec('data', 'The data', 'Jakob', '1:45', 'cream', 'seq-c', [
+    { say: '“We surveyed forty-two readers. Bad news first — our own data killed our first hypothesis.” (disclose the sample before any number)', build: 'Slide 24 as-is establishes that the evidence exists.', go() { cBase(24); } },
+    { say: '“Forced to choose, sixteen took the celebrity memoir. But nineteen refused the choice — and twelve of those said the subject decides.”', build: 'Dim + isolate chart one with its takeaway line.', go() { cBase(24); $('seq-c').classList.add('focused'); $('c-org1').classList.remove('off'); $('c-lift1').classList.remove('gone'); $('c-lift1').style.transform = 'none'; show('c-head1'); } },
+    { say: '“Under fifty-five, reaching the author reads as a reason — twelve of twenty-three. Among fifty-five plus, one of fifteen. Age and channel are confounded, and we say that out loud.”', build: 'Chart two gets its own beat.', go() { cBase(24); $('seq-c').classList.add('focused'); $('c-org2').classList.remove('off'); $('c-lift2').classList.remove('gone'); $('c-lift2').style.transform = 'none'; show('c-head2'); } },
+    { say: '“The hesitation that beat everything: no way to tell if it&rsquo;s any good — twenty-seven of forty-two. Eighteen distrust the reviews that exist. Price moved three.”', build: 'Next slide (26) behind; same focus grammar on its bar chart.', go() { cBase(25); $('seq-c').classList.add('focused'); $('c-org3').classList.remove('off'); $('c-lift3').classList.remove('gone'); $('c-lift3').style.transform = 'none'; show('c-head3'); } },
+    { say: '“And the strongest signal we measured: nobody rated human authorship below a three. BookNet Canada corroborates. The attestation gate delivers exactly that signal — with no certification.”', build: 'Release to the full slide — no focus, let the 40-of-42 land.', go() { cBase(26); } }
+  ], cReset);
+
+  /* §12 arc */
+  const ARC_ALL = ['arc-img', 'arc-k', 'arc-t', 'arc-l0', 'arc-l1', 'arc-l2', 'arc-lv', 'arc-lm', 'arc-l3'];
+  function arcReset() {
+    ARC_ALL.forEach(i => show(i, false));
+    ['arc-l1', 'arc-l2'].forEach(i => $(i).classList.remove('past'));
+  }
+  sec('arc', 'ARC, compressed', 'Jalen', '1:00', 'dark', 'sq-arc', [
+    { say: '“Let&rsquo;s talk ARC — advance reader copies.”', build: 'The illustration is the whole joke — iykyk, never explained aloud. (Replaces slides 27–29; the game key art reads as someone else&rsquo;s brand in front of Amazon.)', go() { show('arc-img'); show('arc-k'); show('arc-t'); show('arc-l0'); } },
+    { say: '“ARC readers are a debut&rsquo;s first audience — and the fifty-dollar rule blocks most of them from reviewing. To be clear, we&rsquo;re not proposing an ARC program; review-for-copy breaks the guidelines we just cited.”', build: 'Two short lines carry it; the full sentences live in the notes, not on the slide.', go() { show('arc-img'); show('arc-k'); show('arc-t'); show('arc-l0'); show('arc-l1'); show('arc-l2'); } },
+    { say: '“And Amazon already runs exactly this for products — Vine: invited reviewers, a free product, a disclosed review, inside policy. If ARC engagement lived as metadata — signal, never reviews — does that fit? Ask four: why not books?”', build: 'Earlier lines dim and shrink so the stage never becomes a wall. Metadata is framed as part of the question to Amazon, not as our recommendation.', go() { show('arc-img'); show('arc-k'); show('arc-t'); show('arc-l0'); show('arc-l1'); show('arc-l2'); ['arc-l1', 'arc-l2'].forEach(i => $(i).classList.add('past')); show('arc-lv'); show('arc-lm'); show('arc-l3'); } }
+  ], arcReset);
+
+  /* §13 prior art — you already own the parts */
+  const PT1 = ['pt-t', 'p1', 'p2', 'p3', 'p4'];
+  const PT2 = ['pt-sub', 'lay1', 'lay2', 'lay3', 'lay4'];
+  sec('prior', 'Own the parts', 'Jalen', '0:45', 'cream', 'sq-prior', [
+    { say: '“You&rsquo;ve met most of these already. First Reads proved a curated shelf sells. KDP already asks authors a question at publish — the AI disclosure. Goodreads proved readers will ask and authors will answer. And Royal Road — the one part from outside — proved rotation keeps a shelf fresh.”',
+      build: 'Slide 1 — headline + four part cards (Appear, After previous, staggered ~0.1s). Three cards are Amazon&rsquo;s own; Royal Road is dashed — the one outside part. Name each card as it lands.',
+      go() { $('sq-prior').classList.remove('asm'); PT1.forEach(i => show(i)); PT2.forEach(i => show(i, false)); } },
+    { say: '“Stack them up and they&rsquo;re the four layers you&rsquo;ve just seen. We didn&rsquo;t invent anything tonight — we assembled. And Vella already taught the lesson that separate destinations are hard, so every piece lives inside pages Amazon already runs.”',
+      build: 'Slide 2 — duplicate + Fade: cards restack into the layer diagram, labels appear left. The crossfade sells the assembly in Slides; here the cards physically move. This beat is the “why us / why now” answer.',
+      go() { PT1.forEach(i => show(i)); $('sq-prior').classList.add('asm'); PT2.forEach(i => show(i)); } }
+  ], () => { $('sq-prior').classList.remove('asm'); PT1.forEach(i => show(i, false)); PT2.forEach(i => show(i, false)); });
+
+  /* §14 stakeholders */
+  function stSet(n) {
+    if (n) { $('sq-stake').setAttribute('data-on', n); } else { $('sq-stake').removeAttribute('data-on'); }
+    ['std1', 'std2', 'std3', 'std4'].forEach((id, i) => $(id).classList.toggle('show', i + 1 === +n));
+  }
+  sec('stake', 'Stakeholder value', 'Pablo', '1:00', 'cream', 'sq-stake', [
+    { say: '“Who benefits — readers, multilingual authors, first-time indie authors, and KDP itself.”', build: 'Wanting&rsquo;s shapes are back — four equal ellipses, wrap bug gone. Names only on the establishing beat.', go() { stSet(0); } },
+    { say: '“Readers: the pain is AI slop and fake reviews; the solution is a curated, authentic collection; the outcome is completion and trust.”', build: 'One stakeholder per beat — the active ellipse holds, the others fade, its row appears below.', go() { stSet(1); } },
+    { say: '“Multilingual authors: AI translation gets flagged as spam; the contextual author statement carries it; the outcome is the English market unlocked.”', build: 'Same grammar, next ellipse.', go() { stSet(2); } },
+    { say: '“First-time indie authors: locked out by expensive ads; free organic placement; discovery without an ad budget.”', build: 'Same grammar.', go() { stSet(3); } },
+    { say: '“And KDP: brand risk and KU churn; self-attestation plus community reporting; reduced platform liability.”', build: 'Close on Amazon&rsquo;s own stake — all claims verbatim from Wanting&rsquo;s slide, still carrying the confirm-with-team flag.', go() { stSet(4); } }
+  ], () => stSet(0));
+
+  /* §15 empowering */
+  sec('emp', 'Is it empowering?', 'Wanting', '0:30', 'cream', 'sq-emp', [
+    { say: '“Accessible, inclusive, equitable. The prototype is WCAG 2.1 AA with zero axe violations, six languages done properly, full RTL — and the equity claim is the outcome: it empowers.”', build: 'The real language-flip GIF, running. Don&rsquo;t talk over the first flip into Arabic.', go() {} }
+  ], () => {});
+
+  /* §16 closing */
+  sec('close', 'Closing', 'Jakob', '0:25', 'cream', 'sq-close', [
+    { say: '“Five questions for Amazon — this is the Q&A agenda. Read them, thank the room, stop talking.”', build: 'Slide as-is.', go() { $('close-qs').style.opacity = 1; $('close-ty').style.opacity = 0; stage.classList.remove('dark'); } },
+    { say: '“Thank you. The prototype is live at this link — walk the pages.”', build: 'Dark close. Leave this up during discussion.', go() { $('close-qs').style.opacity = 0; $('close-ty').style.opacity = 1; stage.classList.add('dark'); } }
+  ], () => { $('close-qs').style.opacity = 1; $('close-ty').style.opacity = 0; });
+
+  /* ---------- flatten to a global beat list ---------- */
+  const FLAT = [];
+  SEC.forEach((s, si) => s.beats.forEach((b, bi) => FLAT.push({ s, si, b, bi })));
+
+  let cur = 0;
+  const dotsWrap = document.querySelector('.dots');
+
+  function render() {
+    const f = FLAT[cur];
+    // reset & hide all sections
+    SEC.forEach(s => { s.reset(); s.el.classList.remove('on'); });
+    f.s.el.classList.add('on');
+    stage.classList.toggle('dark', f.s.stage === 'dark' || !!f.b.dark || (f.s.id === 'close' && f.bi === 1));
+    // §1 the wide scene; §2 the zoomed one behind the figures. Beat 6 (print) keeps the
+    // pitch ground the evolution faded down to, so there's no jump between them.
+    const sceneOn = f.s.id === 'fire';
+    const campOn = f.s.id === 'hist' && (f.bi <= 2 || f.bi === 5);
+    sceneVid.classList.toggle('on', sceneOn);
+    if (sceneOn) { sceneVid.play().catch(() => {}); } else { sceneVid.pause(); }
+    campVid.classList.toggle('on', campOn);
+    if (campOn) { campVid.play().catch(() => {}); } else { campVid.pause(); }
+    stage.classList.toggle('pitch', sceneOn || campOn || (f.s.id === 'hist' && f.bi === 6));
+    requestAnimationFrame(() => requestAnimationFrame(() => f.b.go()));
+    // header
+    $('secnm').textContent = '§' + (f.si + 1) + ' · ' + f.s.name;
+    $('secmeta').textContent = f.s.presenter + ' · target ' + f.s.budget + ' · beat ' + (f.bi + 1) + '/' + f.s.beats.length;
+    $('n-say').innerHTML = f.b.say;
+    $('n-build').innerHTML = f.b.build;
+    document.querySelector('#gprog i').style.width = ((cur + 1) / FLAT.length * 100) + '%';
+    // dots for this section
+    dotsWrap.innerHTML = '';
+    f.s.beats.forEach((_, j) => {
+      const d = document.createElement('button');
+      d.className = 'dot' + (j === f.bi ? ' on' : '');
+      d.setAttribute('aria-label', 'Beat ' + (j + 1));
+      d.addEventListener('click', e => { e.stopPropagation(); go(FLAT.findIndex(x => x.s === f.s && x.bi === j)); });
+      dotsWrap.appendChild(d);
+    });
+    history.replaceState(null, '', '#' + f.s.id + (f.bi + 1));
+  }
+
+  function go(i) { cur = Math.max(0, Math.min(FLAT.length - 1, i)); render(); }
+
+  stage.addEventListener('click', () => go(cur + 1 >= FLAT.length ? 0 : cur + 1));
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(cur + 1 >= FLAT.length ? 0 : cur + 1); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(cur - 1 < 0 ? FLAT.length - 1 : cur - 1); }
+    else if (e.key === ']') { const f = FLAT[cur]; const n = FLAT.findIndex(x => x.si === f.si + 1); if (n >= 0) go(n); }
+    else if (e.key === '[') { const f = FLAT[cur]; const p = FLAT.findIndex(x => x.si === f.si - 1); if (p >= 0) go(p); else go(0); }
+    else if (e.key === 'p' || e.key === 'P') { document.body.classList.toggle('perform'); fit(); }
+  });
+  $('nextsec').addEventListener('click', () => { const f = FLAT[cur]; const n = FLAT.findIndex(x => x.si === f.si + 1); if (n >= 0) go(n); });
+  $('prevsec').addEventListener('click', () => { const f = FLAT[cur]; const p = FLAT.findIndex(x => x.si === f.si - 1); if (p >= 0) go(p); else go(0); });
+
+  function fit() {
+    const wrap = $('stagewrap');
+    const s = Math.min(wrap.clientWidth / 1640, wrap.clientHeight / 930, 1);
+    $('scaler').style.transform = 'scale(' + s + ')';
+  }
+  window.addEventListener('resize', fit);
+  fit();
+
+  /* ?present opens straight into performance mode — the shape of the link you hand out,
+     since the build notes name teammates and retired ideas. `p` toggles it back. */
+  if (/[?&]present\b/.test(location.search)) document.body.classList.add('perform');
+
+  const h = location.hash.slice(1);
+  let start = 0;
+  if (h) {
+    const m = /^([a-z]+)(\d+)?$/.exec(h);
+    if (m) {
+      const idx = FLAT.findIndex(x => x.s.id === m[1] && x.bi === (m[2] ? +m[2] - 1 : 0));
+      if (idx >= 0) start = idx;
+    }
+  }
+  go(start);
+})();
+</script>
+
+</body>
+</html>
