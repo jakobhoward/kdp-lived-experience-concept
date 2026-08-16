@@ -543,7 +543,7 @@
         </div>
         <div class="datahead anno" id="c-head2">
           <h2>Under 55, reaching the author reads as a reason.</h2>
-          <div class="sub">Convenience sample — age and channel are confounded. We say it before Rachel asks.</div>
+          <div class="sub">Convenience sample — age and channel are confounded.</div>
         </div>
         <div class="datahead anno" id="c-head3">
           <h2>The hesitation that beat everything: &ldquo;no way to tell if it&rsquo;s any good.&rdquo;</h2>
@@ -569,7 +569,7 @@
         <img class="arcbg" id="arc-bg" src="arc-circle.webp" alt="">
         <div class="robotcard step" id="arc-img"><img src="robot.webp" alt="An ARC machine looming over a rubber duck"></div>
         <div class="typo" style="left:680px; right:0; position:absolute; padding:0 100px 0 0;">
-          <div class="kicker step" id="arc-k">Trust signal · Jalen&rsquo;s beat</div>
+          <div class="kicker step" id="arc-k">Trust signal</div>
           <div class="huge step" id="arc-t" style="font-size:76px;">Let&rsquo;s talk ARC.</div>
           <div class="lines">
             <div class="line step" id="arc-l0" style="color:rgba(245,239,226,.75)">Advance Reader Copies — a debut&rsquo;s first audience.</div>
@@ -684,14 +684,14 @@
   const show = (id, on = true) => $(id).classList.toggle('show', on);
 
   /* §0 title — static; up while the Zoom room fills */
-  sec('title', 'Title', 'Jakob', '0:00', 'dark', 'sq-title', [
+  sec('title', 'Title', '', '', 'dark', 'sq-title', [
     { say: '',
       build: '',
       go() {} }
   ], () => {});
 
   /* §1 cold open */
-  sec('fire', 'Cold open', 'Jalen', '0:15', 'dark', 'sq-fire', [
+  sec('fire', 'Cold open', '', '', 'dark', 'sq-fire', [
     { say: '',
       build: '',
       go() { show('fire-t'); } }
@@ -738,7 +738,7 @@
     FR.forEach(fr => show(fr, fr === key));
     Object.entries(SCENES).forEach(([k, id]) => $(id).classList.toggle('show', k === key));
   }
-  sec('hist', 'How stories travel', 'Jalen', '1:20', 'cream', 'sq-hist', [
+  sec('hist', 'How stories travel', '', '', 'cream', 'sq-hist', [
     { say: '', dark: true, build: '', go() { histShow(null); sceneOn(true); bubs(0); } },
     { say: '', dark: true, build: '', go() { histShow(null); sceneOn(true); bubs(1); } },
     { say: '', dark: true, build: '', go() { histShow(null); sceneOn(true); bubs(4); } },
@@ -751,12 +751,12 @@
   ], () => { histShow(null); });
 
   /* §3 question */
-  sec('q', 'The question', 'Jalen → Jakob', '0:20', 'cream', 'sq-q', [
+  sec('q', 'The question', '', '', 'cream', 'sq-q', [
     { say: '', build: '', go() {} }
   ], () => {});
 
   /* §5 $50 */
-  sec('fifty', 'Why not reviews', 'Jakob', '0:45', 'cream', 'sq-50', [
+  sec('fifty', 'Why not reviews', '', '', 'cream', 'sq-50', [
     { say: '', build: '', go() { ['s50-num', 's50-l1', 's50-src', 's50-viz'].forEach(i => show(i)); } },
     { say: '', build: '', go() { ['s50-num', 's50-l1', 's50-src', 's50-viz', 's50-l2'].forEach(i => show(i)); } },
     { say: '', build: '', go() { ['s50-num', 's50-l1', 's50-src', 's50-viz', 's50-l2', 's50-l3', 's50-ask'].forEach(i => show(i)); } }
@@ -767,7 +767,7 @@
     $('sq-ans').classList.remove('s2');
     ['al1', 'al2', 'al3', 'al4'].forEach(i => show(i, false));
   }
-  sec('ans', 'Our answer', 'Jakob', '0:30', 'cream', 'sq-ans', [
+  sec('ans', 'Our answer', '', '', 'cream', 'sq-ans', [
     { say: '', build: '', go() { show('al1'); show('al2'); } },
     { say: '', build: '', go() { show('al1'); show('al2'); $('sq-ans').classList.add('s2'); show('al3'); } },
     { say: '', build: '', go() { show('al1'); show('al2'); $('sq-ans').classList.add('s2'); show('al3'); show('al4'); } }
@@ -782,7 +782,7 @@
     $('a-ask').style.opacity = '0';
   }
   const aFocus = () => { $('seq-a').classList.add('focused'); $('a-lift').style.transform = 'none'; };
-  sec('shelf', 'The shelf', 'Jakob', '1:30', 'cream', 'seq-a', [
+  sec('shelf', 'The shelf', '', '', 'cream', 'seq-a', [
     { say: '', build: '', go() {} },
     { say: '', build: '', go: aFocus },
     { say: '', build: '', go() { aFocus(); show('a-anno1'); show('a-arr1'); show('a-arr1h'); } },
@@ -799,7 +799,7 @@
     $('b-ask').style.opacity = '0';
   }
   const bFocus = () => { $('seq-b').classList.add('focused'); $('b-lift').style.transform = 'none'; };
-  sec('gate', 'The gate', 'Wanting', '1:00', 'cream', 'seq-b', [
+  sec('gate', 'The gate', '', '', 'cream', 'seq-b', [
     { say: '', build: '', go() {} },
     { say: '', build: '', go: bFocus },
     { say: '', build: '', go() { bFocus(); show('b-anno1'); show('b-arr1'); show('b-arr1h'); show('b-ring'); $('b-ask').style.opacity = 1; } }
@@ -811,7 +811,7 @@
     $('k-lift').style.transform = DOCK.k;
     $('k-ask').style.opacity = '0';
   }
-  sec('ask', 'Ask the author', 'Pablo', '0:45', 'cream', 'sq-ask', [
+  sec('ask', 'Ask the author', '', '', 'cream', 'sq-ask', [
     { say: '', build: '', go() {} },
     { say: '', build: '', go() { $('sq-ask').classList.add('focused'); $('k-lift').style.transform = 'none'; $('k-ask').style.opacity = 1; } }
   ], kReset);
@@ -821,7 +821,7 @@
     $('sq-rosa').classList.remove('focused');
     $('r-lift').style.transform = DOCK.r;
   }
-  sec('rosa', "Rosa's side", 'Pablo', '0:45', 'cream', 'sq-rosa', [
+  sec('rosa', "Rosa's side", '', '', 'cream', 'sq-rosa', [
     { say: '', build: '', go() {} },
     { say: '', build: '', go() { $('sq-rosa').classList.add('focused'); $('r-lift').style.transform = 'none'; } }
   ], rReset);
@@ -837,7 +837,7 @@
   }
   const lFocus = () => { $('sq-loop').classList.add('focused'); $('l-lift').style.transform = 'none'; };
   const lThesis = () => { lFocus(); $('l-col1').style.opacity = 0; $('l-col2').style.opacity = 1; $('l-org').style.opacity = 0; show('an1'); show('an2'); };
-  sec('loop', 'The loop closes', 'Pablo → Jakob', '0:45', 'cream', 'sq-loop', [
+  sec('loop', 'The loop closes', '', '', 'cream', 'sq-loop', [
     { say: '', build: '', go() {} },
     { say: '', build: '', go: lFocus },
     { say: '', build: '', go: lThesis },
@@ -860,7 +860,7 @@
     $('seq-c').classList.toggle('focused', head !== -1);
   }
   function cReset() { cSet(24, -1, -1, -1); }
-  sec('data', 'The data', 'Jakob', '1:45', 'cream', 'seq-c', [
+  sec('data', 'The data', '', '', 'cream', 'seq-c', [
     { say: '', build: '', go() { cSet(24, -1, -1, -1); } },
     { say: '', build: '', go() { cSet(24, 0, 0, 0); } },
     { say: '', build: '', go() { cSet(24, 1, 1, 1); } },
@@ -874,7 +874,7 @@
     ARC_ALL.forEach(i => show(i, false));
     ['arc-l1', 'arc-l2'].forEach(i => $(i).classList.remove('past'));
   }
-  sec('arc', 'ARC, compressed', 'Jalen', '1:00', 'dark', 'sq-arc', [
+  sec('arc', 'ARC, compressed', '', '', 'dark', 'sq-arc', [
     { say: '', build: '', go() { show('arc-bg'); show('arc-img'); show('arc-k'); show('arc-t'); show('arc-l0'); } },
     { say: '', build: '', go() { show('arc-bg'); show('arc-img'); show('arc-k'); show('arc-t'); show('arc-l0'); show('arc-l1'); show('arc-l2'); } },
     { say: '', build: '', go() { show('arc-bg'); show('arc-img'); show('arc-k'); show('arc-t'); show('arc-l0'); show('arc-l1'); show('arc-l2'); ['arc-l1', 'arc-l2'].forEach(i => $(i).classList.add('past')); show('arc-lv'); show('arc-lm'); show('arc-l3'); } }
@@ -886,7 +886,7 @@
     if (n) { $('sq-stake').setAttribute('data-on', n); } else { $('sq-stake').removeAttribute('data-on'); }
     ['std1', 'std2', 'std3', 'std4'].forEach((id, i) => $(id).classList.toggle('show', i + 1 === +n));
   }
-  sec('stake', 'Stakeholder value', 'Pablo', '1:00', 'cream', 'sq-stake', [
+  sec('stake', 'Stakeholder value', '', '', 'cream', 'sq-stake', [
     { say: '', build: '', go() { stSet(0); } },
     { say: '', build: '', go() { stSet(1); } },
     { say: '', build: '', go() { stSet(2); } },
@@ -895,12 +895,12 @@
   ], () => stSet(0));
 
   /* §15 empowering */
-  sec('emp', 'Is it empowering?', 'Wanting', '0:30', 'cream', 'sq-emp', [
+  sec('emp', 'Is it empowering?', '', '', 'cream', 'sq-emp', [
     { say: '', build: '', go() {} }
   ], () => {});
 
   /* §16 closing */
-  sec('close', 'Closing', 'Jakob', '0:25', 'cream', 'sq-close', [
+  sec('close', 'Closing', '', '', 'cream', 'sq-close', [
     { say: '', build: '', go() { $('close-qs').style.opacity = 1; $('close-ty').style.opacity = 0; stage.classList.remove('dark'); } },
     { say: '', build: '', go() { $('close-qs').style.opacity = 0; $('close-ty').style.opacity = 1; stage.classList.add('dark'); } }
   ], () => { $('close-qs').style.opacity = 1; $('close-ty').style.opacity = 0; });
@@ -939,7 +939,9 @@
     requestAnimationFrame(() => requestAnimationFrame(() => f.b.go()));
     // header
     $('secnm').textContent = '§' + (f.si + 1) + ' · ' + f.s.name;
-    $('secmeta').textContent = f.s.presenter + ' · target ' + f.s.budget + ' · beat ' + (f.bi + 1) + '/' + f.s.beats.length;
+    // presenter/budget are blanked in the public build — render only the parts that survive
+    $('secmeta').textContent = [f.s.presenter, f.s.budget && 'target ' + f.s.budget,
+      'beat ' + (f.bi + 1) + '/' + f.s.beats.length].filter(Boolean).join(' · ');
     $('n-say').innerHTML = f.b.say;
     $('n-build').innerHTML = f.b.build;
     document.querySelector('#gprog i').style.width = ((cur + 1) / FLAT.length * 100) + '%';
@@ -982,8 +984,7 @@
   fit();
 
   /* Performance mode is the default: this gets driven live far more often than it gets
-     read with notes, and the build notes name teammates and retired ideas — so the plain
-     link is always safe to hand out. `?notes` opens with the strip showing; `p` toggles. */
+     read with notes. `?notes` opens with the strip showing; `p` toggles. */
   if (!/[?&]notes\b/.test(location.search)) document.body.classList.add('perform');
 
   const h = location.hash.slice(1);
