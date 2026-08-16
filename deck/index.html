@@ -148,9 +148,9 @@
   video.scene-fire { position: absolute; inset: 0; width: 1600px; height: 900px; object-fit: cover;
     opacity: 0; transition: opacity .5s ease; pointer-events: none; }
   video.scene-fire.on { opacity: 1; }
-  /* the cold open and the figures share one world: the wide scene scales up to meet the
-     zoomed clip's framing (crop 1324x745 @ 200,300), so the cut reads as a camera push-in */
-  #scenevid { transform-origin: 537px 806px; transition: opacity .5s ease, transform 1.2s ease-in-out; }
+  /* the push-in. Origin sits on the fire itself (just below centre) so the frame closes
+     on the flame rather than the middle of the picture. Slow enough to read as a move. */
+  #scenevid { transform-origin: 45% 62%; transition: opacity .5s ease, transform 1.6s cubic-bezier(.4,0,.2,1); }
   #scenevid.zoomed { transform: scale(1.45); }
   /* the title sits in the empty upper forest; this keeps it off the treeline */
   #sq-fire .fire-title { text-shadow: 0 2px 30px rgba(0,0,0,0.85), 0 0 80px rgba(0,0,0,0.6); }
@@ -183,24 +183,6 @@
   .neg.pos .t { font-family: var(--serif); font-weight: 800; font-size: 27px; color: var(--accent); }
   #sq-arc .line { transition: opacity .4s ease, font-size .4s ease; }
   /* §13 you already own the parts */
-  .pt-head { position: absolute; left: 110px; top: 96px; right: 110px; }
-  .pt-head .huge { font-family: var(--serif); font-weight: 800; font-size: 60px; line-height: 1.05; color: var(--ink); }
-  .pt-sub { margin-top: 16px; font-family: var(--serif); font-weight: 800; font-size: 27px; color: var(--accent); }
-  .pcard { position: absolute; top: 370px; width: 330px; height: 250px; background: #FFFDF7; border: 1px solid rgba(31,42,74,0.14); border-radius: 14px; box-shadow: 0 12px 30px rgba(31,42,74,0.08); padding: 24px 26px; display: flex; flex-direction: column; overflow: hidden;
-    transition: left .75s cubic-bezier(.25,.8,.25,1), top .75s cubic-bezier(.25,.8,.25,1), width .75s cubic-bezier(.25,.8,.25,1), height .75s cubic-bezier(.25,.8,.25,1), padding .75s cubic-bezier(.25,.8,.25,1), opacity .5s ease, transform .5s ease; }
-  .pcard.ext { border: 1.5px dashed rgba(31,42,74,0.4); }
-  .pcard .src { font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; white-space: nowrap; }
-  .pcard .nm { font-family: var(--serif); font-weight: 800; font-size: 26px; color: var(--ink); margin-bottom: 10px; white-space: nowrap; }
-  .pcard .pf { font-size: 17px; line-height: 1.42; color: var(--ink); opacity: 0.85; }
-  #p1 { left: 235px; } #p2 { left: 635px; } #p3 { left: 1035px; }
-  #sq-prior.asm .pcard { left: 470px; width: 1020px; height: 108px; flex-direction: row; align-items: center; gap: 24px; padding: 0 30px; }
-  #sq-prior.asm #p1 { top: 340px; } #sq-prior.asm #p2 { top: 472px; } #sq-prior.asm #p3 { top: 604px; }
-  #sq-prior.asm .pcard .src { order: 3; margin: 0 0 0 auto; }
-  #sq-prior.asm .pcard .nm { order: 1; margin: 0; width: 285px; flex: 0 0 auto; }
-  #sq-prior.asm .pcard .pf { order: 2; margin: 0; font-size: 16.5px; }
-  .laylab { position: absolute; left: 110px; width: 330px; height: 108px; display: flex; flex-direction: column; justify-content: center; }
-  .laylab b { font-family: var(--serif); font-weight: 800; font-size: 28px; color: var(--ink); }
-  .laylab span { font-size: 13px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
 
   /* §9 rosa's options as chips — the spoken line enumerates, the slide shows */
   .optrow { display: flex; flex-direction: column; gap: 14px; margin-top: 26px; }
@@ -318,10 +300,10 @@
 <div id="stagewrap">
   <div id="scaler">
     <div id="stage" aria-live="polite">
-      <!-- §1 wide (title needs the treeline); §2 zoomed 1.45x so the fire reads at scale
-           against the figures. The alpha clip is retired — nothing keys out any more. -->
+      <!-- ONE fire layer for the whole show. §1 sits wide; §2 pushes in to 1.45x on the
+           same running clip, so the move reads as a camera, not a crossfade. Sourced at
+           1920x1080 so the zoomed framing is near-native rather than upscaled. -->
       <video id="scenevid" class="scene-fire" src="campfire-scene.mp4" muted loop playsinline preload="auto"></video>
-      <video id="campvid" class="scene-fire" src="campfire-zoom.mp4" muted loop playsinline preload="auto"></video>
 
       <!-- §1 COLD OPEN -->
       <!-- §0 title — static; the show starts when the fire fades in -->
@@ -483,7 +465,6 @@
         <div class="veil"></div>
         <div class="origin" style="left:621px; top:195px; width:357px; height:147px;"></div>
         <div class="col" style="width:460px;">
-          <div class="kicker rise">In the prototype · the gate</div>
           <h1 class="rise" style="font-size:72px;">Author attestation</h1>
           <p class="copy rise">The gate is the author&rsquo;s own statement. No badge, no filter — no store can certify a life. Her name on her own words is the promise.</p>
           <p class="ask rise" id="b-ask" style="opacity:0">Ask 2 — what should happen when an attestation is false?</p>
@@ -509,7 +490,6 @@
         <div class="veil"></div>
         <div class="origin" style="left:481px; top:448px; width:149px; height:369px;"></div>
         <div class="col" style="width:560px; top:170px;">
-          <div class="kicker rise">In the prototype · the hook</div>
           <h1 class="rise" style="font-size:64px;">Finished the book? Ask the author</h1>
           <p class="copy rise">Rosa sees each question.<br>Nothing appears anywhere unless she publishes it.<br>No private messaging at any tier.</p>
           <p class="ask rise" id="k-ask" style="opacity:0">Ask 3 — what breaks first at scale?</p>
@@ -526,14 +506,12 @@
         </div>
         <div class="veil"></div>
         <div class="col" style="width:500px; top:190px;">
-          <div class="kicker rise">In the prototype · the author&rsquo;s side</div>
           <h1 class="rise" style="font-size:60px;">Nothing is public until Rosa publishes it</h1>
           <div class="optrow rise">
             <div class="opt"><svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="16" fill="#C0662A"/><path d="M10 17.5 L15 22.5 L24 12.5" fill="none" stroke="#F5EFE2" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg><div><b>Answer &amp; publish</b> — it joins her author page</div></div>
             <div class="opt"><svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="16" fill="#8C8270"/><path d="M11.5 11.5 L22.5 22.5 M22.5 11.5 L11.5 22.5" stroke="#F5EFE2" stroke-width="3.2" stroke-linecap="round"/></svg><div><b>Decline</b> — the question deletes</div></div>
             <div class="opt"><svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="16" fill="#8C8270"/><rect x="9" y="15.2" width="16" height="3.6" rx="1.8" fill="#F5EFE2"/></svg><div><b>Leave it</b> — no penalty, no nudges</div></div>
           </div>
-          <p class="copy rise" style="margin-top:24px;">She is never required to answer — and Amazon does not chase her.</p>
         </div>
         <div class="lift" id="r-lift" style="left:660px; top:90px; width:860px; height:721px;">
           <img src="dash.webp" style="width:2082px; left:-315px; top:-386px;" alt="">
@@ -606,19 +584,6 @@
         </div>
       </section>
 
-      <!-- §13 PRIOR ART — you already own the parts -->
-      <section class="seq" id="sq-prior">
-        <div class="pt-head">
-          <div class="huge step" id="pt-t">You already own the parts.</div>
-          <div class="pt-sub step" id="pt-sub" style="transition-delay:.34s;">Assembled, not invented.</div>
-        </div>
-        <div class="laylab step" id="lay1" style="top:340px; transition-delay:0s;"><b>Surface</b><span>The shelf</span></div>
-        <div class="laylab step" id="lay2" style="top:472px; transition-delay:.09s;"><b>Gate</b><span>The attestation</span></div>
-        <div class="laylab step" id="lay3" style="top:604px; transition-delay:.18s;"><b>Hook</b><span>Author access</span></div>
-        <div class="pcard step" id="p1" style="transition-delay:0s;"><div class="src">Amazon · Editorial</div><div class="nm">First Reads</div><div class="pf">A curated shelf sells books.</div></div>
-        <div class="pcard step" id="p2" style="transition-delay:.09s;"><div class="src">Amazon · KDP</div><div class="nm">The publish flow</div><div class="pf">Authors already answer a question at publish — the AI disclosure.</div></div>
-        <div class="pcard step" id="p3" style="transition-delay:.18s;"><div class="src">Amazon · Goodreads</div><div class="nm">Ask the Author</div><div class="pf">Readers ask. Authors answer.</div></div>
-      </section>
 
       <!-- §14 STAKEHOLDERS -->
       <section class="seq" id="sq-stake">
@@ -699,7 +664,6 @@
   const $ = id => document.getElementById(id);
   const stage = $('stage');
   const sceneVid = $('scenevid');
-  const campVid = $('campvid');
 
   const DOCK = {
     a: 'translate(-380.7px, 559.2px) scale(0.276)',
@@ -751,12 +715,12 @@
   }
   function evo(id, lone) { evoStage(lone); EVO.forEach(e => show(e, e === id)); }
   /* the writing beat: all three artifacts rise together while the circle and the fire
-     fade — writing is the single moment the story leaves its teller, one gesture */
+     fade — writing is the single moment the story leaves its teller, one gesture.
+     `lone` clears the figures via CSS; the fire fades on the shared video layer. */
   function evoAll(list) {
-    evoStage(false);
+    evoStage(true);
     list.forEach(id => show(id));
-    document.querySelectorAll('#camp .stick').forEach(el => { el.style.opacity = 0; });
-    campVid.style.opacity = 0;
+    sceneVid.style.opacity = 0;
   }
   function bubs(n) {
     ['bub1', 'bub2', 'bub3', 'bub4'].forEach((b, i) => { $(b).style.opacity = i < n ? 1 : 0; });
@@ -766,7 +730,7 @@
     $('print-ground').classList.remove('show');
     $('sq-hist').classList.remove('leave', 'lone');
     document.querySelectorAll('#camp .stick').forEach(el => { el.style.opacity = ''; });
-    campVid.style.opacity = '';
+    sceneVid.style.opacity = '';
     EVO.forEach(e => $(e).classList.remove('show'));
     FR.forEach(fr => show(fr, fr === key));
     Object.entries(SCENES).forEach(([k, id]) => $(id).classList.toggle('show', k === key));
@@ -905,17 +869,6 @@
     { say: '', build: '', go() { show('arc-stamp'); show('arc-img'); show('arc-k'); show('arc-t'); show('arc-l0'); show('arc-l1'); show('arc-l2'); ['arc-l1', 'arc-l2'].forEach(i => $(i).classList.add('past')); show('arc-lv'); show('arc-lm'); show('arc-l3'); } }
   ], arcReset);
 
-  /* §13 prior art — you already own the parts */
-  const PT1 = ['pt-t', 'p1', 'p2', 'p3'];
-  const PT2 = ['pt-sub', 'lay1', 'lay2', 'lay3'];
-  sec('prior', 'Own the parts', 'Jalen', '0:45', 'cream', 'sq-prior', [
-    { say: '',
-      build: '',
-      go() { $('sq-prior').classList.remove('asm'); PT1.forEach(i => show(i)); PT2.forEach(i => show(i, false)); } },
-    { say: '',
-      build: '',
-      go() { PT1.forEach(i => show(i)); $('sq-prior').classList.add('asm'); PT2.forEach(i => show(i)); } }
-  ], () => { $('sq-prior').classList.remove('asm'); PT1.forEach(i => show(i, false)); PT2.forEach(i => show(i, false)); });
 
   /* §14 stakeholders */
   function stSet(n) {
@@ -948,24 +901,28 @@
   let cur = 0;
   const dotsWrap = document.querySelector('.dots');
 
+  let shown = null;
   function render() {
     const f = FLAT[cur];
-    // reset & hide all sections
-    SEC.forEach(s => { s.reset(); s.el.classList.remove('on'); });
+    // Reset every section except the one we're already inside and moving forward through:
+    // its go() sets absolute state anyway, and resetting first made every lift snap back
+    // to its docked position and re-zoom on each beat.
+    const holding = shown && shown.s === f.s && f.bi > shown.bi;
+    SEC.forEach(s => {
+      if (!(holding && s === f.s)) s.reset();
+      if (s !== f.s) s.el.classList.remove('on');
+    });
     f.s.el.classList.add('on');
     stage.classList.toggle('dark', f.s.stage === 'dark' || !!f.b.dark || (f.s.id === 'close' && f.bi === 1));
-    // §1 the wide scene; on the figure beats it stays on underneath and scales to the
-    // zoomed clip's framing, so §1→§2 reads as a push-in. Beat 5 (writing) drops it so
-    // the campvid fade reveals navy, and beat 6 (print) keeps the pitch ground.
-    const campEarly = f.s.id === 'hist' && f.bi <= 2;
-    const sceneOn = f.s.id === 'fire' || campEarly;
-    const campOn = campEarly || (f.s.id === 'hist' && f.bi === 5);
+    // One clip throughout: wide for the cold open, pushed to 1.45x behind the figures,
+    // and it stays zoomed through the writing beat so the fade there is the fire leaving,
+    // not the camera pulling back. Beat 6 (print) keeps the pitch ground it faded to.
+    const zoom = f.s.id === 'hist' && f.bi <= 5;
+    const sceneOn = f.s.id === 'fire' || zoom;
     sceneVid.classList.toggle('on', sceneOn);
-    sceneVid.classList.toggle('zoomed', campEarly);
+    sceneVid.classList.toggle('zoomed', zoom);
     if (sceneOn) { sceneVid.play().catch(() => {}); } else { sceneVid.pause(); }
-    campVid.classList.toggle('on', campOn);
-    if (campOn) { campVid.play().catch(() => {}); } else { campVid.pause(); }
-    stage.classList.toggle('pitch', sceneOn || campOn || (f.s.id === 'hist' && f.bi === 6));
+    stage.classList.toggle('pitch', sceneOn || (f.s.id === 'hist' && f.bi === 6));
     requestAnimationFrame(() => requestAnimationFrame(() => f.b.go()));
     // header
     $('secnm').textContent = '§' + (f.si + 1) + ' · ' + f.s.name;
@@ -983,6 +940,7 @@
       dotsWrap.appendChild(d);
     });
     history.replaceState(null, '', '#' + f.s.id + (f.bi + 1));
+    shown = f;
   }
 
   function go(i) { cur = Math.max(0, Math.min(FLAT.length - 1, i)); render(); }
