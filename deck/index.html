@@ -3,13 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- Same rule as the prototype: hosted so it opens from a link, never indexable. This is a
-     student concept deck that quotes Amazon surfaces and licensed stock; it should not turn
-     up in a search result stripped of that context. -->
+<!-- Same rule as the prototype: hosted so it opens from a link, never indexable. -->
 <meta name="robots" content="noindex, nofollow">
-<title>Reader Discovery — presentation previs</title>
+<title>Reader Discovery — presentation</title>
 <meta property="og:title" content="Reader Discovery — student concept presentation">
-<meta property="og:description" content="COMMLD 560 (UW) final project previs. Not an Amazon product.">
+<meta property="og:description" content="COMMLD 560 (UW) final project. Not an Amazon product.">
+<style>#notes{display:none}</style>
 </head>
 <body>
 <style>
@@ -149,6 +148,10 @@
   video.scene-fire { position: absolute; inset: 0; width: 1600px; height: 900px; object-fit: cover;
     opacity: 0; transition: opacity .5s ease; pointer-events: none; }
   video.scene-fire.on { opacity: 1; }
+  /* the cold open and the figures share one world: the wide scene scales up to meet the
+     zoomed clip's framing (crop 1324x745 @ 200,300), so the cut reads as a camera push-in */
+  #scenevid { transform-origin: 537px 806px; transition: opacity .5s ease, transform 1.2s ease-in-out; }
+  #scenevid.zoomed { transform: scale(1.45); }
   /* the title sits in the empty upper forest; this keeps it off the treeline */
   #sq-fire .fire-title { text-shadow: 0 2px 30px rgba(0,0,0,0.85), 0 0 80px rgba(0,0,0,0.6); }
   /* held back to 80% so the real flame stays the brightest thing on the slide */
@@ -165,8 +168,9 @@
     filter: drop-shadow(0 26px 44px rgba(0,0,0,0.85)) drop-shadow(0 0 34px rgba(224,138,60,0.28)); }
   .evob.page img { border-radius: 3px; }
   .evob.show { opacity: 1; transform: translateX(-50%); }
-  #ev-clay { left: 347px; } #ev-pap { left: 694px; } #ev-bone { left: 1005px; } #ev-codex { left: 1270px; }
-  #ev-print { left: 800px; bottom: 360px; }
+  #ev-clay { left: 400px; } #ev-bone { left: 800px; } #ev-codex { left: 1200px; }
+  /* right third, large — the left half of the type field is the photo's focal point */
+  #ev-print { left: 1150px; bottom: 160px; }
   .shot { position: absolute; overflow: hidden; border-radius: 10px; background: #fff; box-shadow: 0 24px 60px -18px rgba(0,0,0,0.45); }
   .shot img { position: absolute; display: block; }
   .line.past { opacity: 0.32; font-size: 17px !important; }
@@ -188,15 +192,33 @@
   .pcard .src { font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; white-space: nowrap; }
   .pcard .nm { font-family: var(--serif); font-weight: 800; font-size: 26px; color: var(--ink); margin-bottom: 10px; white-space: nowrap; }
   .pcard .pf { font-size: 17px; line-height: 1.42; color: var(--ink); opacity: 0.85; }
-  #p1 { left: 110px; } #p2 { left: 460px; } #p3 { left: 810px; } #p4 { left: 1160px; }
+  #p1 { left: 235px; } #p2 { left: 635px; } #p3 { left: 1035px; }
   #sq-prior.asm .pcard { left: 470px; width: 1020px; height: 108px; flex-direction: row; align-items: center; gap: 24px; padding: 0 30px; }
-  #sq-prior.asm #p1 { top: 300px; } #sq-prior.asm #p2 { top: 432px; } #sq-prior.asm #p3 { top: 564px; } #sq-prior.asm #p4 { top: 696px; }
+  #sq-prior.asm #p1 { top: 340px; } #sq-prior.asm #p2 { top: 472px; } #sq-prior.asm #p3 { top: 604px; }
   #sq-prior.asm .pcard .src { order: 3; margin: 0 0 0 auto; }
   #sq-prior.asm .pcard .nm { order: 1; margin: 0; width: 285px; flex: 0 0 auto; }
   #sq-prior.asm .pcard .pf { order: 2; margin: 0; font-size: 16.5px; }
   .laylab { position: absolute; left: 110px; width: 330px; height: 108px; display: flex; flex-direction: column; justify-content: center; }
   .laylab b { font-family: var(--serif); font-weight: 800; font-size: 28px; color: var(--ink); }
   .laylab span { font-size: 13px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
+
+  /* §9 rosa's options as chips — the spoken line enumerates, the slide shows */
+  .optrow { display: flex; flex-direction: column; gap: 14px; margin-top: 26px; }
+  .opt { display: flex; align-items: center; gap: 14px; font-size: 21px; }
+  .opt svg { flex: 0 0 auto; }
+  .opt b { font-weight: 700; }
+
+  /* §12 the real-world ARC mark, stamped low-key behind Jalen's illustration */
+  .arcstamp { position: absolute; left: 790px; top: 692px; padding: 20px 36px 16px; border: 5px solid rgba(245,239,226,0.30); border-radius: 12px; transform: rotate(-6deg); color: rgba(245,239,226,0.30); text-align: center; text-transform: uppercase; }
+  .arcstamp b { display: block; font-size: 37px; font-weight: 800; letter-spacing: 0.14em; white-space: nowrap; }
+  .arcstamp span { display: block; margin-top: 6px; font-size: 19px; letter-spacing: 0.34em; }
+
+  /* §11 beat 1: the baked headline is erased in the image (texture-filled), and the
+     acquisition-vs-retention line is set here — no background, so no visible seam */
+  .b24patch { position: absolute; left: 40px; top: 108px; width: 1010px; color: #25293C; font-family: var(--serif); font-weight: 800; font-size: 60px; line-height: 1.12; padding-top: 6px; }
+
+  /* §16 native five-questions list */
+  #close-qs .line { font-size: 30px; max-width: none; }
   #al1, #al2 { transition: font-size .5s ease; }
   #sq-ans.s2 #al1 { font-size: 27px; }
   #sq-ans.s2 #al2 { font-size: 62px; }
@@ -288,7 +310,7 @@
   </div>
   <div class="hud-right">
     <div class="dots" aria-label="Beats in section"></div>
-    <span class="hint">click / <kbd>→</kbd> next · <kbd>←</kbd> back · <kbd>[</kbd><kbd>]</kbd> section · <kbd>p</kbd> present</span>
+    <span class="hint">click / <kbd>→</kbd> next · <kbd>←</kbd> back · <kbd>[</kbd><kbd>]</kbd> section · <kbd>p</kbd> present · <kbd>f</kbd> fullscreen</span>
   </div>
 </header>
 <div id="gprog"><i></i></div>
@@ -309,7 +331,8 @@
           <div class="big">The Lived Experience Collection</div>
           <div class="sub">Reach the person who lived it — a discovery surface for debut KDP authors</div>
         </div>
-        <div class="team">Reader Discovery · Jakob · Pablo · Jalen · Wanting</div>
+        <!-- order of first appearance in the show, not of contribution -->
+        <div class="team">Reader Discovery · Jalen · Jakob · Wanting · Pablo</div>
       </section>
 
       <section class="seq" id="sq-fire">
@@ -338,11 +361,10 @@
         </svg>
         <img id="print-ground" src="chinese-type.webp" alt="Chinese movable type blocks standing on a bed of set type">
         <!-- the story without its teller: the last bubble hardens into clay, then evolves -->
-        <div class="evob" id="ev-clay"><img src="clay.webp" style="height:180px;" alt="Proto-cuneiform tablet, Sumer"></div>
-        <div class="evob page" id="ev-pap"><img src="w2.webp" style="height:190px;" alt="Papyrus of Ani, Egypt"></div>
-        <div class="evob" id="ev-bone"><img src="bone.webp" style="height:300px;" alt="Shang oracle bone, British Library Or. 1595"></div>
-        <div class="evob page" id="ev-codex"><img src="w4.webp" style="height:290px;" alt="Dresden Codex page, Maya"></div>
-        <div class="evob page" id="ev-print"><img src="gut.webp" style="height:420px;" alt="Gutenberg Bible, Genesis"></div>
+        <div class="evob" id="ev-clay"><img src="clay.webp" style="height:200px;" alt="Proto-cuneiform tablet, Sumer"></div>
+        <div class="evob" id="ev-bone"><img src="bone.webp" style="height:320px;" alt="Shang oracle bone, British Library Or. 1595"></div>
+        <div class="evob page" id="ev-codex"><img src="w4.webp" style="height:310px;" alt="Dresden Codex page, Maya"></div>
+        <div class="evob page" id="ev-print"><img src="gut.webp" style="height:580px;" alt="Gutenberg Bible, Genesis"></div>
         <div class="frame" id="f10"><img src="e10.webp" alt="School of Athens"></div>
         <div class="frame" id="f11"><img src="e11.webp" alt="Shakespeare reads to a crowd"></div>
         <div class="frame" id="f13"><img src="e13.webp" alt="A Twitch stream with live chat"></div>
@@ -356,7 +378,6 @@
       <!-- §3 THE QUESTION -->
       <section class="seq" id="sq-q">
         <div class="typo">
-          <div class="kicker">Round one · the question Rachel asked us</div>
           <div class="huge">Why would a reader pick up a book by a debut KDP author?</div>
           <div class="lines"><div class="line step show" style="color:var(--muted)">What makes that appealing — and to whom?</div></div>
         </div>
@@ -370,10 +391,9 @@
         <div class="veil"></div>
         <div class="origin" style="left:379px; top:699px; width:204px; height:162px;"></div>
         <div class="col" style="top:200px;">
-          <div class="kicker rise">In the prototype · the surface</div>
           <h1 class="rise" style="font-size:84px;">The shelf</h1>
           <p class="copy rise">Every card opens with the author&rsquo;s own words — membership is attestation plus metadata, so it scales with no editorial headcount.</p>
-          <p class="ask rise" id="a-ask" style="opacity:0">Ask 1 — would this earn placement?</p>
+          <p class="ask rise" id="a-ask" style="opacity:0">Ask 1 — would your storefront teams give this shelf a home?</p>
         </div>
         <div class="lift" id="a-lift" style="left:760px; top:140px; width:740px; height:588px;">
           <img src="shelf.webp" style="width:4337px; left:-642px; top:-2461px;" alt="">
@@ -403,7 +423,7 @@
           <div class="step" id="s50-src" style="margin-top:12px; font-size:14px; color:var(--muted);">UK £40 · DE €50 · CA C$50 — Amazon Community Guidelines</div>
           <div class="step" id="s50-l2" style="font-size:24px; line-height:1.4; max-width:33ch; margin-top:28px;">The debut&rsquo;s first readers are the <b>least likely to clear it</b>.</div>
           <div class="step" id="s50-l3" style="font-size:27px; font-weight:700; margin-top:26px;">Reviews can&rsquo;t be the debut&rsquo;s trust signal.</div>
-          <div class="step" id="s50-ask" style="margin-top:16px; font-size:20px; font-weight:700; color:var(--accent);">For Amazon — does Kindle Unlimited spend count?</div>
+          <div class="step" id="s50-ask" style="margin-top:16px; font-size:20px; font-weight:700; color:var(--accent);">Question for Amazon: does Kindle Unlimited spend count?</div>
         </div>
         <svg class="step" id="s50-viz" viewBox="0 0 480 310" style="position:absolute; right:90px; top:210px; width:580px;" aria-hidden="true">
           <g fill="#CDC3AE">
@@ -448,7 +468,8 @@
               </div>
             </div>
           </div>
-          <div class="shot" style="left:1030px; top:90px; width:400px; height:730px;">
+          <!-- height stops at 612 so the crop ends before the "Prototype note" block -->
+          <div class="shot" style="left:1030px; top:134px; width:400px; height:612px;">
             <img src="answered.webp" style="width:2462px; left:-372px; top:-1151px;" alt="Rosa&rsquo;s published answer">
           </div>
         </div>
@@ -490,7 +511,7 @@
         <div class="col" style="width:560px; top:170px;">
           <div class="kicker rise">In the prototype · the hook</div>
           <h1 class="rise" style="font-size:64px;">Finished the book? Ask the author</h1>
-          <p class="copy rise">Rosa sees each question — answers it, or deletes it. Nothing appears anywhere unless she publishes it. No private messaging at any tier, by design.</p>
+          <p class="copy rise">Rosa sees each question.<br>Nothing appears anywhere unless she publishes it.<br>No private messaging at any tier.</p>
           <p class="ask rise" id="k-ask" style="opacity:0">Ask 3 — what breaks first at scale?</p>
         </div>
         <div class="lift" id="k-lift" style="left:1090px; top:100px; width:280px; height:696px;">
@@ -507,7 +528,12 @@
         <div class="col" style="width:500px; top:190px;">
           <div class="kicker rise">In the prototype · the author&rsquo;s side</div>
           <h1 class="rise" style="font-size:60px;">Nothing is public until Rosa publishes it</h1>
-          <p class="copy rise">Answer, publish, or decline — declining deletes. She is never required to answer, and Amazon does not chase her.</p>
+          <div class="optrow rise">
+            <div class="opt"><svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="16" fill="#C0662A"/><path d="M10 17.5 L15 22.5 L24 12.5" fill="none" stroke="#F5EFE2" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg><div><b>Answer &amp; publish</b> — it joins her author page</div></div>
+            <div class="opt"><svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="16" fill="#8C8270"/><path d="M11.5 11.5 L22.5 22.5 M22.5 11.5 L11.5 22.5" stroke="#F5EFE2" stroke-width="3.2" stroke-linecap="round"/></svg><div><b>Decline</b> — the question deletes</div></div>
+            <div class="opt"><svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="16" fill="#8C8270"/><rect x="9" y="15.2" width="16" height="3.6" rx="1.8" fill="#F5EFE2"/></svg><div><b>Leave it</b> — no penalty, no nudges</div></div>
+          </div>
+          <p class="copy rise" style="margin-top:24px;">She is never required to answer — and Amazon does not chase her.</p>
         </div>
         <div class="lift" id="r-lift" style="left:660px; top:90px; width:860px; height:721px;">
           <img src="dash.webp" style="width:2082px; left:-315px; top:-386px;" alt="">
@@ -524,7 +550,7 @@
         <div class="col" style="width:560px; top:190px;">
           <div class="kicker rise">The loop closes</div>
           <h1 class="rise" style="font-size:64px;">The person who lived it, answering</h1>
-          <p class="copy rise">Her answer publishes with the question to her author page — where every future reader can see the person behind the book. Goodreads proved the moderation model; our claim is placement, not novelty.</p>
+          <p class="copy rise">Her answer publishes with the question to her author page — where every future reader can see the person behind the book.</p>
         </div>
         <div class="lift" id="l-lift" style="left:1080px; top:90px; width:360px; height:700px;">
           <img src="answered.webp" style="width:2213px; left:-335px; top:-1035px;" alt="">
@@ -533,25 +559,24 @@
 
       <!-- §11 THE DATA -->
       <section class="seq" id="seq-c">
-        <div class="base bleed" id="c-b24"><img src="bleed24.webp" alt="Slide: our own data killed our first hypothesis"></div>
+        <div class="base bleed" id="c-b24"><img src="bleed24.webp" alt="Slide: reachability pays off after reading"><div class="b24patch">Reachability doesn&rsquo;t sell the book —<br>it pays off after reading</div></div>
         <div class="base bleed" id="c-b25" style="opacity:0; transition:opacity .4s ease;"><img src="b25.webp" alt="Slide: the missing signal is quality"></div>
         <div class="base bleed" id="c-b26" style="opacity:0; transition:opacity .4s ease;"><img src="b26.webp" alt="Slide: nobody rated human authorship below a 3"></div>
         <div class="veil"></div>
         <div class="datahead anno" id="c-head1">
-          <h2>Forced to choose, 16 took the memoir — but 19 refused the choice.</h2>
-          <div class="sub">n = 42 · Of the 19, 12 said the subject decides — so the shelf merchandises by subject, not by &ldquo;debut author.&rdquo;</div>
+          <h2>Forced to choose, 16 took the memoir — and 19 said &ldquo;it depends.&rdquo;</h2>
+          <div class="sub">n = 42 · Of the 19, 12 named the subject — not the author&rsquo;s fame — as what decides. The shelf merchandises by subject.</div>
         </div>
         <div class="datahead anno" id="c-head2">
-          <h2>Under 55, reaching the author reads as a reason: 12 of 23 rated it 4–5. Among 55+, 1 of 15.</h2>
+          <h2>Under 55, reaching the author reads as a reason. Among 55+, it barely registers.</h2>
           <div class="sub">Convenience sample — age and channel are confounded. We say it before Rachel asks.</div>
         </div>
         <div class="datahead anno" id="c-head3">
           <h2>The hesitation that beat everything: &ldquo;no way to tell if it&rsquo;s any good.&rdquo;</h2>
-          <div class="sub">27 of 42 · 18 distrust the reviews that exist · price moved 3 — the receipt for keeping discounts retired.</div>
+          <div class="sub">27 of 42 · 18 distrust the reviews that exist · price moved 3.</div>
         </div>
         <div class="origin off" id="c-org1" style="left:18px; top:456px; width:824px; height:148px;"></div>
         <div class="origin off" id="c-org2" style="left:842px; top:406px; width:729px; height:317px;"></div>
-        <div class="origin off" id="c-org3" style="left:73px; top:279px; width:1412px; height:465px;"></div>
         <div class="lift" id="c-lift1" style="left:180px; top:350px; width:1240px; height:252px;">
           <img src="slide24.webp" style="width:2543px; left:-95px; top:-686px;" alt="">
         </div>
@@ -565,6 +590,7 @@
 
       <!-- §12 ARC -->
       <section class="seq" id="sq-arc">
+        <div class="arcstamp step" id="arc-stamp"><b>Advance Reading Copy</b><span>Not for sale</span></div>
         <div class="robotcard step" id="arc-img"><img src="robot.webp" alt="An ARC machine looming over a rubber duck"></div>
         <div class="typo" style="left:680px; right:0; position:absolute; padding:0 100px 0 0;">
           <div class="kicker step" id="arc-k">Trust signal · Jalen&rsquo;s beat</div>
@@ -586,14 +612,12 @@
           <div class="huge step" id="pt-t">You already own the parts.</div>
           <div class="pt-sub step" id="pt-sub" style="transition-delay:.34s;">Assembled, not invented.</div>
         </div>
-        <div class="laylab step" id="lay1" style="top:300px; transition-delay:0s;"><b>Surface</b><span>The shelf</span></div>
-        <div class="laylab step" id="lay2" style="top:432px; transition-delay:.09s;"><b>Gate</b><span>The attestation</span></div>
-        <div class="laylab step" id="lay3" style="top:564px; transition-delay:.18s;"><b>Hook</b><span>Author access</span></div>
-        <div class="laylab step" id="lay4" style="top:696px; transition-delay:.27s;"><b>Order</b><span>Rotation</span></div>
+        <div class="laylab step" id="lay1" style="top:340px; transition-delay:0s;"><b>Surface</b><span>The shelf</span></div>
+        <div class="laylab step" id="lay2" style="top:472px; transition-delay:.09s;"><b>Gate</b><span>The attestation</span></div>
+        <div class="laylab step" id="lay3" style="top:604px; transition-delay:.18s;"><b>Hook</b><span>Author access</span></div>
         <div class="pcard step" id="p1" style="transition-delay:0s;"><div class="src">Amazon · Editorial</div><div class="nm">First Reads</div><div class="pf">A curated shelf sells books.</div></div>
         <div class="pcard step" id="p2" style="transition-delay:.09s;"><div class="src">Amazon · KDP</div><div class="nm">The publish flow</div><div class="pf">Authors already answer a question at publish — the AI disclosure.</div></div>
         <div class="pcard step" id="p3" style="transition-delay:.18s;"><div class="src">Amazon · Goodreads</div><div class="nm">Ask the Author</div><div class="pf">Readers ask. Authors answer.</div></div>
-        <div class="pcard step ext" id="p4" style="transition-delay:.27s;"><div class="src">The one outside part</div><div class="nm">Royal Road</div><div class="pf">Rotation keeps a shelf fresh.</div></div>
       </section>
 
       <!-- §14 STAKEHOLDERS -->
@@ -639,12 +663,25 @@
 
       <!-- §16 CLOSING -->
       <section class="seq" id="sq-close">
-        <div class="base bleed" id="close-qs"><img src="b34.webp" alt="Five questions for Amazon"></div>
+        <div id="close-qs" style="position:absolute; inset:0; transition:opacity .5s ease;">
+          <div class="typo" style="justify-content:flex-start; padding:130px 110px 0;">
+            <div class="kicker">In closing</div>
+            <div class="huge" style="font-size:64px;">Five questions for Amazon</div>
+            <div class="lines" style="margin-top:56px; gap:26px;">
+              <div class="line">1 · Would your storefront teams give this shelf a home?</div>
+              <div class="line">2 · What should happen when an attestation is false?</div>
+              <div class="line">3 · What breaks first in the author Q&amp;A — and at what scale?</div>
+              <div class="line">4 · Vine seeds early reviews for products. Why not books?</div>
+              <div class="line">5 · What would kill this internally that we haven&rsquo;t seen?</div>
+            </div>
+          </div>
+        </div>
         <div class="typo centered" id="close-ty" style="opacity:0; transition:opacity .5s ease;">
           <div class="huge">Thank you.</div>
           <div class="lines" style="align-items:center;">
             <div class="line accent step show" style="font-weight:700;">jakobhoward.github.io/kdp-lived-experience-concept</div>
             <div class="step show" style="margin-top:26px; background:var(--cream); padding:13px 13px 9px; border-radius:14px;"><img src="qr.png" style="width:150px; display:block;" alt="QR code for the live prototype"></div>
+            <div class="line step show" style="margin-top:22px; font-size:17px; color:rgba(245,239,226,0.65);">full survey results · jakobhoward.github.io/kdp-lived-experience-concept/data</div>
           </div>
         </div>
       </section>
@@ -686,59 +723,46 @@
 
   /* §0 title — static; up while the Zoom room fills */
   sec('title', 'Title', 'Jakob', '0:00', 'dark', 'sq-title', [
-    { say: '(pre-show — leave this up while people join; the show starts on the next beat)',
-      build: 'Proper title slide, restaged on the navy: case-study kicker, collection name, one-line frame, team. Deliberately static — the fire is held back so the cold open still lands.',
+    { say: '',
+      build: '',
       go() {} }
   ], () => {});
 
   /* §1 cold open */
   sec('fire', 'Cold open', 'Jalen', '0:15', 'dark', 'sq-fire', [
-    { say: '“For three hundred thousand years, a story traveled only as far as its teller.”',
-      build: 'Licensed campfire scene (AdobeStock 447105443, ProRes master) full-bleed — a real fire in a dark forest, seamless 8s loop. Only the 300k line sits in the treeline now; the one-channel idea is carried verbally (wording is Jalen&rsquo;s call — the slide commits only to the number). 300k = the age of Homo sapiens (Jebel Irhoud), safe under fact-check; the old 400k figure predates our species.',
+    { say: '',
+      build: '',
       go() { show('fire-t'); } }
   ], () => { show('fire-t', false); });
 
   /* §2 history — the fire continues; figures inverted to cream around it */
   const FR = ['f10', 'f11', 'f13'];
   const SCENES = { abe: 'abe-scene' };
-  const EVO = ['ev-clay', 'ev-pap', 'ev-bone', 'ev-codex', 'ev-print'];
+  const EVO = ['ev-clay', 'ev-bone', 'ev-codex', 'ev-print'];
   function sceneOn(on) {
     $('camp').classList.toggle('show', on);
     $('bubs').classList.toggle('show', on);
   }
-  /* the evolution: ghosted circle, one object above the fire; lone = circle fully gone */
-  let evoTimers = [];
-  const EVO_HOLD = 1400;  /* ms between writing examples — tune to Jalen's pace */
-  const evoStop = () => { evoTimers.forEach(clearTimeout); evoTimers = []; };
+  /* the evolution: ghosted circle, objects above the fire; lone = circle fully gone */
   function evoStage(lone) {
     histShow(null); sceneOn(true); bubs(0);
     $('sq-hist').classList.add('leave');
     $('sq-hist').classList.toggle('lone', !!lone);
   }
   function evo(id, lone) { evoStage(lone); EVO.forEach(e => show(e, e === id)); }
-  /* one beat: each object rises into the row and takes the circle down a step with it,
-     so the beat ends on the four objects alone. No clicks. */
-  const CIRCLE_FADE = [0.62, 0.36, 0.15, 0];
-  /* the whole photographed world recedes to navy as the artifacts land — the fire is
-     baked into the footage, so the scene fades rather than the flame alone */
-  const SCENE_FADE = [0.78, 0.46, 0.2, 0];
-  const camplings = () => document.querySelectorAll('#camp .stick:not(.flip)');
-  function evoSeq(list) {
+  /* the writing beat: all three artifacts rise together while the circle and the fire
+     fade — writing is the single moment the story leaves its teller, one gesture */
+  function evoAll(list) {
     evoStage(false);
-    let i = 0;
-    (function step() {
-      show(list[i]);
-      camplings().forEach(el => { el.style.opacity = CIRCLE_FADE[i]; });
-      campVid.style.opacity = SCENE_FADE[i];
-      if (++i < list.length) evoTimers.push(setTimeout(step, EVO_HOLD));
-    })();
+    list.forEach(id => show(id));
+    document.querySelectorAll('#camp .stick').forEach(el => { el.style.opacity = 0; });
+    campVid.style.opacity = 0;
   }
   function bubs(n) {
     ['bub1', 'bub2', 'bub3', 'bub4'].forEach((b, i) => { $(b).style.opacity = i < n ? 1 : 0; });
   }
   function histShow(key) {
     sceneOn(false); bubs(0);
-    evoStop();
     $('print-ground').classList.remove('show');
     $('sq-hist').classList.remove('leave', 'lone');
     document.querySelectorAll('#camp .stick').forEach(el => { el.style.opacity = ''; });
@@ -748,43 +772,27 @@
     Object.entries(SCENES).forEach(([k, id]) => $(id).classList.toggle('show', k === key));
   }
   sec('hist', 'How stories travel', 'Jalen', '1:20', 'cream', 'sq-hist', [
-    { say: '“You gathered around the person who lived it.”', dark: true, build: 'Licensed campfire scene, zoomed 1.45x so the flame reads at scale, with the cream figures held to 80% brightness so the real fire stays brightest. No captions anywhere in this run — the say-lines carry it. In Slides: one still per beat, bubbles on Appear.', go() { histShow(null); sceneOn(true); bubs(0); } },
-    { say: '“Someone told —”', dark: true, build: 'One bubble — the teller’s. Action/Reaction labels cut; the bubbles say it.', go() { histShow(null); sceneOn(true); bubs(1); } },
-    { say: '“— and everyone answered. Teller, audience, response. That loop is old.”', dark: true, build: 'Three more bubbles. Fire still burning.', go() { histShow(null); sceneOn(true); bubs(4); } },
-    { say: '“The ancients scaled the circle.”', build: 'Say “the ancients” — the painting is Greek philosophers, not Romans.', go() { histShow('f10'); } },
-    { say: '“The circle became an audience.”', build: 'Shakespeare beat, moved before the writing evolution — all the live-speech beats now sit together.', go() { histShow('f11'); } },
-    { say: '“Then stories learned to travel without their teller — pressed into clay in Sumer &middot; inked onto papyrus in Egypt &middot; carved into oracle bones in China &middot; painted into codices by the Maya.” (one sentence, four beats — let each object land under its clause)', dark: true, build: 'ONE slide, no clicks. Each object rises into the row (~1.4s apart, ≈4s to fill) and takes the circle down a step with it — figures and fire dim on every entry and hit zero as the codex lands, so the beat ends on the four objects alone. Real artifacts: MET tablet, Papyrus of Ani, British Library Or. 1595, Dresden Codex. In Slides: four images each Appear on “After previous” with a 1.4s delay, and give the figure/fire group a Fade Out on the same chain. Tune EVO_HOLD to Jalen&rsquo;s pace.', go() { evoSeq(['ev-clay', 'ev-pap', 'ev-bone', 'ev-codex']); } },
-    { say: '“Movable type was born in China, four centuries before Gutenberg — then the press industrialized it: one teller, a million readers. And for the first time, the audience couldn&rsquo;t talk back.”', dark: true, build: 'Full-bleed licensed Chinese movable type (AdobeStock 2032558546) grounds the beat — print&rsquo;s origin is East Asian, said out loud rather than defaulting to Europe. The Gutenberg page stays the focal artifact, riding above the type field.', go() { evo('ev-print', true); show('print-ground'); } },
-    { say: '(pause — let the loop get its laugh)', build: 'No caption; the reference does the work. 8s loop, GIFs loop natively in Slides.', go() { histShow('abe'); } },
-    { say: '“And this is a campfire too — live, and the audience talks back.”', build: 'No caption. Pause one breath on the chat column, then hand to the question.', go() { histShow('f13'); } }
+    { say: '', dark: true, build: '', go() { histShow(null); sceneOn(true); bubs(0); } },
+    { say: '', dark: true, build: '', go() { histShow(null); sceneOn(true); bubs(1); } },
+    { say: '', dark: true, build: '', go() { histShow(null); sceneOn(true); bubs(4); } },
+    { say: '', build: '', go() { histShow('f10'); } },
+    { say: '', build: '', go() { histShow('f11'); } },
+    { say: '', dark: true, build: '', go() { evoAll(['ev-clay', 'ev-bone', 'ev-codex']); } },
+    { say: '', dark: true, build: '', go() { evo('ev-print', true); show('print-ground'); } },
+    { say: '', build: '', go() { histShow('abe'); } },
+    { say: '', build: '', go() { histShow('f13'); } }
   ], () => { histShow(null); });
 
   /* §3 question */
   sec('q', 'The question', 'Jalen → Jakob', '0:20', 'cream', 'sq-q', [
-    { say: '“Round one, Rachel asked us the question the whole deck answers.”', build: 'Typography only — this is current slide 2, restaged.', go() {} }
+    { say: '', build: '', go() {} }
   ], () => {});
-
-  /* §4 shelf */
-  function aReset() {
-    $('seq-a').classList.remove('focused');
-    $('a-lift').style.transform = DOCK.a;
-    ['a-anno1', 'a-anno2'].forEach(i => $(i).classList.remove('show'));
-    ['a-arr1', 'a-arr2', 'a-arr1h', 'a-arr2h'].forEach(i => $(i).classList.remove('show'));
-    $('a-ask').style.opacity = '0';
-  }
-  const aFocus = () => { $('seq-a').classList.add('focused'); $('a-lift').style.transform = 'none'; };
-  sec('shelf', 'The shelf', 'Jakob', '1:30', 'cream', 'seq-a', [
-    { say: '“Every book you&rsquo;re about to see is invented. The shelf isn&rsquo;t.”', build: 'UI full-bleed, nothing else. Let them read it.', go() {} },
-    { say: '“A browsable collection inside pages Amazon already runs. Membership is attestation plus metadata. First Reads proved a curated shelf works — and editorial attention is precious and scarce, so attestation is how a shelf scales past a hundred books a year.”', build: 'Focus pull: duplicate slide, dimmed screenshot + enlarged card + copy, Fade transition.', go: aFocus },
-    { say: '“Her own words are the gate.”', build: 'Arrow 1 + chip. Same slide duplicated, Fade.', go() { aFocus(); show('a-anno1'); show('a-arr1'); show('a-arr1h'); } },
-    { say: '“The badge is observed, not awarded. Ask one: would this earn placement?”', build: 'Arrow 2 + ask line. Stop talking when the ask lands.', go() { aFocus(); show('a-anno1'); show('a-arr1'); show('a-arr1h'); show('a-anno2'); show('a-arr2'); show('a-arr2h'); $('a-ask').style.opacity = 1; } }
-  ], aReset);
 
   /* §5 $50 */
   sec('fifty', 'Why not reviews', 'Jakob', '0:45', 'cream', 'sq-50', [
-    { say: '“Amazon requires fifty dollars of spend in the past year before a customer may write any review — a threshold that exists to stop review fraud, and it works.”', build: 'Yes-and posture: credit the policy&rsquo;s purpose out loud before describing its side effect. One stat + the locked-review visual.', go() { ['s50-num', 's50-l1', 's50-src', 's50-viz'].forEach(i => show(i)); } },
-    { say: '“It just wasn&rsquo;t built with a debut&rsquo;s first readers in mind — family, community, people who found the book off Amazon are exactly the customers least likely to clear it.”', build: 'The side effect, framed as a gap the policy wasn&rsquo;t designed for — not a flaw in it.', go() { ['s50-num', 's50-l1', 's50-src', 's50-viz', 's50-l2'].forEach(i => show(i)); } },
-    { say: '“So reviews can&rsquo;t be the debut&rsquo;s trust signal. And a genuine question for you — does Kindle Unlimited subscription spend count? We&rsquo;d love to know.”', build: 'KU reframed as a question — yes-and, never Amazon-did-wrong. If it joins the closing asks, five questions become six (team call).', go() { ['s50-num', 's50-l1', 's50-src', 's50-viz', 's50-l2', 's50-l3', 's50-ask'].forEach(i => show(i)); } }
+    { say: '', build: '', go() { ['s50-num', 's50-l1', 's50-src', 's50-viz'].forEach(i => show(i)); } },
+    { say: '', build: '', go() { ['s50-num', 's50-l1', 's50-src', 's50-viz', 's50-l2'].forEach(i => show(i)); } },
+    { say: '', build: '', go() { ['s50-num', 's50-l1', 's50-src', 's50-viz', 's50-l2', 's50-l3', 's50-ask'].forEach(i => show(i)); } }
   ], () => ['s50-num', 's50-l1', 's50-src', 's50-viz', 's50-l2', 's50-l3', 's50-ask'].forEach(i => show(i, false)));
 
   /* §6 answer */
@@ -795,12 +803,28 @@
     $('ext').style.opacity = 0;
   }
   sec('ans', 'Our answer', 'Jakob', '0:45', 'cream', 'sq-ans', [
-    { say: '“So here&rsquo;s our answer: a collection of first-person books —”', build: 'Type does the work — the noun lands huge first.', go() { show('al1'); show('al2'); } },
-    { say: '“— by authors who never saw themselves as writers.”', build: 'The first lines shrink to make room; same slide duplicated in Slides.', go() { show('al1'); show('al2'); $('sq-ans').classList.add('s2'); show('al3'); } },
-    { say: '“Where the reason to pick one up is that you can reach the person who lived it.” (slow down — this is the sentence to leave the room with)', build: 'The sentence assembles across three beats; color lands on the promise.', go() { show('al1'); show('al2'); $('sq-ans').classList.add('s2'); show('al3'); show('al4'); } },
-    { say: '“Extraordinary because it is real. An AI-written book has no one behind it. A celebrity memoirist won&rsquo;t answer you.”', build: 'Its own slide — headline + the two gray claims (Appear, After previous). Order matters: nobody behind it → somebody, but out of reach. The receipt screenshot sits right.', go() { $('ans-stack').style.opacity = 0; $('ext').style.opacity = 1; show('an1'); show('an2'); } },
-    { say: '“This author will.” (stop. let it sit, then hand to the gate)', build: 'One click adds the accent card. It sits directly under “won&rsquo;t answer you,” so “will” answers the line above it — same grammar, third rung of the ladder. In Slides: Appear on the card.', go() { $('ans-stack').style.opacity = 0; $('ext').style.opacity = 1; show('an1'); show('an2'); show('an3'); } }
+    { say: '', build: '', go() { show('al1'); show('al2'); } },
+    { say: '', build: '', go() { show('al1'); show('al2'); $('sq-ans').classList.add('s2'); show('al3'); } },
+    { say: '', build: '', go() { show('al1'); show('al2'); $('sq-ans').classList.add('s2'); show('al3'); show('al4'); } },
+    { say: '', build: '', go() { $('ans-stack').style.opacity = 0; $('ext').style.opacity = 1; show('an1'); show('an2'); } },
+    { say: '', build: '', go() { $('ans-stack').style.opacity = 0; $('ext').style.opacity = 1; show('an1'); show('an2'); show('an3'); } }
   ], ansReset);
+
+  /* §the shelf — moved after the answer so the demo proves a thesis the room has heard */
+  function aReset() {
+    $('seq-a').classList.remove('focused');
+    $('a-lift').style.transform = DOCK.a;
+    ['a-anno1', 'a-anno2'].forEach(i => $(i).classList.remove('show'));
+    ['a-arr1', 'a-arr2', 'a-arr1h', 'a-arr2h'].forEach(i => $(i).classList.remove('show'));
+    $('a-ask').style.opacity = '0';
+  }
+  const aFocus = () => { $('seq-a').classList.add('focused'); $('a-lift').style.transform = 'none'; };
+  sec('shelf', 'The shelf', 'Jakob', '1:30', 'cream', 'seq-a', [
+    { say: '', build: '', go() {} },
+    { say: '', build: '', go: aFocus },
+    { say: '', build: '', go() { aFocus(); show('a-anno1'); show('a-arr1'); show('a-arr1h'); } },
+    { say: '', build: '', go() { aFocus(); show('a-anno1'); show('a-arr1'); show('a-arr1h'); show('a-anno2'); show('a-arr2'); show('a-arr2h'); $('a-ask').style.opacity = 1; } }
+  ], aReset);
 
   /* §7 gate */
   function bReset() {
@@ -813,9 +837,9 @@
   }
   const bFocus = () => { $('seq-b').classList.add('focused'); $('b-lift').style.transform = 'none'; };
   sec('gate', 'The gate', 'Wanting', '1:00', 'cream', 'seq-b', [
-    { say: '“This is Rosa&rsquo;s book page — the attestation lives where the store already talks about a book.”', build: 'UI alone first; the audience finds the statement before you name it.', go() {} },
-    { say: '“The gate is her own statement. Amazon hosts it — and hosting, not certifying, is the honest promise, because no store can certify a life. No badge and no filter, either: KDP counts AI translation as AI-generated, so a filter would catch exactly the multilingual authors this centers.”', build: 'Focus pull to the attestation block. Yes-and: certification is framed as a promise no store could keep, not a thing Amazon fails to do.', go: bFocus },
-    { say: '“What if she&rsquo;s lying? The answer is one line away — existing report tools, existing policies, no new machinery. Ask two: what should happen when an attestation is false?”', build: 'One arrow + ring on the collapsed line. Then the ask.', go() { bFocus(); show('b-anno1'); show('b-arr1'); show('b-arr1h'); show('b-ring'); $('b-ask').style.opacity = 1; } }
+    { say: '', build: '', go() {} },
+    { say: '', build: '', go: bFocus },
+    { say: '', build: '', go() { bFocus(); show('b-anno1'); show('b-arr1'); show('b-arr1h'); show('b-ring'); $('b-ask').style.opacity = 1; } }
   ], bReset);
 
   /* §8 ask */
@@ -825,8 +849,8 @@
     $('k-ask').style.opacity = '0';
   }
   sec('ask', 'Ask the author', 'Pablo', '0:45', 'cream', 'sq-ask', [
-    { say: '“Finish the book, and you get one question.”', build: 'Book page with the composer open (?ask=compose), UI alone.', go() {} },
-    { say: '“Rosa sees each question — answers it, or deletes it. Nothing appears unless she publishes it. No private messaging at any tier. The prototype defaults to one question per reader per book — that&rsquo;s a dial, not a doctrine, and where it sits is part of ask three: what breaks first at scale?”', build: 'Focus pull to the composer — the typed question is a verbatim survey answer.', go() { $('sq-ask').classList.add('focused'); $('k-lift').style.transform = 'none'; $('k-ask').style.opacity = 1; } }
+    { say: '', build: '', go() {} },
+    { say: '', build: '', go() { $('sq-ask').classList.add('focused'); $('k-lift').style.transform = 'none'; $('k-ask').style.opacity = 1; } }
   ], kReset);
 
   /* §9 rosa */
@@ -835,8 +859,8 @@
     $('r-lift').style.transform = DOCK.r;
   }
   sec('rosa', "Rosa's side", 'Pablo', '0:45', 'cream', 'sq-rosa', [
-    { say: '“And this is Rosa&rsquo;s side of it.”', build: 'Dashboard UI alone (author-dashboard.html).', go() {} },
-    { say: '“Nothing is public until she publishes it. Answer, publish, or decline — declining deletes. She is never required to answer, and Amazon does not chase her.”', build: 'Focus pull to the “Waiting for you” queue.', go() { $('sq-rosa').classList.add('focused'); $('r-lift').style.transform = 'none'; } }
+    { say: '', build: '', go() {} },
+    { say: '', build: '', go() { $('sq-rosa').classList.add('focused'); $('r-lift').style.transform = 'none'; } }
   ], rReset);
 
   /* §10 loop */
@@ -845,14 +869,14 @@
     $('l-lift').style.transform = DOCK.l;
   }
   sec('loop', 'The loop closes', 'Pablo → Jakob', '0:30', 'cream', 'sq-loop', [
-    { say: '“And when she answers —”', build: 'Answered state (?ask=answered), UI alone.', go() {} },
-    { say: '“— it publishes with the question to her author page, where every future reader can see the person behind the book. Goodreads proved the moderation model; our claim is placement, not novelty.”', build: 'Focus pull to the answered panel.', go() { $('sq-loop').classList.add('focused'); $('l-lift').style.transform = 'none'; } }
+    { say: '', build: '', go() {} },
+    { say: '', build: '', go() { $('sq-loop').classList.add('focused'); $('l-lift').style.transform = 'none'; } }
   ], lReset);
 
   /* §11 data */
   function cReset() {
     $('seq-c').classList.remove('focused');
-    ['c-org1', 'c-org2', 'c-org3'].forEach(i => $(i).classList.add('off'));
+    ['c-org1', 'c-org2'].forEach(i => $(i).classList.add('off'));
     ['c-lift1', 'c-lift2', 'c-lift3'].forEach(i => { $(i).classList.add('gone'); });
     $('c-lift1').style.transform = DOCK.c1;
     $('c-lift2').style.transform = DOCK.c2;
@@ -862,34 +886,34 @@
   }
   function cBase(which) { $('c-b24').style.opacity = which === 24 ? 1 : 0; $('c-b25').style.opacity = which === 25 ? 1 : 0; $('c-b26').style.opacity = which === 26 ? 1 : 0; }
   sec('data', 'The data', 'Jakob', '1:45', 'cream', 'seq-c', [
-    { say: '“We surveyed forty-two readers. Bad news first — our own data killed our first hypothesis.” (disclose the sample before any number)', build: 'Slide 24 as-is establishes that the evidence exists.', go() { cBase(24); } },
-    { say: '“Forced to choose, sixteen took the celebrity memoir. But nineteen refused the choice — and twelve of those said the subject decides.”', build: 'Dim + isolate chart one with its takeaway line.', go() { cBase(24); $('seq-c').classList.add('focused'); $('c-org1').classList.remove('off'); $('c-lift1').classList.remove('gone'); $('c-lift1').style.transform = 'none'; show('c-head1'); } },
-    { say: '“Under fifty-five, reaching the author reads as a reason — twelve of twenty-three. Among fifty-five plus, one of fifteen. Age and channel are confounded, and we say that out loud.”', build: 'Chart two gets its own beat.', go() { cBase(24); $('seq-c').classList.add('focused'); $('c-org2').classList.remove('off'); $('c-lift2').classList.remove('gone'); $('c-lift2').style.transform = 'none'; show('c-head2'); } },
-    { say: '“The hesitation that beat everything: no way to tell if it&rsquo;s any good — twenty-seven of forty-two. Eighteen distrust the reviews that exist. Price moved three.”', build: 'Next slide (26) behind; same focus grammar on its bar chart.', go() { cBase(25); $('seq-c').classList.add('focused'); $('c-org3').classList.remove('off'); $('c-lift3').classList.remove('gone'); $('c-lift3').style.transform = 'none'; show('c-head3'); } },
-    { say: '“And the strongest signal we measured: nobody rated human authorship below a three. BookNet Canada corroborates. The attestation gate delivers exactly that signal — with no certification.”', build: 'Release to the full slide — no focus, let the 40-of-42 land.', go() { cBase(26); } }
+    { say: '', build: '', go() { cBase(24); } },
+    { say: '', build: '', go() { cBase(24); $('seq-c').classList.add('focused'); $('c-org1').classList.remove('off'); $('c-lift1').classList.remove('gone'); $('c-lift1').style.transform = 'none'; show('c-head1'); } },
+    { say: '', build: '', go() { cBase(24); $('seq-c').classList.add('focused'); $('c-org2').classList.remove('off'); $('c-lift2').classList.remove('gone'); $('c-lift2').style.transform = 'none'; show('c-head2'); } },
+    { say: '', build: '', go() { cBase(0); $('seq-c').classList.add('focused'); $('c-lift3').classList.remove('gone'); $('c-lift3').style.transform = 'none'; show('c-head3'); } },
+    { say: '', build: '', go() { cBase(26); } }
   ], cReset);
 
   /* §12 arc */
-  const ARC_ALL = ['arc-img', 'arc-k', 'arc-t', 'arc-l0', 'arc-l1', 'arc-l2', 'arc-lv', 'arc-lm', 'arc-l3'];
+  const ARC_ALL = ['arc-stamp', 'arc-img', 'arc-k', 'arc-t', 'arc-l0', 'arc-l1', 'arc-l2', 'arc-lv', 'arc-lm', 'arc-l3'];
   function arcReset() {
     ARC_ALL.forEach(i => show(i, false));
     ['arc-l1', 'arc-l2'].forEach(i => $(i).classList.remove('past'));
   }
   sec('arc', 'ARC, compressed', 'Jalen', '1:00', 'dark', 'sq-arc', [
-    { say: '“Let&rsquo;s talk ARC — advance reader copies.”', build: 'The illustration is the whole joke — iykyk, never explained aloud. (Replaces slides 27–29; the game key art reads as someone else&rsquo;s brand in front of Amazon.)', go() { show('arc-img'); show('arc-k'); show('arc-t'); show('arc-l0'); } },
-    { say: '“ARC readers are a debut&rsquo;s first audience — and the fifty-dollar rule blocks most of them from reviewing. To be clear, we&rsquo;re not proposing an ARC program; review-for-copy breaks the guidelines we just cited.”', build: 'Two short lines carry it; the full sentences live in the notes, not on the slide.', go() { show('arc-img'); show('arc-k'); show('arc-t'); show('arc-l0'); show('arc-l1'); show('arc-l2'); } },
-    { say: '“And Amazon already runs exactly this for products — Vine: invited reviewers, a free product, a disclosed review, inside policy. If ARC engagement lived as metadata — signal, never reviews — does that fit? Ask four: why not books?”', build: 'Earlier lines dim and shrink so the stage never becomes a wall. Metadata is framed as part of the question to Amazon, not as our recommendation.', go() { show('arc-img'); show('arc-k'); show('arc-t'); show('arc-l0'); show('arc-l1'); show('arc-l2'); ['arc-l1', 'arc-l2'].forEach(i => $(i).classList.add('past')); show('arc-lv'); show('arc-lm'); show('arc-l3'); } }
+    { say: '', build: '', go() { show('arc-stamp'); show('arc-img'); show('arc-k'); show('arc-t'); show('arc-l0'); } },
+    { say: '', build: '', go() { show('arc-stamp'); show('arc-img'); show('arc-k'); show('arc-t'); show('arc-l0'); show('arc-l1'); show('arc-l2'); } },
+    { say: '', build: '', go() { show('arc-stamp'); show('arc-img'); show('arc-k'); show('arc-t'); show('arc-l0'); show('arc-l1'); show('arc-l2'); ['arc-l1', 'arc-l2'].forEach(i => $(i).classList.add('past')); show('arc-lv'); show('arc-lm'); show('arc-l3'); } }
   ], arcReset);
 
   /* §13 prior art — you already own the parts */
-  const PT1 = ['pt-t', 'p1', 'p2', 'p3', 'p4'];
-  const PT2 = ['pt-sub', 'lay1', 'lay2', 'lay3', 'lay4'];
+  const PT1 = ['pt-t', 'p1', 'p2', 'p3'];
+  const PT2 = ['pt-sub', 'lay1', 'lay2', 'lay3'];
   sec('prior', 'Own the parts', 'Jalen', '0:45', 'cream', 'sq-prior', [
-    { say: '“You&rsquo;ve met most of these already. First Reads proved a curated shelf sells. KDP already asks authors a question at publish — the AI disclosure. Goodreads proved readers will ask and authors will answer. And Royal Road — the one part from outside — proved rotation keeps a shelf fresh.”',
-      build: 'Slide 1 — headline + four part cards (Appear, After previous, staggered ~0.1s). Three cards are Amazon&rsquo;s own; Royal Road is dashed — the one outside part. Name each card as it lands.',
+    { say: '',
+      build: '',
       go() { $('sq-prior').classList.remove('asm'); PT1.forEach(i => show(i)); PT2.forEach(i => show(i, false)); } },
-    { say: '“Stack them up and they&rsquo;re the four layers you&rsquo;ve just seen. We didn&rsquo;t invent anything tonight — we assembled. And Vella already taught the lesson that separate destinations are hard, so every piece lives inside pages Amazon already runs.”',
-      build: 'Slide 2 — duplicate + Fade: cards restack into the layer diagram, labels appear left. The crossfade sells the assembly in Slides; here the cards physically move. This beat is the “why us / why now” answer.',
+    { say: '',
+      build: '',
       go() { PT1.forEach(i => show(i)); $('sq-prior').classList.add('asm'); PT2.forEach(i => show(i)); } }
   ], () => { $('sq-prior').classList.remove('asm'); PT1.forEach(i => show(i, false)); PT2.forEach(i => show(i, false)); });
 
@@ -899,22 +923,22 @@
     ['std1', 'std2', 'std3', 'std4'].forEach((id, i) => $(id).classList.toggle('show', i + 1 === +n));
   }
   sec('stake', 'Stakeholder value', 'Pablo', '1:00', 'cream', 'sq-stake', [
-    { say: '“Who benefits — readers, multilingual authors, first-time indie authors, and KDP itself.”', build: 'Wanting&rsquo;s shapes are back — four equal ellipses, wrap bug gone. Names only on the establishing beat.', go() { stSet(0); } },
-    { say: '“Readers: the pain is AI slop and fake reviews; the solution is a curated, authentic collection; the outcome is completion and trust.”', build: 'One stakeholder per beat — the active ellipse holds, the others fade, its row appears below.', go() { stSet(1); } },
-    { say: '“Multilingual authors: AI translation gets flagged as spam; the contextual author statement carries it; the outcome is the English market unlocked.”', build: 'Same grammar, next ellipse.', go() { stSet(2); } },
-    { say: '“First-time indie authors: locked out by expensive ads; free organic placement; discovery without an ad budget.”', build: 'Same grammar.', go() { stSet(3); } },
-    { say: '“And KDP: brand risk and KU churn; self-attestation plus community reporting; reduced platform liability.”', build: 'Close on Amazon&rsquo;s own stake — all claims verbatim from Wanting&rsquo;s slide, still carrying the confirm-with-team flag.', go() { stSet(4); } }
+    { say: '', build: '', go() { stSet(0); } },
+    { say: '', build: '', go() { stSet(1); } },
+    { say: '', build: '', go() { stSet(2); } },
+    { say: '', build: '', go() { stSet(3); } },
+    { say: '', build: '', go() { stSet(4); } }
   ], () => stSet(0));
 
   /* §15 empowering */
   sec('emp', 'Is it empowering?', 'Wanting', '0:30', 'cream', 'sq-emp', [
-    { say: '“Accessible, inclusive, equitable. The prototype is WCAG 2.1 AA with zero axe violations, six languages done properly, full RTL — and the equity claim is the outcome: it empowers.”', build: 'The real language-flip GIF, running. Don&rsquo;t talk over the first flip into Arabic.', go() {} }
+    { say: '', build: '', go() {} }
   ], () => {});
 
   /* §16 closing */
   sec('close', 'Closing', 'Jakob', '0:25', 'cream', 'sq-close', [
-    { say: '“Five questions for Amazon — this is the Q&A agenda. Read them, thank the room, stop talking.”', build: 'Slide as-is.', go() { $('close-qs').style.opacity = 1; $('close-ty').style.opacity = 0; stage.classList.remove('dark'); } },
-    { say: '“Thank you. The prototype is live at this link — walk the pages.”', build: 'Dark close. Leave this up during discussion.', go() { $('close-qs').style.opacity = 0; $('close-ty').style.opacity = 1; stage.classList.add('dark'); } }
+    { say: '', build: '', go() { $('close-qs').style.opacity = 1; $('close-ty').style.opacity = 0; stage.classList.remove('dark'); } },
+    { say: '', build: '', go() { $('close-qs').style.opacity = 0; $('close-ty').style.opacity = 1; stage.classList.add('dark'); } }
   ], () => { $('close-qs').style.opacity = 1; $('close-ty').style.opacity = 0; });
 
   /* ---------- flatten to a global beat list ---------- */
@@ -930,11 +954,14 @@
     SEC.forEach(s => { s.reset(); s.el.classList.remove('on'); });
     f.s.el.classList.add('on');
     stage.classList.toggle('dark', f.s.stage === 'dark' || !!f.b.dark || (f.s.id === 'close' && f.bi === 1));
-    // §1 the wide scene; §2 the zoomed one behind the figures. Beat 6 (print) keeps the
-    // pitch ground the evolution faded down to, so there's no jump between them.
-    const sceneOn = f.s.id === 'fire';
-    const campOn = f.s.id === 'hist' && (f.bi <= 2 || f.bi === 5);
+    // §1 the wide scene; on the figure beats it stays on underneath and scales to the
+    // zoomed clip's framing, so §1→§2 reads as a push-in. Beat 5 (writing) drops it so
+    // the campvid fade reveals navy, and beat 6 (print) keeps the pitch ground.
+    const campEarly = f.s.id === 'hist' && f.bi <= 2;
+    const sceneOn = f.s.id === 'fire' || campEarly;
+    const campOn = campEarly || (f.s.id === 'hist' && f.bi === 5);
     sceneVid.classList.toggle('on', sceneOn);
+    sceneVid.classList.toggle('zoomed', campEarly);
     if (sceneOn) { sceneVid.play().catch(() => {}); } else { sceneVid.pause(); }
     campVid.classList.toggle('on', campOn);
     if (campOn) { campVid.play().catch(() => {}); } else { campVid.pause(); }
@@ -967,6 +994,10 @@
     else if (e.key === ']') { const f = FLAT[cur]; const n = FLAT.findIndex(x => x.si === f.si + 1); if (n >= 0) go(n); }
     else if (e.key === '[') { const f = FLAT[cur]; const p = FLAT.findIndex(x => x.si === f.si - 1); if (p >= 0) go(p); else go(0); }
     else if (e.key === 'p' || e.key === 'P') { document.body.classList.toggle('perform'); fit(); }
+    else if (e.key === 'f' || e.key === 'F') {
+      if (document.fullscreenElement) { document.exitFullscreen(); }
+      else { document.documentElement.requestFullscreen().catch(() => {}); }
+    }
   });
   $('nextsec').addEventListener('click', () => { const f = FLAT[cur]; const n = FLAT.findIndex(x => x.si === f.si + 1); if (n >= 0) go(n); });
   $('prevsec').addEventListener('click', () => { const f = FLAT[cur]; const p = FLAT.findIndex(x => x.si === f.si - 1); if (p >= 0) go(p); else go(0); });
