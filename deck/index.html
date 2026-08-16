@@ -557,8 +557,18 @@
           <h2>The hesitation that beat everything: &ldquo;no way to tell if it&rsquo;s any good.&rdquo;</h2>
           <div class="sub">27 of 42 · 18 distrust the reviews that exist · price moved 3.</div>
         </div>
+        <div class="datahead anno" id="c-head4">
+          <h2>40 of 42 rated human authorship a 4 or a 5.</h2>
+          <div class="sub">n = 42 · nobody below a 3 · &ldquo;makes no difference&rdquo; drew zero.</div>
+        </div>
+        <div class="datahead anno" id="c-head5">
+          <h2>BookNet Canada reads the same way.</h2>
+          <div class="sub">Published percentages, external corroboration — our own survey reports counts only.</div>
+        </div>
         <div class="origin off" id="c-org1" style="left:18px; top:456px; width:824px; height:148px;"></div>
         <div class="origin off" id="c-org2" style="left:842px; top:406px; width:729px; height:317px;"></div>
+        <div class="origin off" id="c-org3" style="left:20px; top:362px; width:609px; height:350px;"></div>
+        <div class="origin off" id="c-org4" style="left:742px; top:430px; width:832px; height:286px;"></div>
         <div class="lift" id="c-lift1" style="left:180px; top:350px; width:1240px; height:252px;">
           <img src="slide24.webp" style="width:2543px; left:-95px; top:-686px;" alt="">
         </div>
@@ -567,6 +577,12 @@
         </div>
         <div class="lift" id="c-lift3" style="left:50px; top:240px; width:1500px; height:494px;">
           <img src="chart25.webp" style="width:1500px; left:0; top:0;" alt="">
+        </div>
+        <div class="lift" id="c-lift4" style="left:343px; top:280px; width:914px; height:525px;">
+          <img src="b26.webp" style="width:2400px; left:-30px; top:-543px;" alt="">
+        </div>
+        <div class="lift" id="c-lift5" style="left:155px; top:300px; width:1290px; height:443px;">
+          <img src="b26.webp" style="width:2480px; left:-1150px; top:-667px;" alt="">
         </div>
       </section>
 
@@ -679,7 +695,9 @@
     l: 'translate(-635.8px, 406.5px) scale(0.46)',
     c1: 'translate(-161.8px, 106.3px) scale(0.6644)',
     c2: 'translate(617.2px, 115.7px) scale(0.6337)',
-    c3: 'translate(22.7px, 39.1px) scale(0.9415)'
+    c3: 'translate(22.7px, 39.1px) scale(0.9415)',
+    c4: 'translate(-323px, 82px) scale(0.6663)',
+    c5: 'translate(587px, 130px) scale(0.645)'
   };
 
   /* Sections. Each: beats = [{say, build, go}]; reset() returns section to beat-0 state. */
@@ -858,13 +876,13 @@
      beats can't accumulate now that forward motion no longer resets the section */
   function cSet(base, head, lift, org) {
     cBase(base);
-    ['c-head1', 'c-head2', 'c-head3'].forEach((id, i) => show(id, i === head));
-    ['c-lift1', 'c-lift2', 'c-lift3'].forEach((id, i) => {
+    ['c-head1', 'c-head2', 'c-head3', 'c-head4', 'c-head5'].forEach((id, i) => show(id, i === head));
+    ['c-lift1', 'c-lift2', 'c-lift3', 'c-lift4', 'c-lift5'].forEach((id, i) => {
       const on = i === lift;
       $(id).classList.toggle('gone', !on);
       $(id).style.transform = on ? 'none' : DOCK['c' + (i + 1)];
     });
-    ['c-org1', 'c-org2'].forEach((id, i) => $(id).classList.toggle('off', i !== org));
+    ['c-org1', 'c-org2', 'c-org3', 'c-org4'].forEach((id, i) => $(id).classList.toggle('off', i !== org));
     $('seq-c').classList.toggle('focused', head !== -1);
   }
   function cReset() { cSet(24, -1, -1, -1); }
@@ -873,7 +891,9 @@
     { say: '', build: '', go() { cSet(24, 0, 0, 0); } },
     { say: '', build: '', go() { cSet(24, 1, 1, 1); } },
     { say: '', build: '', go() { cSet(0, 2, 2, -1); } },
-    { say: '', build: '', go() { cSet(26, -1, -1, -1); } }
+    { say: '', build: '', go() { cSet(26, -1, -1, -1); } },
+    { say: '', build: '', go() { cSet(26, 3, 3, 2); } },
+    { say: '', build: '', go() { cSet(26, 4, 4, 3); } }
   ], cReset);
 
   /* §12 arc */
