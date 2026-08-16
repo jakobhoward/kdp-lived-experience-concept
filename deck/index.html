@@ -293,7 +293,7 @@
   </div>
   <div class="hud-right">
     <div class="dots" aria-label="Beats in section"></div>
-    <span class="hint">click / <kbd>→</kbd> next · <kbd>←</kbd> back · <kbd>[</kbd><kbd>]</kbd> section · <kbd>p</kbd> present · <kbd>f</kbd> fullscreen</span>
+    <span class="hint">click / <kbd>→</kbd> next · <kbd>←</kbd> back · <kbd>[</kbd><kbd>]</kbd> section · <kbd>p</kbd> hide notes · <kbd>f</kbd> fullscreen</span>
   </div>
 </header>
 <div id="gprog"><i></i></div>
@@ -639,7 +639,7 @@
               <div class="line">1 · Would your storefront teams give this shelf a home?</div>
               <div class="line">2 · What should happen when an attestation is false?</div>
               <div class="line">3 · What breaks first in the author Q&amp;A — and at what scale?</div>
-              <div class="line">4 · Vine seeds early reviews for products. Why not books?</div>
+              <div class="line">4 · Amazon Vine seeds early reviews for products. Why not books?</div>
               <div class="line">5 · What would kill this internally that we haven&rsquo;t seen?</div>
             </div>
           </div>
@@ -983,9 +983,10 @@
   window.addEventListener('resize', fit);
   fit();
 
-  /* ?present opens straight into performance mode — the shape of the link you hand out,
-     since the build notes name teammates and retired ideas. `p` toggles it back. */
-  if (/[?&]present\b/.test(location.search)) document.body.classList.add('perform');
+  /* Performance mode is the default: this gets driven live far more often than it gets
+     read with notes, and the build notes name teammates and retired ideas — so the plain
+     link is always safe to hand out. `?notes` opens with the strip showing; `p` toggles. */
+  if (!/[?&]notes\b/.test(location.search)) document.body.classList.add('perform');
 
   const h = location.hash.slice(1);
   let start = 0;
