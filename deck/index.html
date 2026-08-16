@@ -159,9 +159,7 @@
   /* held back to 80% so the real flame stays the brightest thing on the slide */
   .stick { position: absolute; transition: opacity .6s ease; filter: brightness(0.8); }
   .stick.flip { transform: scaleX(-1); }
-  /* "leave" — the circle dims, the teller goes dark, the bubble becomes clay; "lone" — by print, the circle is gone */
-  #sq-hist.leave .stick.flip { opacity: 0; }   /* the teller has left */
-  #sq-hist.lone .stick { opacity: 0; }         /* by print, the circle is gone */
+  #sq-hist.lone .stick { opacity: 0; }         /* the circle leaves as one — figures go together, on the same fade as the fire */
   /* the four writing examples stand in a row on a common baseline, entering one at a time */
   .evob { position: absolute; bottom: 420px;
     opacity: 0; transform: translateX(-50%) scale(0.45) translateY(120px); transform-origin: 50% 100%;
@@ -710,7 +708,6 @@
   /* the evolution: ghosted circle, objects above the fire; lone = circle fully gone */
   function evoStage(lone) {
     histShow(null); sceneOn(true); bubs(0);
-    $('sq-hist').classList.add('leave');
     $('sq-hist').classList.toggle('lone', !!lone);
   }
   function evo(id, lone) { evoStage(lone); EVO.forEach(e => show(e, e === id)); }
@@ -734,7 +731,7 @@
     sceneOn(false); bubs(0);
     clearTimeout(evoTimer);
     $('print-ground').classList.remove('show');
-    $('sq-hist').classList.remove('leave', 'lone');
+    $('sq-hist').classList.remove('lone');
     document.querySelectorAll('#camp .stick').forEach(el => { el.style.opacity = ''; });
     sceneVid.style.opacity = '';
     EVO.forEach(e => $(e).classList.remove('show'));
