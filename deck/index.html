@@ -183,6 +183,9 @@
   .neg .t b { font-weight: 700; }
   .neg.pos { background: rgba(192,102,42,0.13); }
   .neg.pos .t { font-family: var(--serif); font-weight: 800; font-size: 27px; color: var(--accent); }
+  /* the thesis cards sit over the loop slide's veil, so translucent washes go illegible — solid grounds there */
+  #sq-loop .neg { background: rgba(245,239,226,0.94); }
+  #sq-loop .neg.pos { background: var(--cream); }
   #sq-arc .line { transition: opacity .4s ease, font-size .4s ease; }
   /* §13 you already own the parts */
 
@@ -432,30 +435,6 @@
           <div id="al3" class="step" style="font-family:var(--serif); font-weight:800; font-size:46px; line-height:1.15; margin-top:30px; max-width:24ch;">by authors who never saw themselves as writers</div>
           <div id="al4" class="step" style="font-size:29px; line-height:1.45; margin-top:46px; max-width:44ch;">— where the reason to pick one up is that <b class="accent">you can reach the person who lived it</b>.</div>
         </div>
-        <div id="ext" style="position:absolute; inset:0; opacity:0; transition:opacity .5s ease;">
-          <div class="typo" style="width:900px; padding:0 0 0 110px;">
-            <div class="kicker">Our answer &middot; why it holds</div>
-            <div class="huge" style="font-size:62px;">Extraordinary because it is real.</div>
-            <div class="negrow">
-              <div class="neg step" id="an1">
-                <svg width="40" height="40" viewBox="0 0 40 40"><rect x="8" y="8" width="24" height="24" rx="5" fill="#8C8270"/><rect x="15" y="15" width="10" height="10" rx="2" fill="#F5EFE2"/><rect x="12" y="1" width="4" height="6" rx="2" fill="#8C8270"/><rect x="24" y="1" width="4" height="6" rx="2" fill="#8C8270"/><rect x="12" y="33" width="4" height="6" rx="2" fill="#8C8270"/><rect x="24" y="33" width="4" height="6" rx="2" fill="#8C8270"/><rect x="1" y="12" width="6" height="4" rx="2" fill="#8C8270"/><rect x="1" y="24" width="6" height="4" rx="2" fill="#8C8270"/><rect x="33" y="12" width="6" height="4" rx="2" fill="#8C8270"/><rect x="33" y="24" width="6" height="4" rx="2" fill="#8C8270"/></svg>
-                <div class="t">An AI-written book <b>has no one behind it</b>.</div>
-              </div>
-              <div class="neg step" id="an2">
-                <svg width="40" height="40" viewBox="0 0 40 40"><polygon points="20,3 24.5,14.5 37,14.5 27,22.5 30.8,35 20,27.5 9.2,35 13,22.5 3,14.5 15.5,14.5" fill="#8C8270"/></svg>
-                <div class="t">A celebrity memoirist <b>won&rsquo;t answer you</b>.</div>
-              </div>
-              <div class="neg pos step" id="an3">
-                <svg width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="12" r="7" fill="#C0662A"/><path d="M 6 36 C 6 26 12 22 20 22 C 28 22 34 26 34 36 Z" fill="#C0662A"/></svg>
-                <div class="t">This author <b>will</b>.</div>
-              </div>
-            </div>
-          </div>
-          <!-- height stops at 612 so the crop ends before the "Prototype note" block -->
-          <div class="shot" style="left:1030px; top:134px; width:400px; height:612px;">
-            <img src="answered.webp" style="width:2462px; left:-372px; top:-1151px;" alt="Rosa&rsquo;s published answer">
-          </div>
-        </div>
       </section>
 
       <!-- §7 THE GATE -->
@@ -525,11 +504,29 @@
           <img src="answered.webp" style="width:1019px; left:0; top:0;" alt="Rosa answered your question">
         </div>
         <div class="veil"></div>
-        <div class="origin" style="left:444px; top:497px; width:166px; height:322px;"></div>
-        <div class="col" style="width:560px; top:190px;">
+        <div class="origin" id="l-org" style="left:444px; top:497px; width:166px; height:322px; transition:opacity .45s ease;"></div>
+        <div class="col" id="l-col1" style="width:560px; top:190px; transition:opacity .45s ease;">
           <div class="kicker rise">The loop closes</div>
           <h1 class="rise" style="font-size:64px;">The person who lived it, answering</h1>
           <p class="copy rise">Her answer publishes with the question to her author page — where every future reader can see the person behind the book.</p>
+        </div>
+        <div class="col" id="l-col2" style="width:640px; top:150px; opacity:0; transition:opacity .45s ease;">
+          <div class="kicker">Our answer &middot; why it holds</div>
+          <h1 style="font-size:56px;">There is a person behind this book.</h1>
+          <div class="negrow">
+            <div class="neg step" id="an1">
+              <svg width="40" height="40" viewBox="0 0 40 40"><rect x="8" y="8" width="24" height="24" rx="5" fill="#8C8270"/><rect x="15" y="15" width="10" height="10" rx="2" fill="#F5EFE2"/><rect x="12" y="1" width="4" height="6" rx="2" fill="#8C8270"/><rect x="24" y="1" width="4" height="6" rx="2" fill="#8C8270"/><rect x="12" y="33" width="4" height="6" rx="2" fill="#8C8270"/><rect x="24" y="33" width="4" height="6" rx="2" fill="#8C8270"/><rect x="1" y="12" width="6" height="4" rx="2" fill="#8C8270"/><rect x="1" y="24" width="6" height="4" rx="2" fill="#8C8270"/><rect x="33" y="12" width="6" height="4" rx="2" fill="#8C8270"/><rect x="33" y="24" width="6" height="4" rx="2" fill="#8C8270"/></svg>
+              <div class="t">An AI-written book <b>has no one behind it</b>.</div>
+            </div>
+            <div class="neg step" id="an2">
+              <svg width="40" height="40" viewBox="0 0 40 40"><polygon points="20,3 24.5,14.5 37,14.5 27,22.5 30.8,35 20,27.5 9.2,35 13,22.5 3,14.5 15.5,14.5" fill="#8C8270"/></svg>
+              <div class="t">A celebrity memoirist <b>won&rsquo;t answer you</b>.</div>
+            </div>
+            <div class="neg pos step" id="an3">
+              <svg width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="12" r="7" fill="#C0662A"/><path d="M 6 36 C 6 26 12 22 20 22 C 28 22 34 26 34 36 Z" fill="#C0662A"/></svg>
+              <div class="t">This author <b>will</b>.</div>
+            </div>
+          </div>
         </div>
         <div class="lift" id="l-lift" style="left:1080px; top:90px; width:360px; height:700px;">
           <img src="answered.webp" style="width:2213px; left:-335px; top:-1035px;" alt="">
@@ -771,16 +768,12 @@
   /* §6 answer */
   function ansReset() {
     $('sq-ans').classList.remove('s2');
-    ['al1', 'al2', 'al3', 'al4', 'an1', 'an2', 'an3'].forEach(i => show(i, false));
-    $('ans-stack').style.opacity = 1;
-    $('ext').style.opacity = 0;
+    ['al1', 'al2', 'al3', 'al4'].forEach(i => show(i, false));
   }
-  sec('ans', 'Our answer', 'Jakob', '0:45', 'cream', 'sq-ans', [
+  sec('ans', 'Our answer', 'Jakob', '0:30', 'cream', 'sq-ans', [
     { say: '', build: '', go() { show('al1'); show('al2'); } },
     { say: '', build: '', go() { show('al1'); show('al2'); $('sq-ans').classList.add('s2'); show('al3'); } },
-    { say: '', build: '', go() { show('al1'); show('al2'); $('sq-ans').classList.add('s2'); show('al3'); show('al4'); } },
-    { say: '', build: '', go() { $('ans-stack').style.opacity = 0; $('ext').style.opacity = 1; show('an1'); show('an2'); } },
-    { say: '', build: '', go() { $('ans-stack').style.opacity = 0; $('ext').style.opacity = 1; show('an1'); show('an2'); show('an3'); } }
+    { say: '', build: '', go() { show('al1'); show('al2'); $('sq-ans').classList.add('s2'); show('al3'); show('al4'); } }
   ], ansReset);
 
   /* §the shelf — moved after the answer so the demo proves a thesis the room has heard */
@@ -840,10 +833,18 @@
   function lReset() {
     $('sq-loop').classList.remove('focused');
     $('l-lift').style.transform = DOCK.l;
+    $('l-col1').style.opacity = 1;
+    $('l-col2').style.opacity = 0;
+    $('l-org').style.opacity = '';
+    ['an1', 'an2', 'an3'].forEach(i => show(i, false));
   }
-  sec('loop', 'The loop closes', 'Pablo → Jakob', '0:30', 'cream', 'sq-loop', [
+  const lFocus = () => { $('sq-loop').classList.add('focused'); $('l-lift').style.transform = 'none'; };
+  const lThesis = () => { lFocus(); $('l-col1').style.opacity = 0; $('l-col2').style.opacity = 1; $('l-org').style.opacity = 0; show('an1'); show('an2'); };
+  sec('loop', 'The loop closes', 'Pablo → Jakob', '0:45', 'cream', 'sq-loop', [
     { say: '', build: '', go() {} },
-    { say: '', build: '', go() { $('sq-loop').classList.add('focused'); $('l-lift').style.transform = 'none'; } }
+    { say: '', build: '', go: lFocus },
+    { say: '', build: '', go: lThesis },
+    { say: '', build: '', go() { lThesis(); show('an3'); } }
   ], lReset);
 
   /* §11 data */
