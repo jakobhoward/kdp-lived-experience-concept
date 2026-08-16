@@ -152,6 +152,8 @@
      on the flame rather than the middle of the picture. Slow enough to read as a move. */
   #scenevid { transform-origin: 45% 62%; transition: opacity .5s ease, transform 1.6s cubic-bezier(.4,0,.2,1); }
   #scenevid.zoomed { transform: scale(1.45); }
+  /* entering from the cold open: hold the figures back until the push-in lands */
+  #sq-hist.delayfigs .scene { transition-delay: 1.5s; }
   /* the title sits in the empty upper forest; this keeps it off the treeline */
   #sq-fire .fire-title { text-shadow: 0 2px 30px rgba(0,0,0,0.85), 0 0 80px rgba(0,0,0,0.6); }
   /* held back to 80% so the real flame stays the brightest thing on the slide */
@@ -190,10 +192,9 @@
   .opt svg { flex: 0 0 auto; }
   .opt b { font-weight: 700; }
 
-  /* §12 the real-world ARC mark, stamped low-key behind Jalen's illustration */
-  .arcstamp { position: absolute; left: 790px; top: 692px; padding: 20px 36px 16px; border: 5px solid rgba(245,239,226,0.30); border-radius: 12px; transform: rotate(-6deg); color: rgba(245,239,226,0.30); text-align: center; text-transform: uppercase; }
-  .arcstamp b { display: block; font-size: 37px; font-weight: 800; letter-spacing: 0.14em; white-space: nowrap; }
-  .arcstamp span { display: block; margin-top: 6px; font-size: 19px; letter-spacing: 0.34em; }
+  /* §12 background: the reading circle, dimmed to texture under the navy */
+  .arcbg { position: absolute; inset: 0; width: 1600px; height: 900px; object-fit: cover; opacity: 0; transition: opacity .8s ease; filter: grayscale(0.65) brightness(0.6); }
+  .arcbg.show { opacity: 0.3; }
 
   /* §11 beat 1: the baked headline is erased in the image (texture-filled), and the
      acquisition-vs-retention line is set here — no background, so no visible seam */
@@ -329,16 +330,16 @@
         <div class="scene" id="camp">
           <img class="stick" src="fig1.webp" style="left:160px; top:518px; height:282px;" alt="">
           <img class="stick flip" src="fig2.webp" style="left:346px; top:485px; height:315px;" alt="">
-          <img class="stick" src="fig4.webp" style="left:1078px; top:499px; height:301px;" alt="">
-          <img class="stick" src="fig1.webp" style="left:1353px; top:518px; height:282px;" alt="">
+          <img class="stick" src="fig4.webp" style="left:1250px; top:499px; height:301px;" alt="">
+          <img class="stick" src="fig1.webp" style="left:1458px; top:518px; height:282px;" alt="">
         </div>
         <svg class="scene" id="bubs" viewBox="0 0 1600 900" aria-hidden="true">
           <g fill="#E9BC4F">
             <!-- one bubble centred over each head; tails drop to the new figure tops -->
             <g class="bub" id="bub1" opacity="0"><ellipse cx="434" cy="400" rx="80" ry="48"/><path d="M 418 443 L 430 481 L 452 441 Z"/></g>
             <g class="bub" id="bub2" opacity="0"><ellipse cx="223" cy="430" rx="70" ry="42"/><path d="M 209 467 L 214 508 L 240 464 Z"/></g>
-            <g class="bub" id="bub3" opacity="0"><ellipse cx="1186" cy="412" rx="70" ry="42"/><path d="M 1172 449 L 1176 490 L 1202 446 Z"/></g>
-            <g class="bub" id="bub4" opacity="0"><ellipse cx="1416" cy="430" rx="70" ry="42"/><path d="M 1402 467 L 1406 508 L 1432 464 Z"/></g>
+            <g class="bub" id="bub3" opacity="0"><ellipse cx="1358" cy="412" rx="70" ry="42"/><path d="M 1344 449 L 1348 490 L 1374 446 Z"/></g>
+            <g class="bub" id="bub4" opacity="0"><ellipse cx="1518" cy="430" rx="62" ry="40"/><path d="M 1504 467 L 1508 508 L 1534 464 Z"/></g>
           </g>
         </svg>
         <img id="print-ground" src="chinese-type.webp" alt="Chinese movable type blocks standing on a bed of set type">
@@ -466,7 +467,7 @@
         <div class="origin" style="left:621px; top:195px; width:357px; height:147px;"></div>
         <div class="col" style="width:460px;">
           <h1 class="rise" style="font-size:72px;">Author attestation</h1>
-          <p class="copy rise">The gate is the author&rsquo;s own statement. No badge, no filter — no store can certify a life. Her name on her own words is the promise.</p>
+          <p class="copy rise">The gate is the author&rsquo;s own statement. No badge, no filter — no store can certify a life.</p>
           <p class="ask rise" id="b-ask" style="opacity:0">Ask 2 — what should happen when an attestation is false?</p>
         </div>
         <div class="lift" id="b-lift" style="left:560px; top:160px; width:980px; height:402px;">
@@ -546,7 +547,7 @@
           <div class="sub">n = 42 · Of the 19, 12 named the subject — not the author&rsquo;s fame — as what decides. The shelf merchandises by subject.</div>
         </div>
         <div class="datahead anno" id="c-head2">
-          <h2>Under 55, reaching the author reads as a reason. Among 55+, it barely registers.</h2>
+          <h2>Under 55, reaching the author reads as a reason.</h2>
           <div class="sub">Convenience sample — age and channel are confounded. We say it before Rachel asks.</div>
         </div>
         <div class="datahead anno" id="c-head3">
@@ -568,7 +569,9 @@
 
       <!-- §12 ARC -->
       <section class="seq" id="sq-arc">
-        <div class="arcstamp step" id="arc-stamp"><b>Advance Reading Copy</b><span>Not for sale</span></div>
+        <!-- the deck's circle motif, restated in the present: a debut's first audience is
+             a circle of readers. Preview asset — license AdobeStock 1986643502 if it stays. -->
+        <img class="arcbg" id="arc-bg" src="arc-circle.webp" alt="">
         <div class="robotcard step" id="arc-img"><img src="robot.webp" alt="An ARC machine looming over a rubber duck"></div>
         <div class="typo" style="left:680px; right:0; position:absolute; padding:0 100px 0 0;">
           <div class="kicker step" id="arc-k">Trust signal · Jalen&rsquo;s beat</div>
@@ -714,19 +717,25 @@
     $('sq-hist').classList.toggle('lone', !!lone);
   }
   function evo(id, lone) { evoStage(lone); EVO.forEach(e => show(e, e === id)); }
-  /* the writing beat: all three artifacts rise together while the circle and the fire
-     fade — writing is the single moment the story leaves its teller, one gesture.
-     `lone` clears the figures via CSS; the fire fades on the shared video layer. */
+  /* the writing beat: the circle gets one breath on screen, then the three artifacts
+     rise together while figures and fire fade — writing is the moment the story
+     leaves its teller. `lone` clears the figures; the fire fades on the video layer. */
+  let evoTimer = 0;
   function evoAll(list) {
-    evoStage(true);
-    list.forEach(id => show(id));
-    sceneVid.style.opacity = 0;
+    evoStage(false);
+    clearTimeout(evoTimer);
+    evoTimer = setTimeout(() => {
+      $('sq-hist').classList.add('lone');
+      list.forEach(id => show(id));
+      sceneVid.style.opacity = 0;
+    }, 900);
   }
   function bubs(n) {
     ['bub1', 'bub2', 'bub3', 'bub4'].forEach((b, i) => { $(b).style.opacity = i < n ? 1 : 0; });
   }
   function histShow(key) {
     sceneOn(false); bubs(0);
+    clearTimeout(evoTimer);
     $('print-ground').classList.remove('show');
     $('sq-hist').classList.remove('leave', 'lone');
     document.querySelectorAll('#camp .stick').forEach(el => { el.style.opacity = ''; });
@@ -838,35 +847,39 @@
   ], lReset);
 
   /* §11 data */
-  function cReset() {
-    $('seq-c').classList.remove('focused');
-    ['c-org1', 'c-org2'].forEach(i => $(i).classList.add('off'));
-    ['c-lift1', 'c-lift2', 'c-lift3'].forEach(i => { $(i).classList.add('gone'); });
-    $('c-lift1').style.transform = DOCK.c1;
-    $('c-lift2').style.transform = DOCK.c2;
-    $('c-lift3').style.transform = DOCK.c3;
-    ['c-head1', 'c-head2', 'c-head3'].forEach(i => show(i, false));
-    $('c-b24').style.opacity = 1; $('c-b25').style.opacity = 0; $('c-b26').style.opacity = 0;
-  }
   function cBase(which) { $('c-b24').style.opacity = which === 24 ? 1 : 0; $('c-b25').style.opacity = which === 25 ? 1 : 0; $('c-b26').style.opacity = which === 26 ? 1 : 0; }
+  /* every beat sets the FULL section state — heads/lifts/origins are exclusive, so
+     beats can't accumulate now that forward motion no longer resets the section */
+  function cSet(base, head, lift, org) {
+    cBase(base);
+    ['c-head1', 'c-head2', 'c-head3'].forEach((id, i) => show(id, i === head));
+    ['c-lift1', 'c-lift2', 'c-lift3'].forEach((id, i) => {
+      const on = i === lift;
+      $(id).classList.toggle('gone', !on);
+      $(id).style.transform = on ? 'none' : DOCK['c' + (i + 1)];
+    });
+    ['c-org1', 'c-org2'].forEach((id, i) => $(id).classList.toggle('off', i !== org));
+    $('seq-c').classList.toggle('focused', head !== -1);
+  }
+  function cReset() { cSet(24, -1, -1, -1); }
   sec('data', 'The data', 'Jakob', '1:45', 'cream', 'seq-c', [
-    { say: '', build: '', go() { cBase(24); } },
-    { say: '', build: '', go() { cBase(24); $('seq-c').classList.add('focused'); $('c-org1').classList.remove('off'); $('c-lift1').classList.remove('gone'); $('c-lift1').style.transform = 'none'; show('c-head1'); } },
-    { say: '', build: '', go() { cBase(24); $('seq-c').classList.add('focused'); $('c-org2').classList.remove('off'); $('c-lift2').classList.remove('gone'); $('c-lift2').style.transform = 'none'; show('c-head2'); } },
-    { say: '', build: '', go() { cBase(0); $('seq-c').classList.add('focused'); $('c-lift3').classList.remove('gone'); $('c-lift3').style.transform = 'none'; show('c-head3'); } },
-    { say: '', build: '', go() { cBase(26); } }
+    { say: '', build: '', go() { cSet(24, -1, -1, -1); } },
+    { say: '', build: '', go() { cSet(24, 0, 0, 0); } },
+    { say: '', build: '', go() { cSet(24, 1, 1, 1); } },
+    { say: '', build: '', go() { cSet(0, 2, 2, -1); } },
+    { say: '', build: '', go() { cSet(26, -1, -1, -1); } }
   ], cReset);
 
   /* §12 arc */
-  const ARC_ALL = ['arc-stamp', 'arc-img', 'arc-k', 'arc-t', 'arc-l0', 'arc-l1', 'arc-l2', 'arc-lv', 'arc-lm', 'arc-l3'];
+  const ARC_ALL = ['arc-bg', 'arc-img', 'arc-k', 'arc-t', 'arc-l0', 'arc-l1', 'arc-l2', 'arc-lv', 'arc-lm', 'arc-l3'];
   function arcReset() {
     ARC_ALL.forEach(i => show(i, false));
     ['arc-l1', 'arc-l2'].forEach(i => $(i).classList.remove('past'));
   }
   sec('arc', 'ARC, compressed', 'Jalen', '1:00', 'dark', 'sq-arc', [
-    { say: '', build: '', go() { show('arc-stamp'); show('arc-img'); show('arc-k'); show('arc-t'); show('arc-l0'); } },
-    { say: '', build: '', go() { show('arc-stamp'); show('arc-img'); show('arc-k'); show('arc-t'); show('arc-l0'); show('arc-l1'); show('arc-l2'); } },
-    { say: '', build: '', go() { show('arc-stamp'); show('arc-img'); show('arc-k'); show('arc-t'); show('arc-l0'); show('arc-l1'); show('arc-l2'); ['arc-l1', 'arc-l2'].forEach(i => $(i).classList.add('past')); show('arc-lv'); show('arc-lm'); show('arc-l3'); } }
+    { say: '', build: '', go() { show('arc-bg'); show('arc-img'); show('arc-k'); show('arc-t'); show('arc-l0'); } },
+    { say: '', build: '', go() { show('arc-bg'); show('arc-img'); show('arc-k'); show('arc-t'); show('arc-l0'); show('arc-l1'); show('arc-l2'); } },
+    { say: '', build: '', go() { show('arc-bg'); show('arc-img'); show('arc-k'); show('arc-t'); show('arc-l0'); show('arc-l1'); show('arc-l2'); ['arc-l1', 'arc-l2'].forEach(i => $(i).classList.add('past')); show('arc-lv'); show('arc-lm'); show('arc-l3'); } }
   ], arcReset);
 
 
@@ -921,6 +934,8 @@
     const sceneOn = f.s.id === 'fire' || zoom;
     sceneVid.classList.toggle('on', sceneOn);
     sceneVid.classList.toggle('zoomed', zoom);
+    // figures wait for the camera only on the fire → figures cut
+    $('sq-hist').classList.toggle('delayfigs', !!(shown && shown.s.id === 'fire' && f.s.id === 'hist' && f.bi === 0));
     if (sceneOn) { sceneVid.play().catch(() => {}); } else { sceneVid.pause(); }
     stage.classList.toggle('pitch', sceneOn || (f.s.id === 'hist' && f.bi === 6));
     requestAnimationFrame(() => requestAnimationFrame(() => f.b.go()));
