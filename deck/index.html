@@ -255,7 +255,9 @@
   #print-ground.show { opacity: 1; }
 
   /* performance mode (press p): chrome gone, stage alone for the screen share */
-  body.perform header, body.perform #gprog, body.perform #notes, body.perform #rot { display: none; }
+  /* #rot is deliberately NOT in this list: perform mode is the default and the only mode the
+     public deck ships, so hiding it here meant the rotate prompt never once rendered. */
+  body.perform header, body.perform #gprog, body.perform #notes { display: none; }
 
   .robotcard { position: absolute; left: 150px; top: 190px; width: 470px; background: #EFEDE8; border-radius: 14px; padding: 28px; box-shadow: 0 30px 80px -20px rgba(0,0,0,0.65); }
   .robotcard img { width: 100%; display: block; }
@@ -280,10 +282,24 @@
     #notes .say { font-size: 14px; line-height: 1.35; }
     #notes .build { font-size: 11.5px; line-height: 1.3; }
   }
-  @media (max-width: 900px) and (orientation: portrait) {
-    #rot { display: block; }
+  /* A portrait phone scales the 1600x900 stage to about 0.23 — every label on it is
+     unreadable. Ask for landscape, but never trap: orientation lock is common, so the
+     prompt is always dismissable and dismissal sticks for the visit. */
+  #rot { display: none; position: fixed; inset: 0; z-index: 50; padding: 26px;
+         background: rgba(16,22,43,0.93); align-items: center; justify-content: center; }
+  #rot .rotcard { background: var(--cream); color: var(--ink); border-radius: 16px;
+         padding: 30px 26px; text-align: center; max-width: 330px;
+         box-shadow: 0 30px 70px -20px rgba(0,0,0,0.7); }
+  #rot svg { display: block; margin: 0 auto 18px; }
+  #rot .rott { font-family: var(--serif); font-weight: 800; font-size: 26px; line-height: 1.15; }
+  #rot .rots { font-size: 15px; line-height: 1.45; color: var(--muted); margin-top: 10px; }
+  #rot button { margin-top: 22px; font: inherit; font-size: 14px; font-weight: 700;
+         color: var(--accent); background: transparent; border: 1px solid rgba(31,42,74,0.3);
+         border-radius: 999px; padding: 10px 22px; cursor: pointer; }
+  #rot button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  @media (orientation: portrait) and (max-width: 900px) {
+    body:not(.rot-ok) #rot { display: flex; }
   }
-  #rot { display: none; position: fixed; left: 0; right: 0; bottom: 6px; text-align: center; font-size: 11.5px; color: var(--muted); }
 
   @media (prefers-reduced-motion: reduce) {
     .lift, .veil, .rise, .anno, .seq, .step, .frame, .era, svg.arrows path { transition-duration: 0.01s !important; transition-delay: 0s !important; }
@@ -677,7 +693,20 @@
   </div>
 </div>
 
-<div id="rot">rotate to landscape for a bigger stage</div>
+<div id="rot" role="group" aria-label="Orientation notice">
+  <div class="rotcard">
+    <svg width="52" height="52" viewBox="0 0 52 52" aria-hidden="true" fill="none">
+      <rect x="4" y="15" width="26" height="34" rx="4" stroke="#1F2A4A" stroke-width="2.6"/>
+      <rect x="14" y="44" width="6" height="1.6" rx="0.8" fill="#1F2A4A"/>
+      <path d="M 24 6 A 20 20 0 0 1 46 26" stroke="#C0662A" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M 46 26 l -5 -5 m 5 5 l -5 5" stroke="#C0662A" stroke-width="2.6"
+            stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div class="rott">Rotate to landscape</div>
+    <div class="rots">This deck is a 16:9 stage — sideways gives it room to be readable.</div>
+    <button type="button" id="rot-x">View anyway</button>
+  </div>
+</div>
 <div id="notes"><div class="say" id="n-say"></div><div class="build" id="n-build"></div></div>
 
 <script>
@@ -1010,6 +1039,10 @@
   }
   window.addEventListener('resize', fit);
   fit();
+
+  /* Dismissal sticks for the visit — someone with orientation lock shouldn't be asked twice.
+     Rotating to landscape hides it on its own, via the media query. */
+  $('rot-x').addEventListener('click', () => document.body.classList.add('rot-ok'));
 
   /* Performance mode is the default: this gets driven live far more often than it gets
      read with notes. `?notes` opens with the strip showing; `p` toggles. */
