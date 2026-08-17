@@ -329,7 +329,9 @@
       <!-- ONE fire layer for the whole show. §1 sits wide; §2 pushes in to 1.45x on the
            same running clip, so the move reads as a camera, not a crossfade. Sourced at
            1920x1080 so the zoomed framing is near-native rather than upscaled. -->
-      <video id="scenevid" class="scene-fire" src="campfire-scene.mp4" muted loop playsinline preload="auto"></video>
+      <!-- preload="none": 1.9MB that used to race the first paint. warmAll() buffers it
+           the moment the page is up, long before the click that starts the show. -->
+      <video id="scenevid" class="scene-fire" src="campfire-scene.mp4" muted loop playsinline preload="none"></video>
 
       <!-- §1 COLD OPEN -->
       <!-- §0 title — static; the show starts when the fire fades in -->
@@ -353,10 +355,10 @@
       <section class="seq" id="sq-hist">
         <!-- composed campfire scene: licensed stick figures (AdobeStock 2015814173) recolored cream, real fire where the icon was -->
         <div class="scene" id="camp">
-          <img class="stick" src="fig1.webp" style="left:160px; top:518px; height:282px;" alt="">
-          <img class="stick flip" src="fig2.webp" style="left:346px; top:485px; height:315px;" alt="">
-          <img class="stick" src="fig4.webp" style="left:1250px; top:499px; height:301px;" alt="">
-          <img class="stick" src="fig1.webp" style="left:1458px; top:518px; height:282px;" alt="">
+          <img class="stick" data-src="fig1.webp" style="left:160px; top:518px; height:282px;" alt="">
+          <img class="stick flip" data-src="fig2.webp" style="left:346px; top:485px; height:315px;" alt="">
+          <img class="stick" data-src="fig4.webp" style="left:1250px; top:499px; height:301px;" alt="">
+          <img class="stick" data-src="fig1.webp" style="left:1458px; top:518px; height:282px;" alt="">
         </div>
         <svg class="scene" id="bubs" viewBox="0 0 1600 900" aria-hidden="true">
           <g fill="#E9BC4F">
@@ -367,19 +369,19 @@
             <g class="bub" id="bub4" opacity="0"><ellipse cx="1518" cy="430" rx="62" ry="40"/><path d="M 1504 467 L 1508 508 L 1534 464 Z"/></g>
           </g>
         </svg>
-        <img id="print-ground" src="chinese-type.webp" alt="Chinese movable type blocks standing on a bed of set type">
+        <img id="print-ground" data-src="chinese-type.webp" alt="Chinese movable type blocks standing on a bed of set type">
         <!-- the story without its teller: the last bubble hardens into clay, then evolves -->
-        <div class="evob" id="ev-clay"><img src="clay.webp" style="height:200px;" alt="Proto-cuneiform tablet, Sumer"></div>
-        <div class="evob" id="ev-bone"><img src="bone.webp" style="height:320px;" alt="Shang oracle bone, British Library Or. 1595"></div>
-        <div class="evob page" id="ev-codex"><img src="w4.webp" style="height:310px;" alt="Dresden Codex page, Maya"></div>
-        <div class="evob page" id="ev-print"><img src="gut.webp" style="height:580px;" alt="Gutenberg Bible, Genesis"></div>
-        <div class="frame" id="f10"><img src="e10.webp" alt="School of Athens"></div>
-        <div class="frame" id="f11"><img src="e11.webp" alt="Shakespeare reads to a crowd"></div>
-        <div class="frame" id="f13"><img src="e13.webp" alt="A Twitch stream with live chat"></div>
+        <div class="evob" id="ev-clay"><img data-src="clay.webp" style="height:200px;" alt="Proto-cuneiform tablet, Sumer"></div>
+        <div class="evob" id="ev-bone"><img data-src="bone.webp" style="height:320px;" alt="Shang oracle bone, British Library Or. 1595"></div>
+        <div class="evob page" id="ev-codex"><img data-src="w4.webp" style="height:310px;" alt="Dresden Codex page, Maya"></div>
+        <div class="evob page" id="ev-print"><img data-src="gut.webp" style="height:580px;" alt="Gutenberg Bible, Genesis"></div>
+        <div class="frame" id="f10"><img data-src="e10.webp" alt="School of Athens"></div>
+        <div class="frame" id="f11"><img data-src="e11.webp" alt="Shakespeare reads to a crowd"></div>
+        <div class="frame" id="f13"><img data-src="e13.webp" alt="A Twitch stream with live chat"></div>
         <div class="scene" id="abe-scene" style="background:#0F2610;">
           <!-- mp4 here, not the GIF: same 8s loop at 1/6 the bytes, which keeps the inlined
                build under the artifact size ceiling. The Slides pack still ships abe.gif. -->
-          <div class="framewrap" style="left:348px; top:88px;"><video src="abe.mp4" style="width:880px; display:block;" autoplay muted loop playsinline preload="auto" aria-label="Grandpa Simpson telling the lemon tree story"></video></div>
+          <div class="framewrap" style="left:348px; top:88px;"><video id="abevid" src="abe.mp4" style="width:880px; display:block;" muted loop playsinline preload="none" aria-label="Grandpa Simpson telling the lemon tree story"></video></div>
         </div>
       </section>
 
@@ -394,7 +396,7 @@
       <!-- §4 THE SHELF -->
       <section class="seq" id="seq-a">
         <div class="base" style="left:202px; top:20px; width:1197px; height:860px;">
-          <img src="shelf.webp" style="width:1197px; left:0; top:0;" alt="Lived Experience collection page">
+          <img data-src="shelf.webp" style="width:1197px; left:0; top:0;" alt="Lived Experience collection page">
         </div>
         <div class="veil"></div>
         <div class="origin" style="left:379px; top:699px; width:204px; height:162px;"></div>
@@ -404,7 +406,7 @@
           <p class="ask rise" id="a-ask" style="opacity:0">Ask 1 — would your storefront teams give this shelf a home?</p>
         </div>
         <div class="lift" id="a-lift" style="left:760px; top:140px; width:740px; height:588px;">
-          <img src="shelf.webp" style="width:4337px; left:-642px; top:-2461px;" alt="">
+          <img data-src="shelf.webp" style="width:4337px; left:-642px; top:-2461px;" alt="">
         </div>
         <svg class="arrows" viewBox="0 0 1600 900" aria-hidden="true">
           <path id="a-arr1" d="M 452 600 C 600 622, 690 556, 756 492"/>
@@ -462,7 +464,7 @@
       <!-- §7 THE GATE -->
       <section class="seq" id="seq-b">
         <div class="base" style="left:290px; top:20px; width:1019px; height:860px;">
-          <img src="book.webp" style="width:1019px; left:0; top:0;" alt="Book page with author attestation">
+          <img data-src="book.webp" style="width:1019px; left:0; top:0;" alt="Book page with author attestation">
         </div>
         <div class="veil"></div>
         <div class="origin" style="left:621px; top:195px; width:357px; height:147px;"></div>
@@ -472,7 +474,7 @@
           <p class="ask rise" id="b-ask" style="opacity:0">Ask 2 — what should happen when an attestation is false?</p>
         </div>
         <div class="lift" id="b-lift" style="left:560px; top:160px; width:980px; height:402px;">
-          <img src="book.webp" style="width:2800px; left:-910px; top:-479px;" alt="">
+          <img data-src="book.webp" style="width:2800px; left:-910px; top:-479px;" alt="">
         </div>
         <div class="ring" id="b-ring" style="left:920px; top:414px; width:400px; height:50px;"></div>
         <svg class="arrows" viewBox="0 0 1600 900" aria-hidden="true">
@@ -487,7 +489,7 @@
       <!-- §8 ASK THE AUTHOR -->
       <section class="seq" id="sq-ask">
         <div class="base" style="left:343px; top:20px; width:914px; height:860px;">
-          <img src="ask.webp" style="width:914px; left:0; top:0;" alt="Book page with the ask panel open">
+          <img data-src="ask.webp" style="width:914px; left:0; top:0;" alt="Book page with the ask panel open">
         </div>
         <div class="veil"></div>
         <div class="origin" style="left:481px; top:448px; width:149px; height:369px;"></div>
@@ -497,14 +499,14 @@
           <p class="ask rise" id="k-ask" style="opacity:0">Ask 3 — what breaks first at scale?</p>
         </div>
         <div class="lift" id="k-lift" style="left:1090px; top:100px; width:280px; height:696px;">
-          <img src="ask.webp" style="width:1723px; left:-261px; top:-807px;" alt="">
+          <img data-src="ask.webp" style="width:1723px; left:-261px; top:-807px;" alt="">
         </div>
       </section>
 
       <!-- §9 ROSA'S SIDE -->
       <section class="seq" id="sq-rosa">
         <div class="base" style="left:199px; top:20px; width:1202px; height:860px;">
-          <img src="dash.webp" style="width:1202px; left:0; top:0;" alt="Rosa's author dashboard">
+          <img data-src="dash.webp" style="width:1202px; left:0; top:0;" alt="Rosa's author dashboard">
         </div>
         <div class="veil"></div>
         <div class="col" style="width:500px; top:190px;">
@@ -516,14 +518,14 @@
           </div>
         </div>
         <div class="lift" id="r-lift" style="left:660px; top:90px; width:860px; height:721px;">
-          <img src="dash.webp" style="width:2082px; left:-315px; top:-386px;" alt="">
+          <img data-src="dash.webp" style="width:2082px; left:-315px; top:-386px;" alt="">
         </div>
       </section>
 
       <!-- §10 THE LOOP -->
       <section class="seq" id="sq-loop">
         <div class="base" style="left:290px; top:20px; width:1019px; height:860px;">
-          <img src="answered.webp" style="width:1019px; left:0; top:0;" alt="Rosa answered your question">
+          <img data-src="answered.webp" style="width:1019px; left:0; top:0;" alt="Rosa answered your question">
         </div>
         <div class="veil"></div>
         <div class="origin" id="l-org" style="left:444px; top:497px; width:166px; height:322px; transition:opacity .45s ease;"></div>
@@ -551,15 +553,15 @@
           </div>
         </div>
         <div class="lift" id="l-lift" style="left:1080px; top:90px; width:360px; height:700px;">
-          <img src="answered.webp" style="width:2213px; left:-335px; top:-1035px;" alt="">
+          <img data-src="answered.webp" style="width:2213px; left:-335px; top:-1035px;" alt="">
         </div>
       </section>
 
       <!-- §11 THE DATA -->
       <section class="seq" id="seq-c">
-        <div class="base bleed" id="c-b24"><img src="bleed24.webp" alt="Slide: author reachability pays off after reading"><div class="b24patch">Author reachability doesn&rsquo;t sell the book — it pays off after reading</div></div>
-        <div class="base bleed" id="c-b25" style="opacity:0; transition:opacity .4s ease;"><img src="b25.webp" alt="Slide: the missing signal is quality"></div>
-        <div class="base bleed" id="c-b26" style="opacity:0; transition:opacity .4s ease;"><img src="b26.webp" alt="Slide: nobody rated human authorship below a 3"></div>
+        <div class="base bleed" id="c-b24"><img data-src="bleed24.webp" alt="Slide: author reachability pays off after reading"><div class="b24patch">Author reachability doesn&rsquo;t sell the book — it pays off after reading</div></div>
+        <div class="base bleed" id="c-b25" style="opacity:0; transition:opacity .4s ease;"><img data-src="b25.webp" alt="Slide: the missing signal is quality"></div>
+        <div class="base bleed" id="c-b26" style="opacity:0; transition:opacity .4s ease;"><img data-src="b26.webp" alt="Slide: nobody rated human authorship below a 3"></div>
         <div class="veil"></div>
         <div class="datahead anno" id="c-head1">
           <h2>Forced to choose, 16 took the memoir — and 19 said &ldquo;it depends.&rdquo;</h2>
@@ -586,19 +588,19 @@
         <div class="origin off" id="c-org3" style="left:20px; top:362px; width:609px; height:350px;"></div>
         <div class="origin off" id="c-org4" style="left:742px; top:430px; width:832px; height:286px;"></div>
         <div class="lift" id="c-lift1" style="left:180px; top:350px; width:1240px; height:252px;">
-          <img src="slide24.webp" style="width:2543px; left:-95px; top:-686px;" alt="">
+          <img data-src="slide24.webp" style="width:2543px; left:-95px; top:-686px;" alt="">
         </div>
         <div class="lift" id="c-lift2" style="left:225px; top:290px; width:1150px; height:500px;">
-          <img src="slide24.webp" style="width:2666px; left:-1400px; top:-640px;" alt="">
+          <img data-src="slide24.webp" style="width:2666px; left:-1400px; top:-640px;" alt="">
         </div>
         <div class="lift" id="c-lift3" style="left:50px; top:240px; width:1500px; height:494px;">
-          <img src="chart25.webp" style="width:1500px; left:0; top:0;" alt="">
+          <img data-src="chart25.webp" style="width:1500px; left:0; top:0;" alt="">
         </div>
         <div class="lift" id="c-lift4" style="left:343px; top:280px; width:914px; height:525px;">
-          <img src="b26.webp" style="width:2400px; left:-30px; top:-543px;" alt="">
+          <img data-src="b26.webp" style="width:2400px; left:-30px; top:-543px;" alt="">
         </div>
         <div class="lift" id="c-lift5" style="left:155px; top:300px; width:1290px; height:443px;">
-          <img src="b26.webp" style="width:2480px; left:-1150px; top:-667px;" alt="">
+          <img data-src="b26.webp" style="width:2480px; left:-1150px; top:-667px;" alt="">
         </div>
       </section>
 
@@ -606,8 +608,8 @@
       <section class="seq" id="sq-arc">
         <!-- the deck's circle motif, restated in the present: a debut's first audience is
              a circle of readers. Licensed AdobeStock 1986643502, 6000x4004 master. -->
-        <img class="arcbg" id="arc-bg" src="arc-circle.webp" alt="">
-        <div class="robotcard step" id="arc-img"><img src="robot.webp" alt="An ARC machine looming over a rubber duck"></div>
+        <img class="arcbg" id="arc-bg" data-src="arc-circle.webp" alt="">
+        <div class="robotcard step" id="arc-img"><img data-src="robot.webp" alt="An ARC machine looming over a rubber duck"></div>
         <div class="typo" style="left:680px; right:0; position:absolute; padding:0 100px 0 0;">
           <div class="kicker step" id="arc-k">Trust signal</div>
           <div class="huge step" id="arc-t" style="font-size:76px;">Let&rsquo;s talk ARC.</div>
@@ -660,8 +662,8 @@
 
       <!-- §15 EMPOWERING -->
       <section class="seq" id="sq-emp">
-        <div class="base bleed"><img src="b33.webp" alt="Accessible, inclusive, equitable"></div>
-        <img class="gifover" src="i18n.gif" style="left:249px; top:173px; width:1102px; height:620px;" alt="Prototype flipping between six languages">
+        <div class="base bleed"><img data-src="b33.webp" alt="Accessible, inclusive, equitable"></div>
+        <img class="gifover" data-src="i18n.gif" style="left:249px; top:173px; width:1102px; height:620px;" alt="Prototype flipping between six languages">
       </section>
 
       <!-- §16 CLOSING -->
@@ -683,7 +685,7 @@
           <div class="huge">Thank you.</div>
           <div class="lines" style="align-items:center;">
             <div class="line accent step show" style="font-weight:700;">jakobhoward.github.io/kdp-lived-experience-concept</div>
-            <div class="step show" style="margin-top:26px; background:var(--cream); padding:13px 13px 9px; border-radius:14px;"><img src="qr.png" style="width:150px; display:block;" alt="QR code for the live prototype"></div>
+            <div class="step show" style="margin-top:26px; background:var(--cream); padding:13px 13px 9px; border-radius:14px;"><img data-src="qr.png" style="width:150px; display:block;" alt="QR code for the live prototype"></div>
             <div class="line step show" style="margin-top:22px; font-size:17px; color:rgba(245,239,226,0.65);">full survey results · jakobhoward.github.io/kdp-lived-experience-concept/data</div>
           </div>
         </div>
@@ -715,6 +717,28 @@
   const $ = id => document.getElementById(id);
   const stage = $('stage');
   const sceneVid = $('scenevid');
+  const abeVid = $('abevid');
+
+  /* Deferred hydration: slide art ships as data-src so nothing races the title's first
+     paint. The showing section (and the next) hydrate on render; warmAll() streams the
+     rest in section order the moment the page is up, so stepping stays instant. */
+  function hydrate(root) {
+    root.querySelectorAll('img[data-src]').forEach(img => {
+      img.src = img.dataset.src;
+      img.removeAttribute('data-src');
+    });
+  }
+  function warmAll() {
+    // the fire is the show's second beat — buffer it first, before any slide art
+    if (sceneVid.readyState === 0 && sceneVid.paused) { sceneVid.preload = 'auto'; sceneVid.load(); }
+    const rest = SEC.map(s => s.el);
+    (function next() {
+      const el = rest.shift();
+      if (el) { hydrate(el); setTimeout(next, 100); }
+      else if (abeVid.readyState === 0 && abeVid.paused) { abeVid.preload = 'auto'; abeVid.load(); }
+    })();
+  }
+  window.addEventListener('load', () => setTimeout(warmAll, 50));
 
   const DOCK = {
     a: 'translate(-380.7px, 559.2px) scale(0.276)',
@@ -792,6 +816,8 @@
     EVO.forEach(e => $(e).classList.remove('show'));
     FR.forEach(fr => show(fr, fr === key));
     Object.entries(SCENES).forEach(([k, id]) => $(id).classList.toggle('show', k === key));
+    // abe lost its autoplay attribute to preload="none" — scripted instead
+    if (key === 'abe') { abeVid.play().catch(() => {}); } else { abeVid.pause(); }
   }
   sec('hist', 'How stories travel', '', '', 'cream', 'sq-hist', [
     { say: '', dark: true, build: '', go() { histShow(null); sceneOn(true); bubs(0); } },
@@ -972,6 +998,10 @@
   let shown = null;
   function render() {
     const f = FLAT[cur];
+    // showing section + the one ahead; no-ops once warmAll() has been through
+    hydrate(f.s.el);
+    const nf = FLAT[cur + 1];
+    if (nf) hydrate(nf.s.el);
     // Reset every section except the one we're already inside and moving forward through:
     // its go() sets absolute state anyway, and resetting first made every lift snap back
     // to its docked position and re-zoom on each beat.
