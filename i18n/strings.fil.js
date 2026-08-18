@@ -198,6 +198,20 @@ window.I18N.fil = {
   "book.attest.false.p4": "Kaya ang pag-uulat na mismo ang buong mekanismo. Hindi ito pangako ng resulta, at hindi ka bibigyan ng ulat kung ano na ang nangyari dito.",
   "book.attest.false.reportLink": "Iulat ang nilalamang ito",
 
+  /* The advance-reader signal — the reader-facing half, translated 8/18. Same
+     counts as author-dashboard.html: 24 invited, 21 finished, both pages or
+     neither. The dashboard's own dash.arc.* keys are deliberately NOT here:
+     the whole dash.* namespace stays English in every locale (the author
+     console is untranslated). The one exception is dash.arc.credit, further
+     down, because it also renders in book.html's translated credits footer. */
+  "book.arc.stripInvited": "inimbitahang advance reader",
+  "book.arc.stripFinished": "ang nakatapos bago ito ma-publish",
+  "book.arc.howToggle": "Paano gumagana ang advance readers",
+  "book.arc.how.h": "Paano gumagana ang advance readers",
+  "book.arc.how.p1": "Bago ma-publish ang librong ito, nag-imbita ang KDP ng 24 na mambabasa para tumanggap ng libreng advance copy — inimbitahan, libre, at hayagan, ang parehong anyo na ginagamit na ng Amazon Vine sa mga produkto. Nag-opt in si Rosa sa round; hindi kailanman ipinakita sa kanya kung sino ang mga mambabasa.",
+  "book.arc.how.p2": "Ang pagbabasa ang siyang signal. Alam ng Kindle kung natapos na ang isang libro, at 21 sa 24 ang nakatapos nito. Nasa pahinang ito na ang mga bilang na iyon mula pa noong araw ng paglabas nito — bago pa umiral ang unang review.",
+  "book.arc.how.p3": "Ang hindi iniiwan dito ng advance readers ay review. Karamihan ay hindi rin naman makakapag-iwan — kailangan ng $50 na binili sa Amazon sa nakaraang taon para makapagsulat ng review — at labag sa Community Guidelines ang review kapalit ng libreng kopya. Kaya hindi kailanman ginagalaw ng round ang mga review: walang bituin, walang sipi, walang score. Ang bilang ng nakatapos ay katotohanan tungkol sa libro, hindi pahayag na maganda ito.",
+
   "book.desc.lede": "Dahil ang bawat karaniwang buhay ay may kuwentong hindi karaniwan, at karapat-dapat itong tandaan.",
   "book.desc.p1Html": "Noong 1979, sumakay ng eroplano sa Maynila si Rosa Delgado, may hawak na nursing contract at isang maleta, walang kaalam-alam na labing-isang taon pa ang lilipas bago niya muling makita ang kanyang ina. Ang <em>The Road from Manila</em> ay kuwento ng mga taon sa pagitan — mga night shift sa bansang kailangan pa niyang isalin ang wika nito, kahit sa panaginip; mga padalang nakatupi sa loob ng birthday card; at ang mabagal na pagbuo ng tahanan habang nangungulila sa tahanang iniwan.",
   "book.desc.p2": "Ang memoir na ito, na isinulat muna sa Tagalog at isinalin kasama ang pamangkin niya, ay para sa sinumang umalis — at sa sinumang naiwan.",
@@ -295,6 +309,9 @@ window.I18N.fil = {
   "book.buy.sendSample": "Ipadala ang libreng sample",
 
   "book.credits1": "Reader Discovery team — Jakob Picciotto · Pablo Ortega · Jalen Oscar Howard · Wanting Chao · Gate ng pahayag ng may-akda: mekanismo ni Wanting (7/27) · Mga tier ng access: konsepto ni Pablo (7/27) · Pagiging kuwalipikado sa “Tinatanggap ang salin”: pananaliksik ng team sa AI-content policy ng KDP (7/27)",
+  /* Rendered in the credits footer of BOTH author-dashboard.html and book.html —
+     translated because the book.html footer is otherwise fully translated. */
+  "dash.arc.credit": "Idinagdag ang advance-reader signal noong 8/17 — ang tanong ng deck na ARC-bilang-metadata (slide ni Jalen), ginawang konkreto matapos ang feedback ng mga mentor.",
 
   /* ---------- author page ---------- */
   "author.disclaimer": "Hindi ito produkto ng Amazon. Kathang-isip ang may-akdang ito at lahat ng nilalaman; hindi gumagana ang mga kontrol.",
@@ -495,6 +512,9 @@ window.I18N.fil = {
   "revnote.book.1Body": "Nilalagyan ng badge ng Amazon ang kayang sukatin, at sinisipi ang hindi kaya. Ito ang bahaging sinipi.",
   "revnote.book.2Label": "Ang kawit.",
   "revnote.book.2Body": "Kusang-loob at maaaring bawiin ang akses ng mambabasa. Maaabot dito ang bawat kalagayan, pati ang isang walang nangyayari.",
+  /* Added 8/17 with the advance-reader signal. */
+  "revnote.book.3Label": "Ang trust signal.",
+  "revnote.book.3Body": "Ang Ask 4, ginawang konkreto: isang round na hugis-Vine na ang tanging bakas sa publiko ay ang mga bilang na ito — nasa pahina mula unang araw, bago ang unang review. Signal, hindi kailanman review.",
   "revnote.author.1Label": "Ang may-akda ang magpapasya.",
   "revnote.author.1Body": "Siya ang pumipili ng bawat antas, at maaari niya itong isara anumang oras.",
   "revnote.search.1Label": "Hindi ito panukala sa ranggo.",

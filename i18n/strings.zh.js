@@ -161,6 +161,20 @@ window.I18N.zh = {
   "book.attest.false.p4": "所以，举报就是这套机制的全部。它不承诺任何结果，也不会向你反馈进展。",
   "book.attest.false.reportLink": "举报此内容",
 
+  /* The advance-reader signal — the reader-facing half, translated 8/18. Same
+     counts as author-dashboard.html: 24 invited, 21 finished, both pages or
+     neither. The dashboard's own dash.arc.* keys are deliberately NOT here:
+     the whole dash.* namespace stays English in every locale (the author
+     console is untranslated). The one exception is dash.arc.credit, further
+     down, because it also renders in book.html's translated credits footer. */
+  "book.arc.stripInvited": "位受邀预读读者",
+  "book.arc.stripFinished": "位在出版前读完",
+  "book.arc.howToggle": "预读是怎么运作的",
+  "book.arc.how.h": "预读是怎么运作的",
+  "book.arc.how.p1": "这本书出版之前，KDP 邀请了 24 位读者免费领取预读本——受邀、免费、公开说明，与 Amazon Vine 在其他商品上已有的做法相同。Rosa 自己选择加入这一轮；她从未被告知这些读者是谁。",
+  "book.arc.how.p2": "阅读本身就是信号。Kindle 能知道一本书有没有被读完，24 位中有 21 位读完了这一本。这两个数字从出版当天起就在这个页面上——那时第一条评论都还不存在。",
+  "book.arc.how.p3": "预读读者不会在这里留下的，是评论。多数人本来也留不了——发表评论需要过去一年在 Amazon 消费满 50 美元——而且拿免费书换评论违反社区准则。所以这一轮从头到尾不碰评论：没有星级，没有引语，没有评分。多少人读完，是关于这本书的事实，不是说它写得好的断言。",
+
   "book.desc.lede": "因为每一段平凡的人生，都有一个不平凡的故事，值得记住。",
   "book.desc.p1Html": "1979 年，Rosa Delgado 带着一份护士合同和一个箱子，在马尼拉登上飞机，那时她还不知道，此后十一年都见不到母亲。<em>The Road from Manila</em> 写的就是这中间的岁月——在一个她连做梦都要翻译的国家里上夜班，把汇款夹进生日卡片，一边想着故乡，一边一点一点在这里安家。",
   "book.desc.p2": "这本回忆录先用塔加洛语写成，后来和侄女一起译成英文。写给每一个曾经离开的人——也写给留下来的人。",
@@ -257,6 +271,9 @@ window.I18N.zh = {
   "book.buy.sendSample": "发送免费样章",
 
   "book.credits1": "Reader Discovery 团队：Jakob Picciotto · Pablo Ortega · Jalen Oscar Howard · Wanting Chao · 作者声明机制：Wanting 的方案（7 月 27 日）· 互动层级：Pablo 的构想（7 月 27 日）· “译本也欢迎”的适用范围：团队对 KDP AI 内容政策的研究（7 月 27 日）",
+  /* Rendered in the credits footer of BOTH author-dashboard.html and book.html —
+     translated because the book.html footer is otherwise fully translated. */
+  "dash.arc.credit": "预读信号添加于 8 月 17 日——幻灯片里“ARC 作为元数据”的提问（Jalen 的那一页），在导师反馈后落地。",
 
   /* ---------- author page ---------- */
   "author.disclaimer": "非 Amazon 官方产品。本作者及全部内容均为虚构，页面控件不可操作。",
@@ -458,6 +475,9 @@ window.I18N.zh = {
   "revnote.book.1Body": "能测量的，亚马逊给标识；不能测量的，就原样引用。这里是被引用的那一半。",
   "revnote.book.2Label": "落点。",
   "revnote.book.2Body": "读者访问由作者自愿开启，且可随时关闭。这里可以看到每一种状态，包括什么也没有发生的那一种。",
+  /* Added 8/17 with the advance-reader signal. */
+  "revnote.book.3Label": "信任信号。",
+  "revnote.book.3Body": "把第 4 问（Ask 4）落到实处：一轮 Vine 式预读，公开痕迹只有这两个数字——出版第一天就在页面上，先于第一条评论。只做信号，绝不碰评论。",
   "revnote.author.1Label": "由作者决定。",
   "revnote.author.1Body": "每一个层级都由她选择，也可以随时关闭。",
   "revnote.search.1Label": "这不是排序方案。",

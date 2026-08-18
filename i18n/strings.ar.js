@@ -156,6 +156,20 @@ window.I18N.ar = {
   "book.attest.false.p4": "فالإبلاغ هو الآلية كلها. وهو ليس وعدًا بنتيجة، ولن يصلك تقرير عن سير الأمر.",
   "book.attest.false.reportLink": "الإبلاغ عن هذا المحتوى",
 
+  /* The advance-reader signal — the reader-facing half, translated 8/18. Same
+     counts as author-dashboard.html: 24 invited, 21 finished, both pages or
+     neither. The dashboard's own dash.arc.* keys are deliberately NOT here:
+     the whole dash.* namespace stays English in every locale (the author
+     console is untranslated). The one exception is dash.arc.credit, further
+     down, because it also renders in book.html's translated credits footer. */
+  "book.arc.stripInvited": "قارئًا مدعوًّا للقراءة المسبقة",
+  "book.arc.stripFinished": "أنهَوه قبل النشر",
+  "book.arc.howToggle": "كيف تعمل القراءة المسبقة",
+  "book.arc.how.h": "كيف تعمل القراءة المسبقة",
+  "book.arc.how.p1": "قبل نشر هذا الكتاب، دعت KDP‏ 24 قارئًا لتلقّي نسخة مسبقة مجانية — بدعوة، ومجانًا، وبإفصاح معلَن، وهو الشكل نفسه الذي يستخدمه Amazon Vine مع المنتجات أصلًا. اختارت Rosa الانضمام إلى الجولة؛ ولم يُعرض عليها قط مَن هؤلاء القراء.",
+  "book.arc.how.p2": "القراءة نفسها هي الإشارة. جهاز Kindle يعرف متى يُنهى كتاب، وقد أنهى هذا الكتابَ 21 من أصل 24. وهذان الرقمان على هذه الصفحة منذ يوم صدوره — قبل أن توجد أول مراجعة.",
+  "book.arc.how.p3": "ما لا يتركه قراء النسخة المسبقة هنا هو المراجعات. ومعظمهم ما كان ليستطيع أصلًا — فكتابة مراجعة تتطلب 50 دولارًا من المشتريات على Amazon خلال العام الماضي — والمراجعة مقابل نسخة مجانية مخالفة لإرشادات المجتمع. لذلك لا تمسّ الجولة المراجعات إطلاقًا: لا نجوم، ولا اقتباسات، ولا درجة. عدد مَن أنهوا الكتاب حقيقة عن الكتاب، لا ادعاء بأنه جيد.",
+
   "book.desc.lede": "لأن لكل حياة عادية قصة استثنائية تستحق أن تُذكر.",
   "book.desc.p1Html": "في عام 1979، صعدت Rosa Delgado إلى طائرة في مانيلا بعقد تمريض وحقيبة واحدة، ولم تكن تدري أنها لن ترى أمها مرة أخرى إلا بعد أحد عشر عامًا. وكتاب <em>The Road from Manila</em> هو قصة تلك السنوات الفاصلة — نوبات ليلية في بلدٍ كانت أحلامها فيه تأتيها مترجمة، وأوراق نقدية تُطوى داخل بطاقات أعياد الميلاد، وبناء بيت على مهل مع الحنين إلى بيت آخر.",
   "book.desc.p2": "كُتبت هذه المذكرات أولًا بالتاغالوغية وتُرجمت بمساعدة ابنة أختها، وهي لكل من رحل يومًا — أو من بقي.",
@@ -253,6 +267,9 @@ window.I18N.ar = {
   "book.buy.sendSample": "إرسال عيّنة مجانية",
 
   "book.credits1": "فريق Reader Discovery — Jakob Picciotto · Pablo Ortega · Jalen Oscar Howard · Wanting Chao · بوابة الإقرار الذاتي: آلية Wanting (27/7) · مستويات الوصول: فكرة Pablo (27/7) · أهلية «الترجمة مرحّب بها»: بحث الفريق في سياسة KDP للمحتوى المولّد بالذكاء الاصطناعي (27/7)",
+  /* Rendered in the credits footer of BOTH author-dashboard.html and book.html —
+     translated because the book.html footer is otherwise fully translated. */
+  "dash.arc.credit": "أُضيفت إشارة القراءة المسبقة في 17/8 — سؤال العرض التقديمي عن ARC بوصفه بيانات وصفية (شريحة Jalen)، جُسِّد بعد ملاحظات المرشدَيْن.",
 
   /* ---------- author page ---------- */
   "author.disclaimer": "هذه الصفحة ليست منتجًا من منتجات Amazon. هذه المؤلفة وكل ما فيها من نسج الخيال، وعناصر التحكم لا تعمل.",
@@ -451,6 +468,9 @@ window.I18N.ar = {
   "revnote.book.1Body": "أمازون تمنح شارة لما تستطيع قياسه، وتقتبس ما لا تستطيع. وهذا هو الشطر المقتبس.",
   "revnote.book.2Label": "نقطة الجذب.",
   "revnote.book.2Body": "الوصول اختياري وقابل للتراجع. كل الحالات متاحة هنا، بما فيها الحالة التي لا يحدث فيها شيء.",
+  /* Added 8/17 with the advance-reader signal. */
+  "revnote.book.3Label": "إشارة الثقة.",
+  "revnote.book.3Body": "«Ask 4» مجسَّدًا: جولة مسبقة على شاكلة Vine أثرها العلني الوحيد هذان الرقمان — على الصفحة من اليوم الأول، قبل أول مراجعة. إشارة، لا مراجعات أبدًا.",
   "revnote.author.1Label": "القرار للمؤلفة.",
   "revnote.author.1Body": "هي التي تختار كل مستوى، ويمكنها إيقافه في أي وقت.",
   "revnote.search.1Label": "ليست مقترحًا لترتيب النتائج.",

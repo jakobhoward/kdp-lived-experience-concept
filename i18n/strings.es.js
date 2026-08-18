@@ -165,6 +165,20 @@ window.I18N.es = {
   "book.attest.false.p4": "Así que denunciar es todo el mecanismo. No es la promesa de un resultado, y no vas a recibir ningún informe de cómo va.",
   "book.attest.false.reportLink": "Denunciar este contenido",
 
+  /* The advance-reader signal — the reader-facing half, translated 8/18. Same
+     counts as author-dashboard.html: 24 invited, 21 finished, both pages or
+     neither. The dashboard's own dash.arc.* keys are deliberately NOT here:
+     the whole dash.* namespace stays English in every locale (the author
+     console is untranslated). The one exception is dash.arc.credit, further
+     down, because it also renders in book.html's translated credits footer. */
+  "book.arc.stripInvited": "personas invitadas a leerlo antes",
+  "book.arc.stripFinished": "lo terminaron antes de su publicación",
+  "book.arc.howToggle": "Cómo funciona la lectura anticipada",
+  "book.arc.how.h": "Cómo funciona la lectura anticipada",
+  "book.arc.how.p1": "Antes de publicarse este libro, KDP invitó a 24 personas a recibir un ejemplar anticipado gratuito: por invitación, gratis y declarado, el mismo esquema que Amazon Vine ya usa con otros productos. Rosa aceptó participar en la ronda; nunca se le mostró quiénes eran.",
+  "book.arc.how.p2": "La señal es la lectura. Un Kindle sabe cuándo se termina un libro, y 21 de los 24 terminaron este. Esos números están en esta página desde el día en que se publicó, antes de que existiera la primera opinión.",
+  "book.arc.how.p3": "Lo que la lectura anticipada no deja aquí son opiniones. La mayoría ni podría: escribir una opinión exige 50 dólares en compras en Amazon durante el último año, y una opinión a cambio de un ejemplar gratuito va contra las Normas de la comunidad. Así que la ronda nunca toca las opiniones: ni estrellas, ni citas, ni puntuación. Cuántas personas lo terminaron es un dato sobre el libro, no una afirmación de que sea bueno.",
+
   "book.desc.lede": "Porque toda vida corriente guarda una historia extraordinaria que merece recordarse.",
   "book.desc.p1Html": "En 1979, Rosa Delgado subió a un avión en Manila con un contrato de enfermería, una sola maleta y sin saber que no volvería a ver a su madre en once años. <em>The Road from Manila</em> es la historia de los años intermedios: turnos de noche en un país cuyo idioma soñaba traducido, el dinero que enviaba a casa doblado dentro de las tarjetas de cumpleaños y el lento trabajo de hacerse un hogar mientras echaba de menos el otro.",
   "book.desc.p2": "Escritas primero en tagalo y traducidas con su sobrina, estas memorias son para quien alguna vez se ha marchado y también para quien se ha quedado.",
@@ -263,6 +277,9 @@ window.I18N.es = {
   "book.buy.sendSample": "Enviar una muestra gratis",
 
   "book.credits1": "Equipo Reader Discovery — Jakob Picciotto · Pablo Ortega · Jalen Oscar Howard · Wanting Chao · Requisito de declaración de autoría: mecanismo de Wanting (27/7) · Niveles de acceso: concepto de Pablo (27/7) · Elegibilidad de «Se admiten traducciones»: investigación del equipo sobre la política de contenido con IA de KDP (27/7)",
+  /* Rendered in the credits footer of BOTH author-dashboard.html and book.html —
+     translated because the book.html footer is otherwise fully translated. */
+  "dash.arc.credit": "Señal de lectura anticipada añadida el 17/8 — la pregunta del deck sobre ARC como metadato (diapositiva de Jalen), hecha concreta tras los comentarios de los mentores.",
 
   /* ---------- author page ---------- */
   "author.disclaimer": "No es un producto de Amazon. Esta autora y todo el contenido son ficticios; los controles no funcionan.",
@@ -469,6 +486,9 @@ window.I18N.es = {
   "revnote.book.1Body": "Amazon acredita lo que puede medir y cita lo que no. Esta es la mitad citada.",
   "revnote.book.2Label": "El gancho.",
   "revnote.book.2Body": "El acceso es voluntario y reversible. Aquí se puede llegar a todos los estados, incluido aquel en el que no ocurre nada.",
+  /* Added 8/17 with the advance-reader signal. */
+  "revnote.book.3Label": "La señal de confianza.",
+  "revnote.book.3Body": "El «Ask 4» del deck, hecho concreto: una ronda anticipada con la forma de Vine cuya única huella pública son estos números, presentes desde el primer día, antes de la primera opinión. Señal, nunca opiniones.",
   "revnote.author.1Label": "Decide la autora.",
   "revnote.author.1Body": "Ella elige cada nivel y puede desactivarlo cuando quiera.",
   "revnote.search.1Label": "No es una propuesta de clasificación.",

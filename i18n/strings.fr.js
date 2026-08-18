@@ -202,6 +202,20 @@ window.I18N.fr = {
   "book.attest.false.p4": "Le signalement est donc tout le mécanisme. Ce n'est pas la promesse d'un résultat, et vous ne recevrez aucun compte rendu de suivi.",
   "book.attest.false.reportLink": "Signaler ce contenu",
 
+  /* The advance-reader signal — the reader-facing half, translated 8/18. Same
+     counts as author-dashboard.html: 24 invited, 21 finished, both pages or
+     neither. The dashboard's own dash.arc.* keys are deliberately NOT here:
+     the whole dash.* namespace stays English in every locale (the author
+     console is untranslated). The one exception is dash.arc.credit, further
+     down, because it also renders in book.html's translated credits footer. */
+  "book.arc.stripInvited": "personnes invitées en avant-première",
+  "book.arc.stripFinished": "l'ont terminé avant publication",
+  "book.arc.howToggle": "Comment fonctionne la lecture en avant-première",
+  "book.arc.how.h": "Comment fonctionne la lecture en avant-première",
+  "book.arc.how.p1": "Avant la publication de ce livre, KDP a invité 24 personnes à recevoir un exemplaire gratuit en avant-première — sur invitation, gratuit et déclaré, le schéma qu'Amazon Vine applique déjà aux produits. Rosa a accepté de participer à ce tour ; on ne lui a jamais montré qui étaient ces personnes.",
+  "book.arc.how.p2": "Le signal, c'est la lecture. Un Kindle sait quand un livre est terminé, et 21 des 24 ont terminé celui-ci. Ces chiffres figurent sur cette page depuis le jour de sa publication — avant même le premier avis.",
+  "book.arc.how.p3": "Ce que la lecture en avant-première ne laisse pas ici, ce sont des avis. La plupart ne le pourraient de toute façon pas — publier un avis exige 50 $ d'achats sur Amazon au cours de l'année écoulée — et un avis en échange d'un exemplaire gratuit est contraire aux règles de la communauté. Le tour ne touche donc jamais aux avis : ni étoiles, ni citations, ni note. Le nombre de personnes qui l'ont terminé est un fait sur le livre, pas une affirmation qu'il est bon.",
+
   "book.desc.lede": "Parce que toute vie ordinaire porte une histoire extraordinaire qui mérite d'être retenue.",
   "book.desc.p1Html": "En 1979, Rosa Delgado est montée dans un avion à Manille avec un contrat d'infirmière, une seule valise, et sans savoir qu'elle ne reverrait pas sa mère avant onze ans. <em>The Road from Manila</em> raconte les années qui ont suivi : des gardes de nuit dans un pays dont elle rêvait la langue en traduction, des mandats glissés dans des cartes d'anniversaire, et le lent travail de se construire un foyer tout en regrettant l'autre.",
   "book.desc.p2": "Écrit d'abord en tagalog et traduit avec sa nièce, ce livre s'adresse à quiconque a un jour été la personne qui est partie — ou celle qui est restée.",
@@ -299,6 +313,9 @@ window.I18N.fr = {
   "book.buy.sendSample": "Envoyer un extrait gratuit",
 
   "book.credits1": "Équipe Reader Discovery — Jakob Picciotto · Pablo Ortega · Jalen Oscar Howard · Wanting Chao · Déclaration d'autorat : mécanisme de Wanting (27/7) · Niveaux d'accès : concept de Pablo (27/7) · Éligibilité « traductions bienvenues » : recherche de l'équipe sur la politique de KDP relative au contenu généré par IA (27/7)",
+  /* Rendered in the credits footer of BOTH author-dashboard.html and book.html —
+     translated because the book.html footer is otherwise fully translated. */
+  "dash.arc.credit": "Signal de lecture en avant-première ajouté le 17/8 — la question du deck sur l'ARC comme métadonnée (diapositive de Jalen), rendue concrète après les retours des mentors.",
 
   /* ---------- author page ---------- */
   "author.disclaimer": "Ce n'est pas un produit Amazon. Cette autrice et tout le contenu sont fictifs ; les commandes ne fonctionnent pas.",
@@ -499,6 +516,9 @@ window.I18N.fr = {
   "revnote.book.1Body": "Amazon appose un badge sur ce qu'elle peut mesurer et cite ce qu'elle ne peut pas. Voici la moitié citée.",
   "revnote.book.2Label": "L'accroche.",
   "revnote.book.2Body": "L'accès est volontaire et réversible. Tous les états sont accessibles ici, y compris celui où rien ne se passe.",
+  /* Added 8/17 with the advance-reader signal. */
+  "revnote.book.3Label": "Le signal de confiance.",
+  "revnote.book.3Body": "L'« Ask 4 » du deck, rendu concret : un tour en avant-première à la Vine dont la seule trace publique est cette paire de chiffres — sur la page dès le premier jour, avant le premier avis. Un signal, jamais des avis.",
   "revnote.author.1Label": "C'est l'autrice qui décide.",
   "revnote.author.1Body": "Elle choisit chaque niveau et peut le désactiver à tout moment.",
   "revnote.search.1Label": "Ce n'est pas une proposition de classement.",

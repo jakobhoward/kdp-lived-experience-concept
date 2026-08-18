@@ -219,8 +219,8 @@ window.I18N.en = {
   "book.attest.false.p4": "So reporting is the whole of the mechanism. It is not a promise of an outcome, and you will not get a progress report.",
   "book.attest.false.reportLink": "Report this content",
 
-  /* The advance-reader signal. Added 8/17, English only so far — the five other locales
-     fall back to English until these are translated. This is the deck's Ask 4 (Vine for
+  /* The advance-reader signal. Added 8/17; the five other locales carry these
+     reader-facing keys since 8/18. This is the deck's Ask 4 (Vine for
      books, engagement as metadata) made concrete after the 8/17 mentor feedback: both
      mentors said they could not follow what the ARC idea would actually look like.
      The counts here are the same counts author-dashboard.html reports: 24 invited,
@@ -552,7 +552,7 @@ window.I18N.en = {
   "revnote.book.1Body": "Amazon badges what it can measure and quotes what it cannot. This is the quoted half.",
   "revnote.book.2Label": "The hook.",
   "revnote.book.2Body": "Reader access is opt-in and reversible. Every state is reachable here, including the one where nothing happens.",
-  /* Added 8/17 with the advance-reader signal — English only so far, falls back. */
+  /* Added 8/17 with the advance-reader signal. */
   "revnote.book.3Label": "The trust signal.",
   "revnote.book.3Body": "Ask 4, made concrete: a Vine-shaped advance round whose only public trace is these counts — on the page from day one, before the first review. Signal, never reviews.",
   "revnote.author.1Label": "The author decides.",
@@ -617,9 +617,12 @@ window.I18N.en = {
   "dash.noMsgNote": "There is no private messaging at any tier — readers cannot write to you outside these questions, and you cannot write back except by publishing an answer. Contact details are never shared in either direction. That is out of scope by design, for your safety.",
   "dash.mockNote": "Prototype note: nothing here is sent anywhere. The two toggles work so the choice can be seen being made; they change only this page.",
 
-  /* The author's side of the advance-reader signal. Added 8/17, English only so far —
-     the five other locales fall back to English. Same-numbers contract with book.html:
-     24 invited, 21 finished, on both pages or on neither. */
+  /* The author's side of the advance-reader signal, added 8/17. These stay
+     English in every locale along with the whole dash.* namespace (the author
+     console is untranslated) — except dash.arc.credit, translated because it
+     also renders in book.html's otherwise fully translated credits footer.
+     Same-numbers contract with book.html: 24 invited, 21 finished, on both
+     pages or on neither. */
   "dash.arc.h2": "Advance readers",
   "dash.arc.sub": "One round, before publication · run by KDP, opted into by you",
   "dash.arc.invited": "invited",
