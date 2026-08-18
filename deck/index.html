@@ -436,8 +436,8 @@
     <button type="button" class="thumb" data-sec="data"><span class="tart"><img data-from="bleed24.webp" alt=""></span></button>
     <button type="button" class="thumb darkt" data-sec="arc"><span class="tart"><img data-from="arc-circle.webp" alt=""></span></button>
     <button type="button" class="thumb" data-sec="day"><span class="tart"><img data-from="arc-book.webp" alt="" style="object-position:50% 0"></span></button>
-    <button type="button" class="thumb" data-sec="recap"><span class="tart"><span class="tt">The shelf · the gate · ask the author</span></span></button>
-    <button type="button" class="thumb" data-sec="stake"><span class="tart"><span class="tt">Who benefits?</span></span></button>
+    <button type="button" class="thumb" data-sec="recap"><span class="tart"><span class="tt">Recap</span></span></button>
+    <button type="button" class="thumb" data-sec="stake"><span class="tart"><span class="tt">Stakeholder value</span></span></button>
     <button type="button" class="thumb darkt" data-sec="close"><span class="tart"><span class="tt">Thank you.</span></span></button>
   </div>
 </nav>
@@ -1090,7 +1090,7 @@
     show('day-chip', chip);
     show('day-dash', dash);
   }
-  sec('day', 'Day one', 'Jalen', '', 'cream', 'sq-day', [
+  sec('day', 'ARC demo', 'Jalen', '', 'cream', 'sq-day', [
     { say: '', build: '', go() { daySet(false, false, false); } },
     { say: '', build: '', go() { daySet(true, true, false); } },
     { say: '', build: '', go() { daySet(true, true, true); } }
@@ -1129,8 +1129,21 @@
 
   /* ---------- thumbnail rail ---------- */
   /* The frame color says who presents the section; the caption says it in words, so
-     color is never the sole channel. Split sections read left→right in speaking order. */
-  const OWNER_COLOR = { Jakob: '#2F5DBE', Pablo: '#0E7C72', Jalen: '#6E45BD', Wanting: '#B23271' };
+     color is never the sole channel. Split sections read left→right in speaking order.
+
+     Colors are dealt out by order of first appearance in the deck — the same neutral
+     convention the title slide already uses for the team line. Nobody's color is a
+     choice anyone made about them, and reordering the show reassigns them on its own.
+     The palette is four equal-luminance earth tones, so no presenter's tile reads
+     louder than another's, and each clears 4.5:1 against the cream caption text. */
+  const PALETTE = ['#2F4F8F', '#0C6055', '#74491B', '#8A3A45'];
+  const OWNER_COLOR = {};
+  SEC.forEach(s => (s.presenter || '').split('→').forEach(part => {
+    const who = part.trim();
+    if (who && !(who in OWNER_COLOR)) {
+      OWNER_COLOR[who] = PALETTE[Object.keys(OWNER_COLOR).length % PALETTE.length];
+    }
+  }));
   const rail = $('rail'), strip = $('railstrip');
   SEC.forEach((s, si) => {
     const t = strip.querySelector('.thumb[data-sec="' + s.id + '"]');
