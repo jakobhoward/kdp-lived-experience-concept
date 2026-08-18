@@ -65,6 +65,59 @@
   #gprog { width: 100%; height: 3px; background: rgba(31,42,74,0.12); }
   #gprog i { display: block; height: 100%; background: var(--accent); width: 0; transition: width .3s ease; }
 
+  /* ---------- thumbnail rail (8/18): scrubbable slide navigator ---------- */
+  /* Sits in-flow at compact height; the strip itself is an overlay, so hover-expanding
+     it never reflows the stage or needs a fit() call. The frame color says who presents
+     the section (split sections get a two-color frame, first presenter on the left);
+     the expanded caption says it in words, so color is never the only channel. Hidden
+     with the rest of the chrome in perform mode. */
+  #rail { position: relative; width: 100%; height: 60px; z-index: 30; }
+  #railstrip { position: absolute; left: 0; right: 0; top: 0; display: flex; gap: 8px;
+    padding: 7px 14px 11px; overflow-x: auto; overscroll-behavior-x: contain;
+    scroll-behavior: smooth; background: var(--cream);
+    border-bottom: 1px solid rgba(31,42,74,0.1); }
+  #railstrip::-webkit-scrollbar { height: 5px; }
+  #railstrip::-webkit-scrollbar-thumb { background: rgba(31,42,74,0.22); border-radius: 99px; }
+  #railstrip::-webkit-scrollbar-track { background: transparent; }
+  #rail:hover #railstrip, #rail:focus-within #railstrip, #rail.open #railstrip {
+    box-shadow: 0 18px 40px -18px rgba(31,42,74,0.45); }
+  .thumb { flex: none; display: block; padding: 2px; border: 0; border-radius: 7px;
+    background: var(--tc1, rgba(31,42,74,0.28)); cursor: pointer; text-align: left;
+    opacity: 0.82; transition: opacity .2s ease; }
+  .thumb.two { background: linear-gradient(100deg, var(--tc1) 50%, var(--tc2) 50%); }
+  .thumb:hover, .thumb.cur { opacity: 1; }
+  .thumb.cur { box-shadow: 0 10px 26px -12px rgba(31,42,74,0.55); }
+  .thumb:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .tart { position: relative; display: block; width: 68px; height: 38px; border-radius: 5px;
+    overflow: hidden; background: var(--cream-deep);
+    transition: width .28s ease, height .28s ease; }
+  .thumb.darkt .tart { background: #0A0F20; }
+  .tart img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .tart .tt { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    padding: 7%; text-align: center; font-family: var(--serif); font-weight: 800;
+    font-size: 6.5px; line-height: 1.25; color: var(--ink); text-wrap: balance;
+    transition: font-size .28s ease; }
+  .thumb.darkt .tt { color: var(--cream); }
+  .thumb.firet .tart { background: radial-gradient(ellipse 90% 65% at 50% 100%, rgba(224,138,60,0.8), rgba(224,138,60,0) 70%), #0A0F20; }
+  .tnum { position: absolute; left: 3px; bottom: 3px; z-index: 2; font-size: 8.5px; font-weight: 700;
+    line-height: 1; color: var(--cream); background: rgba(16,22,43,0.72); border-radius: 4px;
+    padding: 2px 4px; }
+  .tprog { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; z-index: 2;
+    background: rgba(16,22,43,0.28); display: none; }
+  .tprog i { display: block; height: 100%; width: 0; background: var(--accent-bright); transition: width .25s ease; }
+  .thumb.cur .tprog { display: block; }
+  /* the caption sits on the button's own presenter-colored background, so it reads
+     as a nameplate: cream text on the owner's color (all four are dark enough) */
+  .tcap { display: block; overflow: hidden; height: 0; opacity: 0; width: 68px;
+    transition: height .28s ease, opacity .2s ease, margin-top .28s ease, width .28s ease;
+    font-size: 11px; line-height: 1.3; color: var(--cream); padding: 0 4px 2px; }
+  .tcap .nm2 { display: block; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tcap .who { display: block; font-weight: 700; font-size: 10.5px; color: rgba(245,239,226,0.82);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #rail:hover .tart, #rail:focus-within .tart, #rail.open .tart { width: 152px; height: 86px; }
+  #rail:hover .tt, #rail:focus-within .tt, #rail.open .tt { font-size: 11px; }
+  #rail:hover .tcap, #rail:focus-within .tcap, #rail.open .tcap { height: 31px; opacity: 1; margin-top: 3px; width: 152px; }
+
   /* ---------- stage ---------- */
   #stagewrap { flex: 1; display: flex; align-items: center; justify-content: center; width: 100%; min-height: 0; }
   #scaler { transform-origin: center center; }
@@ -180,6 +233,7 @@
     filter: drop-shadow(0 26px 44px rgba(0,0,0,0.85)) drop-shadow(0 0 34px rgba(224,138,60,0.28)); }
   .evob.page img { border-radius: 3px; }
   .evob.show { opacity: 1; transform: translateX(-50%); }
+  #ev-clay { left: 400px; } #ev-bone { left: 800px; } #ev-codex { left: 1200px; }
   /* right third, large — the left half of the type field is the photo's focal point */
   #ev-print { left: 1150px; bottom: 160px; }
   .shot { position: absolute; overflow: hidden; border-radius: 10px; background: #fff; box-shadow: 0 24px 60px -18px rgba(0,0,0,0.45); }
@@ -275,16 +329,20 @@
   #print-ground { position: absolute; inset: 0; width: 1600px; height: 900px; object-fit: cover; opacity: 0; transition: opacity .6s ease; }
   #print-ground.show { opacity: 1; }
 
-  /* performance mode (press p): chrome gone, stage alone for the screen share */
-  /* #rot is deliberately NOT in this list: perform mode is the default and the only mode the
-     public deck ships, so hiding it here meant the rotate prompt never once rendered. */
-  body.perform header, body.perform #gprog, body.perform #notes { display: none; }
+  /* performance mode (`p`, or ?present — the link the room sees): chrome gone, stage
+     alone for the screen share. Chrome-by-default is the 8/18 flip: the team scrubs
+     this deck far more often than anyone presents it, and nobody should have to
+     remember a key to navigate. */
+  /* #rot is deliberately NOT in this list: back when perform mode was the default,
+     hiding it here meant the rotate prompt never once rendered. */
+  body.perform header, body.perform #gprog, body.perform #rail, body.perform #notes { display: none; }
 
   .robotcard { position: absolute; left: 150px; top: 190px; width: 470px; background: #EFEDE8; border-radius: 14px; padding: 28px; box-shadow: 0 30px 80px -20px rgba(0,0,0,0.65); }
   .robotcard img { width: 100%; display: block; }
 
-  /* notes strip */
-  #notes { width: 100%; max-width: 1280px; padding: 10px 24px 14px; text-align: center; min-height: 64px; }
+  /* notes strip — rehearsal gear: hidden unless ?notes asks for it */
+  #notes { display: none; width: 100%; max-width: 1280px; padding: 10px 24px 14px; text-align: center; min-height: 64px; }
+  body.shownotes:not(.perform) #notes { display: block; }
   #notes .say { font-size: 15px; color: var(--ink); }
   #notes .say::before { content: "Say · "; color: var(--accent); font-weight: 700; }
   #notes .build { font-size: 12.5px; color: var(--muted); margin-top: 3px; }
@@ -336,7 +394,8 @@
   #home.off { opacity: 0; pointer-events: none; }
 
   @media (prefers-reduced-motion: reduce) {
-    .lift, .veil, .rise, .anno, .seq, .step, .frame, .era, svg.arrows path { transition-duration: 0.01s !important; transition-delay: 0s !important; }
+    .lift, .veil, .rise, .anno, .seq, .step, .frame, .era, svg.arrows path, .thumb, .tart, .tt, .tcap { transition-duration: 0.01s !important; transition-delay: 0s !important; }
+    #railstrip { scroll-behavior: auto; }
   }
 </style>
 
@@ -352,10 +411,36 @@
   </div>
   <div class="hud-right">
     <div class="dots" aria-label="Beats in section"></div>
-    <span class="hint">click / <kbd>→</kbd> next · <kbd>←</kbd> back · <kbd>[</kbd><kbd>]</kbd> section · <kbd>p</kbd> hide notes · <kbd>f</kbd> fullscreen · <kbd>home</kbd> restart</span>
+    <span class="hint">click / <kbd>→</kbd> next · <kbd>←</kbd> back · <kbd>[</kbd><kbd>]</kbd> section · <kbd>p</kbd> present · <kbd>f</kbd> fullscreen · <kbd>home</kbd> restart</span>
   </div>
 </header>
 <div id="gprog"><i></i></div>
+
+<!-- Thumbnail rail (8/18): one tile per section so the team can scrub to a beat without
+     knowing any keys. Art reuses the slide assets by filename via data-from — never src,
+     so the build's inliner won't base64 a second copy of anything; copyThumbArt() lifts
+     each src off the already-hydrated slide img instead. Tiles here are just id + art;
+     the script wires numbers, names, presenter frames, clicks, and hides any tile whose
+     section has been cut. Typographic tiles echo the slide they stand for. -->
+<nav id="rail" aria-label="Slide navigator">
+  <div id="railstrip">
+    <button type="button" class="thumb darkt" data-sec="title"><span class="tart"><span class="tt">The Lived Experience Collection</span></span></button>
+    <button type="button" class="thumb darkt firet" data-sec="fire"><span class="tart"><span class="tt">300,000 years ago</span></span></button>
+    <button type="button" class="thumb darkt" data-sec="hist"><span class="tart"><img data-from="e11.webp" alt="" style="object-position:50% 20%"></span></button>
+    <button type="button" class="thumb" data-sec="q"><span class="tart"><span class="tt">Why would a reader pick up a book by a debut KDP author?</span></span></button>
+    <button type="button" class="thumb" data-sec="shelf"><span class="tart"><img data-from="shelf.webp" alt="" style="object-position:50% 0"></span></button>
+    <button type="button" class="thumb" data-sec="gate"><span class="tart"><img data-from="book.webp" alt="" style="object-position:50% 0"></span></button>
+    <button type="button" class="thumb" data-sec="ask"><span class="tart"><img data-from="ask.webp" alt="" style="object-position:50% 30%"></span></button>
+    <button type="button" class="thumb" data-sec="rosa"><span class="tart"><img data-from="dash.webp" alt="" style="object-position:50% 0"></span></button>
+    <button type="button" class="thumb" data-sec="loop"><span class="tart"><img data-from="answered.webp" alt="" style="object-position:50% 45%"></span></button>
+    <button type="button" class="thumb" data-sec="data"><span class="tart"><img data-from="bleed24.webp" alt=""></span></button>
+    <button type="button" class="thumb darkt" data-sec="arc"><span class="tart"><img data-from="arc-circle.webp" alt=""></span></button>
+    <button type="button" class="thumb" data-sec="day"><span class="tart"><img data-from="arc-book.webp" alt="" style="object-position:50% 0"></span></button>
+    <button type="button" class="thumb" data-sec="recap"><span class="tart"><span class="tt">The shelf · the gate · ask the author</span></span></button>
+    <button type="button" class="thumb" data-sec="stake"><span class="tart"><span class="tt">Who benefits?</span></span></button>
+    <button type="button" class="thumb darkt" data-sec="close"><span class="tart"><span class="tt">Thank you.</span></span></button>
+  </div>
+</nav>
 
 <div id="stagewrap">
   <div id="scaler">
@@ -404,6 +489,10 @@
           </g>
         </svg>
         <img id="print-ground" data-src="chinese-type.webp" alt="Chinese movable type blocks standing on a bed of set type">
+        <!-- the story without its teller: the last bubble hardens into clay, then evolves -->
+        <div class="evob" id="ev-clay"><img data-src="clay.webp" style="height:200px;" alt="Proto-cuneiform tablet, Sumer"></div>
+        <div class="evob" id="ev-bone"><img data-src="bone.webp" style="height:320px;" alt="Shang oracle bone, British Library Or. 1595"></div>
+        <div class="evob page" id="ev-codex"><img data-src="w4.webp" style="height:310px;" alt="Dresden Codex page, Maya"></div>
         <div class="evob page" id="ev-print"><img data-src="gut.webp" style="height:580px;" alt="Gutenberg Bible, Genesis"></div>
         <div class="frame" id="f10"><img data-src="e10.webp" alt="School of Athens"></div>
         <div class="frame" id="f11"><img data-src="e11.webp" alt="Shakespeare reads to a crowd"></div>
@@ -765,6 +854,7 @@
   function hydrate(root) {
     root.querySelectorAll('img[data-src]').forEach(img => {
       img.src = img.dataset.src;
+      img.dataset.art = img.dataset.src; // stable name — the rail finds its art by this
       img.removeAttribute('data-src');
     });
   }
@@ -775,7 +865,10 @@
     (function next() {
       const el = rest.shift();
       if (el) { hydrate(el); setTimeout(next, 100); }
-      else if (abeVid.readyState === 0 && abeVid.paused) { abeVid.preload = 'auto'; abeVid.load(); }
+      else {
+        copyThumbArt(); // every slide img now has data-art — the rail can borrow its src
+        if (abeVid.readyState === 0 && abeVid.paused) { abeVid.preload = 'auto'; abeVid.load(); }
+      }
     })();
   }
   window.addEventListener('load', () => setTimeout(warmAll, 50));
@@ -803,14 +896,14 @@
   const show = (id, on = true) => $(id).classList.toggle('show', on);
 
   /* §0 title — static; up while the Zoom room fills */
-  sec('title', 'Title', '', '', 'dark', 'sq-title', [
+  sec('title', 'Title', 'Jakob', '', 'dark', 'sq-title', [
     { say: '',
       build: '',
       go() {} }
   ], () => {});
 
   /* §1 cold open */
-  sec('fire', 'Cold open', '', '', 'dark', 'sq-fire', [
+  sec('fire', 'Cold open', 'Pablo', '', 'dark', 'sq-fire', [
     { say: '',
       build: '',
       go() { show('fire-t'); } }
@@ -819,7 +912,7 @@
   /* §2 history — the fire continues; figures inverted to cream around it */
   const FR = ['f10', 'f11', 'f13'];
   const SCENES = { abe: 'abe-scene' };
-  const EVO = ['ev-print'];
+  const EVO = ['ev-clay', 'ev-bone', 'ev-codex', 'ev-print'];
   function sceneOn(on) {
     $('camp').classList.toggle('show', on);
     $('bubs').classList.toggle('show', on);
@@ -830,11 +923,25 @@
     $('sq-hist').classList.toggle('lone', !!lone);
   }
   function evo(id, lone) { evoStage(lone); EVO.forEach(e => show(e, e === id)); }
+  /* the writing beat: the circle gets one breath on screen, then the three artifacts
+     rise together while figures and fire fade — writing is the moment the story
+     leaves its teller. `lone` clears the figures; the fire fades on the video layer. */
+  let evoTimer = 0;
+  function evoAll(list) {
+    evoStage(false);
+    clearTimeout(evoTimer);
+    evoTimer = setTimeout(() => {
+      $('sq-hist').classList.add('lone');
+      list.forEach(id => show(id));
+      sceneVid.style.opacity = 0;
+    }, 900);
+  }
   function bubs(n) {
     ['bub1', 'bub2', 'bub3', 'bub4'].forEach((b, i) => { $(b).style.opacity = i < n ? 1 : 0; });
   }
   function histShow(key) {
     sceneOn(false); bubs(0);
+    clearTimeout(evoTimer);
     $('print-ground').classList.remove('show');
     $('sq-hist').classList.remove('lone');
     document.querySelectorAll('#camp .stick').forEach(el => { el.style.opacity = ''; });
@@ -845,11 +952,12 @@
     // abe lost its autoplay attribute to preload="none" — scripted instead
     if (key === 'abe') { abeVid.play().catch(() => {}); } else { abeVid.pause(); }
   }
-  sec('hist', 'How stories travel', '', '', 'cream', 'sq-hist', [
+  sec('hist', 'How stories travel', 'Pablo → Jakob', '', 'cream', 'sq-hist', [
     { say: '', dark: true, build: '', go() { histShow(null); sceneOn(true); bubs(0); } },
     { say: '', dark: true, build: '', go() { histShow(null); sceneOn(true); bubs(1); } },
     { say: '', dark: true, build: '', go() { histShow(null); sceneOn(true); bubs(4); } },
-    { say: '', dark: true, build: '', go() { evo('ev-print', true); show('print-ground'); sceneVid.style.opacity = 0; } },
+    { say: '', dark: true, build: '', go() { evoAll(['ev-clay', 'ev-bone', 'ev-codex']); } },
+    { say: '', dark: true, build: '', go() { evo('ev-print', true); show('print-ground'); } },
     { say: '', build: '', go() { histShow('f10'); } },
     { say: '', build: '', go() { histShow('f11'); } },
     { say: '', build: '', go() { histShow('abe'); } },
@@ -857,7 +965,7 @@
   ], () => { histShow(null); });
 
   /* §3 question */
-  sec('q', 'The question', '', '', 'cream', 'sq-q', [
+  sec('q', 'The question', 'Jakob', '', 'cream', 'sq-q', [
     { say: '', build: '', go() {} }
   ], () => {});
 
@@ -870,7 +978,7 @@
     $('a-ask').style.opacity = '0';
   }
   const aFocus = () => { $('seq-a').classList.add('focused'); $('a-lift').style.transform = 'none'; };
-  sec('shelf', 'The shelf', '', '', 'cream', 'seq-a', [
+  sec('shelf', 'The shelf', 'Jakob', '', 'cream', 'seq-a', [
     { say: '', build: '', go() {} },
     { say: '', build: '', go: aFocus },
     { say: '', build: '', go() { aFocus(); show('a-anno1'); show('a-arr1'); show('a-arr1h'); } },
@@ -887,7 +995,7 @@
     $('b-ask').style.opacity = '0';
   }
   const bFocus = () => { $('seq-b').classList.add('focused'); $('b-lift').style.transform = 'none'; };
-  sec('gate', 'The gate', '', '', 'cream', 'seq-b', [
+  sec('gate', 'The gate', 'Jakob', '', 'cream', 'seq-b', [
     { say: '', build: '', go() {} },
     { say: '', build: '', go: bFocus },
     { say: '', build: '', go() { bFocus(); show('b-anno1'); show('b-arr1'); show('b-arr1h'); show('b-ring'); $('b-ask').style.opacity = 1; } }
@@ -899,7 +1007,7 @@
     $('k-lift').style.transform = DOCK.k;
     $('k-ask').style.opacity = '0';
   }
-  sec('ask', 'Ask the author', '', '', 'cream', 'sq-ask', [
+  sec('ask', 'Ask the author', 'Pablo', '', 'cream', 'sq-ask', [
     { say: '', build: '', go() {} },
     { say: '', build: '', go() { $('sq-ask').classList.add('focused'); $('k-lift').style.transform = 'none'; $('k-ask').style.opacity = 1; } }
   ], kReset);
@@ -909,7 +1017,7 @@
     $('sq-rosa').classList.remove('focused');
     $('r-lift').style.transform = DOCK.r;
   }
-  sec('rosa', "Rosa's side", '', '', 'cream', 'sq-rosa', [
+  sec('rosa', "Rosa's side", 'Pablo', '', 'cream', 'sq-rosa', [
     { say: '', build: '', go() {} },
     { say: '', build: '', go() { $('sq-rosa').classList.add('focused'); $('r-lift').style.transform = 'none'; } }
   ], rReset);
@@ -925,7 +1033,7 @@
   }
   const lFocus = () => { $('sq-loop').classList.add('focused'); $('l-lift').style.transform = 'none'; };
   const lThesis = () => { lFocus(); $('l-col1').style.opacity = 0; $('l-col2').style.opacity = 1; $('l-org').style.opacity = 0; show('an1'); show('an2'); };
-  sec('loop', 'The loop closes', '', '', 'cream', 'sq-loop', [
+  sec('loop', 'The loop closes', 'Pablo → Jakob', '', 'cream', 'sq-loop', [
     { say: '', build: '', go() {} },
     { say: '', build: '', go: lFocus },
     { say: '', build: '', go: lThesis },
@@ -948,7 +1056,7 @@
     $('seq-c').classList.toggle('focused', head !== -1);
   }
   function cReset() { cSet(24, -1, -1, -1); }
-  sec('data', 'The data', '', '', 'cream', 'seq-c', [
+  sec('data', 'The data', 'Jakob → Wanting', '', 'cream', 'seq-c', [
     { say: '', build: '', go() { cSet(24, -1, -1, -1); } },
     { say: '', build: '', go() { cSet(24, 0, 0, 0); } },
     { say: '', build: '', go() { cSet(24, 1, 1, 1); } },
@@ -964,7 +1072,7 @@
     ARC_ALL.forEach(i => show(i, false));
     $('arc-l1').classList.remove('past');
   }
-  sec('arc', 'ARC', '', '', 'dark', 'sq-arc', [
+  sec('arc', 'ARC', 'Jalen', '', 'dark', 'sq-arc', [
     { say: '', build: '', go() { show('arc-bg'); show('arc-img'); show('arc-k'); show('arc-t'); show('arc-l0'); } },
     { say: '', build: '', go() { show('arc-bg'); show('arc-img'); show('arc-k'); show('arc-t'); show('arc-l0'); show('arc-l1'); } },
     { say: '', build: '', go() { show('arc-bg'); show('arc-img'); show('arc-k'); show('arc-t'); show('arc-l0'); show('arc-l1'); $('arc-l1').classList.add('past'); show('arc-lv'); show('arc-l3'); } }
@@ -982,14 +1090,14 @@
     show('day-chip', chip);
     show('day-dash', dash);
   }
-  sec('day', 'Day one', '', '', 'cream', 'sq-day', [
+  sec('day', 'Day one', 'Jalen', '', 'cream', 'sq-day', [
     { say: '', build: '', go() { daySet(false, false, false); } },
     { say: '', build: '', go() { daySet(true, true, false); } },
     { say: '', build: '', go() { daySet(true, true, true); } }
   ], () => { show('day-book', false); show('day-chip', false); show('day-dash', false); $('day-p-counts').style.opacity = ''; });
 
   /* §13 recap — added per Chang (8/17): the three ideas again, before who benefits */
-  sec('recap', 'Recap', '', '', 'cream', 'sq-recap', [
+  sec('recap', 'Recap', 'Wanting', '', 'cream', 'sq-recap', [
     { say: '',
       build: '',
       go() { show('rc1'); show('rc2'); show('rc3'); } }
@@ -1001,7 +1109,7 @@
     if (n) { $('sq-stake').setAttribute('data-on', n); } else { $('sq-stake').removeAttribute('data-on'); }
     ['std1', 'std2', 'std3', 'std4'].forEach((id, i) => $(id).classList.toggle('show', i + 1 === +n));
   }
-  sec('stake', 'Stakeholder value', '', '', 'cream', 'sq-stake', [
+  sec('stake', 'Stakeholder value', 'Wanting', '', 'cream', 'sq-stake', [
     { say: '', build: '', go() { stSet(0); } },
     { say: '', build: '', go() { stSet(1); } },
     { say: '', build: '', go() { stSet(2); } },
@@ -1010,7 +1118,7 @@
   ], () => stSet(0));
 
   /* §16 closing */
-  sec('close', 'Closing', '', '', 'cream', 'sq-close', [
+  sec('close', 'Closing', 'Jakob', '', 'cream', 'sq-close', [
     { say: '', build: '', go() { $('close-qs').style.opacity = 1; $('close-ty').style.opacity = 0; stage.classList.remove('dark'); } },
     { say: '', build: '', go() { $('close-qs').style.opacity = 0; $('close-ty').style.opacity = 1; stage.classList.add('dark'); } }
   ], () => { $('close-qs').style.opacity = 1; $('close-ty').style.opacity = 0; });
@@ -1018,6 +1126,56 @@
   /* ---------- flatten to a global beat list ---------- */
   const FLAT = [];
   SEC.forEach((s, si) => s.beats.forEach((b, bi) => FLAT.push({ s, si, b, bi })));
+
+  /* ---------- thumbnail rail ---------- */
+  /* The frame color says who presents the section; the caption says it in words, so
+     color is never the sole channel. Split sections read left→right in speaking order. */
+  const OWNER_COLOR = { Jakob: '#2F5DBE', Pablo: '#0E7C72', Jalen: '#6E45BD', Wanting: '#B23271' };
+  const rail = $('rail'), strip = $('railstrip');
+  SEC.forEach((s, si) => {
+    const t = strip.querySelector('.thumb[data-sec="' + s.id + '"]');
+    if (!t) return;
+    s.tile = t;
+    const cols = (s.presenter || '').split('→').map(x => OWNER_COLOR[x.trim()]).filter(Boolean);
+    if (cols[0]) t.style.setProperty('--tc1', cols[0]);
+    if (cols[1]) { t.style.setProperty('--tc2', cols[1]); t.classList.add('two'); }
+    const num = document.createElement('span');
+    num.className = 'tnum'; num.textContent = si + 1;
+    const prog = document.createElement('span');
+    prog.className = 'tprog'; prog.innerHTML = '<i></i>';
+    t.querySelector('.tart').append(num, prog);
+    const cap = document.createElement('span');
+    cap.className = 'tcap';
+    cap.innerHTML = '<span class="nm2">' + (si + 1) + ' · ' + s.name + '</span>' +
+      (s.presenter ? '<span class="who">' + s.presenter + '</span>' : '');
+    t.appendChild(cap);
+    t.setAttribute('aria-label', 'Slide ' + (si + 1) + ' · ' + s.name +
+      (s.presenter ? ' — ' + s.presenter : ''));
+    t.addEventListener('click', e => {
+      e.stopPropagation();
+      if (e.detail) t.blur(); // mouse click: release focus so the rail can collapse
+      go(FLAT.findIndex(x => x.s === s && x.bi === 0));
+    });
+  });
+  // a tile whose section has been cut from SEC would be a dead button — hide it
+  strip.querySelectorAll('.thumb').forEach(t => {
+    if (!SEC.some(s => s.tile === t)) t.style.display = 'none';
+  });
+  function copyThumbArt() {
+    strip.querySelectorAll('img[data-from]').forEach(img => {
+      const src = document.querySelector('#stage img[data-art="' + img.dataset.from + '"]');
+      if (src) { img.src = src.src; img.removeAttribute('data-from'); }
+    });
+  }
+  // touch has no hover: touching the rail opens it, touching anywhere else closes it
+  strip.addEventListener('touchstart', () => rail.classList.add('open'), { passive: true });
+  document.addEventListener('touchstart', e => {
+    if (!rail.contains(e.target)) rail.classList.remove('open');
+  }, { passive: true });
+  // a mouse wheel over the strip scrubs it sideways (trackpads already can)
+  strip.addEventListener('wheel', e => {
+    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) { e.preventDefault(); strip.scrollLeft += e.deltaY; }
+  }, { passive: false });
 
   let cur = 0;
   const dotsWrap = document.querySelector('.dots');
@@ -1053,7 +1211,8 @@
     requestAnimationFrame(() => requestAnimationFrame(() => f.b.go()));
     // header
     $('secnm').textContent = '§' + (f.si + 1) + ' · ' + f.s.name;
-    // presenter/budget are blanked in the public build — render only the parts that survive
+    // budget is blanked in the public build; presenter ships (it drives the rail) —
+    // render only the parts that survive
     $('secmeta').textContent = [f.s.presenter, f.s.budget && 'target ' + f.s.budget,
       'beat ' + (f.bi + 1) + '/' + f.s.beats.length].filter(Boolean).join(' · ');
     $('n-say').innerHTML = f.b.say;
@@ -1069,6 +1228,18 @@
       dotsWrap.appendChild(d);
     });
     $('home').classList.toggle('off', cur === 0);
+    // rail: light the current tile, run its beat progress, keep it centered in view
+    SEC.forEach(s => {
+      if (!s.tile) return;
+      const on = s === f.s;
+      s.tile.classList.toggle('cur', on);
+      if (on) { s.tile.setAttribute('aria-current', 'true'); } else { s.tile.removeAttribute('aria-current'); }
+      const p = s.tile.querySelector('.tprog i');
+      if (p) p.style.width = on ? ((f.bi + 1) / f.s.beats.length * 100) + '%' : '0';
+    });
+    if (f.s.tile) {
+      strip.scrollLeft = f.s.tile.offsetLeft - (strip.clientWidth - f.s.tile.offsetWidth) / 2;
+    }
     history.replaceState(null, '', '#' + f.s.id + (f.bi + 1));
     shown = f;
   }
@@ -1104,9 +1275,12 @@
      Rotating to landscape hides it on its own, via the media query. */
   $('rot-x').addEventListener('click', () => document.body.classList.add('rot-ok'));
 
-  /* Performance mode is the default: this gets driven live far more often than it gets
-     read with notes. `?notes` opens with the strip showing; `p` toggles. */
-  if (!/[?&]notes\b/.test(location.search)) document.body.classList.add('perform');
+  /* Chrome (header, rail, progress) is the default view — the team scrubs this deck
+     far more often than anyone presents it, and nobody should have to know a key to
+     navigate. `?present` opens clean for the screen share (the link the room sees);
+     `p` toggles it live. `?notes` adds the say/build strip for rehearsal. */
+  if (/[?&]present\b/.test(location.search)) document.body.classList.add('perform');
+  if (/[?&]notes\b/.test(location.search)) document.body.classList.add('shownotes');
 
   const h = location.hash.slice(1);
   let start = 0;
