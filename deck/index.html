@@ -236,6 +236,15 @@
   #sq-stake.fr .dim { opacity: 0.15; }
   #sq-stake.fr .mhead.keep { color: var(--accent); }
 
+  /* §12b day one — ARC made concrete: the live prototype page, time-staged. The
+     patches are white because the page is white; they hide the stars row and the
+     counts row so the shot reads as launch day. Only the counts patch ever lifts. */
+  .dayshot { position: absolute; overflow: hidden; border-radius: 10px; background: #fff;
+    box-shadow: 0 30px 80px -20px rgba(0,0,0,0.5), 0 0 0 1px rgba(31,42,74,0.12); }
+  .dayshot img { position: absolute; display: block; }
+  .daypatch { position: absolute; background: #fff; display: flex; align-items: center; transition: opacity .55s ease; }
+  .daypatch span { font-size: 15px; color: #565959; }
+
   /* §13 recap — added per Chang (8/17): one slide recapping the three pitched ideas
      before the benefits slide. The thumbnails reuse the exact crops the audience has
      already seen (the shelf/gate/answered lifts), rescaled — recognition, not rereading. */
@@ -556,7 +565,8 @@
         </div>
         <div class="datahead anno" id="c-head2">
           <h2>Under 55, reaching the author reads as a reason.</h2>
-          <div class="sub">Convenience sample — age and channel are confounded.</div>
+          <div class="sub">&ldquo;Would being able to message the author — ask a question about the book or their life —
+          change how likely you are to buy it?&rdquo; · 1 = makes no difference, 5 = much more likely · age and channel are confounded</div>
         </div>
         <div class="datahead anno" id="c-head3">
           <h2>The hesitation that beat everything: &ldquo;no way to tell if it&rsquo;s any good.&rdquo;</h2>
@@ -601,13 +611,34 @@
           <div class="kicker step" id="arc-k">Trust signal</div>
           <div class="huge step" id="arc-t" style="font-size:76px;">Let&rsquo;s talk ARC.</div>
           <div class="lines">
+            <!-- Trimmed 8/17 from six lines to four (Jakob&rsquo;s deck-cutting pass):
+                 the two blockers share a line, and metadata folded into the ask.
+                 The full sentences stay in the say notes for the speaker. -->
             <div class="line step" id="arc-l0" style="color:rgba(245,239,226,.75)">Advance Reader Copies — a debut&rsquo;s first audience.</div>
-            <div class="line step" id="arc-l1">The earliest trust signals — <b>blocked by the $50 rule</b>.</div>
-            <div class="line step" id="arc-l2">Not an ARC program — review-for-copy breaks the guidelines.</div>
-            <div class="line step" id="arc-lv"><b>Vine</b> already does it for products: invited, free, disclosed, inside policy.</div>
-            <div class="line step" id="arc-lm">ARC engagement as <b>metadata</b> — signal, never reviews.</div>
-            <div class="line step accent" id="arc-l3" style="font-weight:700;">Ask 4 — Vine seeds early reviews for products. Why not books?</div>
+            <div class="line step" id="arc-l1">Blocked twice: <b>the $50 rule</b>, and review-for-copy.</div>
+            <div class="line step" id="arc-lv"><b>Vine</b> already does this for products — invited, free, disclosed.</div>
+            <div class="line step accent" id="arc-l3" style="font-weight:700;">Ask 4 — engagement as <b>metadata</b>, never reviews. Why not books?</div>
           </div>
+        </div>
+      </section>
+
+      <!-- §12b DAY ONE — ARC made concrete (added 8/17, after both mentors said they
+           could not follow the ARC proposal). The live prototype book page, time-staged
+           with white patches: launch day has no stars and no counts; the counts patch
+           lifts, the stars patch never does. Rosa&rsquo;s ledger rises beside it. -->
+      <section class="seq" id="sq-day">
+        <div class="typo" style="justify-content: flex-start; padding: 90px 110px 0;">
+          <div class="kicker">Trust signal · made concrete</div>
+          <div class="huge" style="font-size: 44px; max-width: none;">Day one.</div>
+        </div>
+        <div class="dayshot step" id="day-book" style="left:110px; top:280px; width:860px; height:424px;">
+          <img data-src="arc-book.webp" style="width:3670px; left:-1181px; top:-505px;" alt="">
+          <div class="daypatch" id="day-p-stars" style="left:16px; top:192px; width:300px; height:62px;"><span style="font-size:20px">No ratings yet</span></div>
+          <div class="daypatch" id="day-p-counts" style="left:12px; top:312px; width:816px; height:102px;"></div>
+        </div>
+        <div class="anno chip" id="day-chip" style="left:700px; top:640px;">Day one — <b>before the first review</b></div>
+        <div class="dayshot step" id="day-dash" style="left:985px; top:395px; width:551px; height:190px;">
+          <img data-src="arc-dash.webp" style="width:2080px; left:-1204px; top:-1071px;" alt="">
         </div>
       </section>
 
@@ -947,17 +978,35 @@
     { say: '', build: '', go() { cSet(26, 4, 4, 3); } }
   ], cReset);
 
-  /* §12 arc */
-  const ARC_ALL = ['arc-bg', 'arc-img', 'arc-k', 'arc-t', 'arc-l0', 'arc-l1', 'arc-l2', 'arc-lv', 'arc-lm', 'arc-l3'];
+  /* §12 arc — trimmed 8/17 (six lines to four); the concrete half moved to §12b */
+  const ARC_ALL = ['arc-bg', 'arc-img', 'arc-k', 'arc-t', 'arc-l0', 'arc-l1', 'arc-lv', 'arc-l3'];
   function arcReset() {
     ARC_ALL.forEach(i => show(i, false));
-    ['arc-l1', 'arc-l2'].forEach(i => $(i).classList.remove('past'));
+    $('arc-l1').classList.remove('past');
   }
   sec('arc', 'ARC, compressed', '', '', 'dark', 'sq-arc', [
     { say: '', build: '', go() { show('arc-bg'); show('arc-img'); show('arc-k'); show('arc-t'); show('arc-l0'); } },
-    { say: '', build: '', go() { show('arc-bg'); show('arc-img'); show('arc-k'); show('arc-t'); show('arc-l0'); show('arc-l1'); show('arc-l2'); } },
-    { say: '', build: '', go() { show('arc-bg'); show('arc-img'); show('arc-k'); show('arc-t'); show('arc-l0'); show('arc-l1'); show('arc-l2'); ['arc-l1', 'arc-l2'].forEach(i => $(i).classList.add('past')); show('arc-lv'); show('arc-lm'); show('arc-l3'); } }
+    { say: '', build: '', go() { show('arc-bg'); show('arc-img'); show('arc-k'); show('arc-t'); show('arc-l0'); show('arc-l1'); } },
+    { say: '', build: '', go() { show('arc-bg'); show('arc-img'); show('arc-k'); show('arc-t'); show('arc-l0'); show('arc-l1'); $('arc-l1').classList.add('past'); show('arc-lv'); show('arc-l3'); } }
   ], arcReset);
+
+  /* §12b day one — ARC made concrete (added 8/17, after Rachel and Cesar both said
+     they could not follow what the proposal would look like). The trick: the live
+     prototype page, time-staged. White patches hide what launch day does not have —
+     the stars row AND the counts row. Beat 2 lifts only the counts patch, so the
+     signal arrives on a page that still has no reviews; the stars patch never lifts,
+     which is the argument. Same repaint move as the data section&rsquo;s b24patch. */
+  function daySet(reveal, chip, dash) {
+    show('day-book');
+    $('day-p-counts').style.opacity = reveal ? 0 : 1;
+    show('day-chip', chip);
+    show('day-dash', dash);
+  }
+  sec('day', 'Day one', '', '', 'cream', 'sq-day', [
+    { say: '', build: '', go() { daySet(false, false, false); } },
+    { say: '', build: '', go() { daySet(true, true, false); } },
+    { say: '', build: '', go() { daySet(true, true, true); } }
+  ], () => { show('day-book', false); show('day-chip', false); show('day-dash', false); $('day-p-counts').style.opacity = ''; });
 
   /* §13 recap — added per Chang (8/17): the three ideas again, before who benefits */
   sec('recap', 'Recap', '', '', 'cream', 'sq-recap', [
