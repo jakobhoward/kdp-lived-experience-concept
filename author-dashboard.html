@@ -143,32 +143,33 @@
 
 <a class="skiplink" href="#main" data-i18n="chrome.skipToContent">Skip to main content</a>
 
-<header class="sitehead">
-  <div class="concept-banner">
-    <div class="demobar-row">
-      <strong class="demobar-mark" data-i18n-html="chrome.conceptLabel">STUDENT CONCEPT — <span lang="en" dir="ltr">Inclusive Design &amp; Product Equity (COMMLD 560), UW.</span></strong>
-      <span class="demobar-note" data-i18n="dash.disclaimer">Not an Amazon product. The author's view of the same student concept: this author, her readers, and every question are fictional; controls are non-functional.</span>
-      <!-- The language picker is injected here by i18n/i18n.js. -->
-      <div class="demobar-tools"></div>
-    </div>
-    <div class="demobar-row demobar-row-nav">
-      <!-- The walkthrough stays: all five reader-side steps remain links, because the
-           way back to the store side should be one click from here. What is current is
-           the detour chip — this page is beside the path, not on it, so no step is
-           marked current and no sixth number is minted. -->
-      <nav class="demobar-nav" aria-label="Prototype walkthrough" data-i18n-attr="aria-label:demo.navAria">
-        <ol>
-        <li><a class="demobar-step" href="search.html"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.search">Search</span></a></li>
-        <li><a class="demobar-step" href="browse.html"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.category">Category</span></a></li>
-        <li><a class="demobar-step" href="index.html"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.collection">Collection</span></a></li>
-        <li><a class="demobar-step" href="book.html"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.book">Book</span></a></li>
-        <li><a class="demobar-step" href="author.html"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.author">Author</span></a></li>
-        </ol>
-        <span class="demobar-step demobar-authorview" aria-current="page"><span data-i18n="demo.authorViewHere">Author's view — what Rosa sees</span></span>
-      </nav>
-      <p class="demobar-caption" data-i18n="dash.demoCaption">The author's side — the queue behind "9 of 14 answered", and the tiers behind "opt-in".</p>
-    </div>
+<aside class="concept-banner" aria-label="About this prototype" data-i18n-attr="aria-label:demo.bannerAria">
+  <div class="demobar-row">
+    <strong class="demobar-mark" data-i18n-html="chrome.conceptLabel">STUDENT CONCEPT — <span lang="en" dir="ltr">Inclusive Design &amp; Product Equity (COMMLD 560), UW.</span></strong>
+    <span class="demobar-note" data-i18n="dash.disclaimer">Not an Amazon product. The author's view of the same student concept: this author, her readers, and every question are fictional; controls are non-functional.</span>
+    <!-- The language picker is injected here by i18n/i18n.js. -->
+    <div class="demobar-tools"></div>
   </div>
+  <div class="demobar-row demobar-row-nav">
+    <!-- The walkthrough stays: all five reader-side steps remain links, because the
+         way back to the store side should be one click from here. What is current is
+         the detour chip — this page is beside the path, not on it, so no step is
+         marked current and no sixth number is minted. -->
+    <nav class="demobar-nav" aria-label="Prototype walkthrough" data-i18n-attr="aria-label:demo.navAria">
+      <ol>
+      <li><a class="demobar-step" href="search.html"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.search">Search</span></a></li>
+      <li><a class="demobar-step" href="browse.html"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.category">Category</span></a></li>
+      <li><a class="demobar-step" href="index.html"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.collection">Collection</span></a></li>
+      <li><a class="demobar-step" href="book.html"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.book">Book</span></a></li>
+      <li><a class="demobar-step" href="author.html"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.author">Author</span></a></li>
+      </ol>
+      <span class="demobar-step demobar-authorview" aria-current="page"><span data-i18n="demo.authorViewHere">Author's view — what Rosa sees</span></span>
+    </nav>
+    <p class="demobar-caption" data-i18n="dash.demoCaption">The author's side — the queue behind "9 of 14 answered", and the tiers behind "opt-in".</p>
+  </div>
+</aside>
+
+<header class="sitehead">
   <div class="topnav">
     <!-- KDP's console, not the Kindle Store: kdp wordmark, no search box (see the
          note at the top of the style block), tabs instead of departments. -->
@@ -367,6 +368,7 @@
 <script src="i18n/strings.ar.js"></script>
 <script src="i18n/strings.fr.js"></script>
 <script src="i18n/i18n.js"></script>
+<script src="demobar.js"></script>
 <!-- After i18n.js, always: dashboard.js reveals controls i18n.js has already
      translated, and re-keys the state words it flips — see the note in that file. -->
 <script src="dashboard.js"></script>

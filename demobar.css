@@ -23,7 +23,14 @@
    WHY STICKY: the bar stopped being a disclaimer the moment it became the way through
    the prototype. A reviewer three screens down a search-results page cannot navigate
    with something parked at the top of the document. The disclaimer benefits too — it is
-   now true on screen the whole time, not only before anyone scrolls. */
+   now true on screen the whole time, not only before anyone scrolls.
+
+   WHAT THE STICKY LIVES OR DIES BY: .concept-banner must stay a SIBLING of
+   header.sitehead, never a child. position:sticky pins an element only within its
+   parent's box, and an accessibility pass once moved the bar inside the header — it
+   then "stuck" only for the ~120px it took the store chrome to scroll past, and left
+   with it, on every page, while sticky was still the computed style. Nothing warns
+   when this breaks except a reviewer noticing the bar is gone. */
 
 .concept-banner {
   position: sticky;
@@ -35,6 +42,18 @@
   font-size: 12px;
   padding: 0;
   text-align: start;
+}
+
+/* THE COMPANION RULE. With the bar genuinely pinned, the skip link's jump to #main
+   would land the breadcrumb underneath it — invisible to the sighted keyboard user
+   the skip link exists for. demobar.js keeps --demobar-h equal to the bar's rendered
+   height (it varies by viewport, by language, and when notes.js injects its toggle);
+   the static fallback is the measured English desktop height plus a margin, and erring
+   tall only lands the content a little low, never under the bar. Scoped to the widths
+   where the bar is sticky at all — responsive.css unsticks it at 700px and down, and
+   zeroes this margin in its short-landscape block for the same reason. */
+@media (min-width: 701px) {
+  #main { scroll-margin-top: var(--demobar-h, 96px); }
 }
 
 /* Rows are padded rather than the container, so the hairline between them can run the

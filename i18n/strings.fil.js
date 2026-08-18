@@ -473,6 +473,7 @@ window.I18N.fil = {
      screen is for, and the notes behind the Show-notes toggle. Translated like
      everything else — a reviewer reading in Arabic should not hit an English
      signpost. */
+  "demo.bannerAria": "Tungkol sa prototype na ito",
   "demo.navAria": "Paglilibot sa prototype",
   "demo.step.search": "Paghahanap",
   "demo.step.category": "Kategorya",

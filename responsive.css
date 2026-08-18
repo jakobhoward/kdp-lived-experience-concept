@@ -541,6 +541,9 @@ img { max-width: 100%; height: auto; }
      disclaimer is still the first thing read — it just scrolls away like everything
      else once the reader is into the content. */
   .concept-banner { position: static; }
+  /* And with nothing pinned, the skip link needs no landing offset — leaving the
+     margin in place would drop #main a bar's-height short of the top for no reason. */
+  #main { scroll-margin-top: 0; }
   .topnav { padding: 6px 14px; row-gap: 6px; }
   .subnav { padding: 5px 14px; }
   .subnav ul { row-gap: 3px; }

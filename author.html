@@ -133,10 +133,14 @@
 <!-- ============================ PAGE CHROME ============================
      ACCESSIBILITY PASS. What changed here, and why, on all five pages:
 
-     - The disclaimer, the brand row and the store nav are now one <header>
-       banner landmark instead of three sibling <div>s floating outside every
-       landmark on the page. The concept banner in particular was orphaned
-       content: announced, but belonging to nothing.
+     - The brand row and the store nav are one <header> banner landmark; the
+       reviewer bar above them is its own named <aside>, and it MUST stay a
+       sibling of that header, never a child. position:sticky pins an element
+       only within its parent's box, so nesting the bar in the header silently
+       killed its stickiness on every page: it left the screen with the store
+       chrome after ~120px of scroll (demobar.css, "WHY STICKY"). Nothing is
+       orphaned by the split — the banner is announced as complementary, with
+       a name.
      - A skip link, off-screen until focused. There are ~12 tab stops in front
        of the first word of content, identically on five pages.
      - .subnav is a <nav> with an accessible name wrapping a real list. Its six
@@ -152,39 +156,40 @@
      ==================================================================== -->
 <a class="skiplink" href="#main" data-i18n="chrome.skipToContent">Skip to main content</a>
 
-<header class="sitehead">
-  <div class="concept-banner">
-    <div class="demobar-row">
-      <strong class="demobar-mark" data-i18n-html="chrome.conceptLabel">STUDENT CONCEPT — <span lang="en" dir="ltr">Inclusive Design &amp; Product Equity (COMMLD 560), UW.</span></strong>
-      <span class="demobar-note" data-i18n="author.disclaimer">Not an Amazon product. This author and all content are fictional; controls are non-functional.</span>
-      <!-- The reviewer's own controls are injected here, in this order: the notes
-           toggle by notes.js, then the language picker by i18n/i18n.js. Both are
-           absent if their script is not loaded, and the row simply collapses. -->
-      <div class="demobar-tools"></div>
-    </div>
-    <div class="demobar-row demobar-row-nav">
-      <!-- THE WALKTHROUGH. An <ol> because the order is the point: the five screens are
-           one reader's path through the concept, and a row of equal-weight links does
-           not say that. Numbers come from a CSS counter, never typed. -->
-      <nav class="demobar-nav" aria-label="Prototype walkthrough" data-i18n-attr="aria-label:demo.navAria">
-        <ol>
-        <li><a class="demobar-step" href="search.html"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.search">Search</span></a></li>
-        <li><a class="demobar-step" href="browse.html"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.category">Category</span></a></li>
-        <li><a class="demobar-step" href="index.html"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.collection">Collection</span></a></li>
-        <li><a class="demobar-step" href="book.html"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.book">Book</span></a></li>
-        <li><span class="demobar-step" aria-current="page"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.author">Author</span></span></li>
-        </ol>
-        <!-- THE AUTHOR'S SIDE. A detour, not a sixth step: the walkthrough is one
-             reader's path, and Rosa's dashboard is not on it. So this link sits outside
-             the <ol> — no number, its own styling — and exists only in the reviewer
-             bar. Store navigation never points at the author console, on purpose:
-             a reader has no business there, and the demo should not imply otherwise.
-             Present on the two Rosa-side pages (this one and book.html) only. -->
-        <a class="demobar-step demobar-authorview" href="author-dashboard.html"><span data-i18n="demo.authorView">Author's view: Rosa's dashboard</span></a>
-      </nav>
-      <p class="demobar-caption" data-i18n="author.demoCaption">What an author opens up — the access tiers, opt-in and reversible.</p>
-    </div>
+<aside class="concept-banner" aria-label="About this prototype" data-i18n-attr="aria-label:demo.bannerAria">
+  <div class="demobar-row">
+    <strong class="demobar-mark" data-i18n-html="chrome.conceptLabel">STUDENT CONCEPT — <span lang="en" dir="ltr">Inclusive Design &amp; Product Equity (COMMLD 560), UW.</span></strong>
+    <span class="demobar-note" data-i18n="author.disclaimer">Not an Amazon product. This author and all content are fictional; controls are non-functional.</span>
+    <!-- The reviewer's own controls are injected here, in this order: the notes
+         toggle by notes.js, then the language picker by i18n/i18n.js. Both are
+         absent if their script is not loaded, and the row simply collapses. -->
+    <div class="demobar-tools"></div>
   </div>
+  <div class="demobar-row demobar-row-nav">
+    <!-- THE WALKTHROUGH. An <ol> because the order is the point: the five screens are
+         one reader's path through the concept, and a row of equal-weight links does
+         not say that. Numbers come from a CSS counter, never typed. -->
+    <nav class="demobar-nav" aria-label="Prototype walkthrough" data-i18n-attr="aria-label:demo.navAria">
+      <ol>
+      <li><a class="demobar-step" href="search.html"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.search">Search</span></a></li>
+      <li><a class="demobar-step" href="browse.html"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.category">Category</span></a></li>
+      <li><a class="demobar-step" href="index.html"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.collection">Collection</span></a></li>
+      <li><a class="demobar-step" href="book.html"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.book">Book</span></a></li>
+      <li><span class="demobar-step" aria-current="page"><span class="demobar-num" aria-hidden="true"></span><span data-i18n="demo.step.author">Author</span></span></li>
+      </ol>
+      <!-- THE AUTHOR'S SIDE. A detour, not a sixth step: the walkthrough is one
+           reader's path, and Rosa's dashboard is not on it. So this link sits outside
+           the <ol> — no number, its own styling — and exists only in the reviewer
+           bar. Store navigation never points at the author console, on purpose:
+           a reader has no business there, and the demo should not imply otherwise.
+           Present on the two Rosa-side pages (this one and book.html) only. -->
+      <a class="demobar-step demobar-authorview" href="author-dashboard.html"><span data-i18n="demo.authorView">Author's view: Rosa's dashboard</span></a>
+    </nav>
+    <p class="demobar-caption" data-i18n="author.demoCaption">What an author opens up — the access tiers, opt-in and reversible.</p>
+  </div>
+</aside>
+
+<header class="sitehead">
   <div class="topnav">
     <div class="logo" lang="en">kindle<span>store</span></div>
     <div class="searchbar"><input value="" placeholder="Search Kindle Store" aria-label="Search Kindle Store" data-i18n-attr="placeholder:chrome.searchPlaceholder;aria-label:chrome.searchAria" readonly><button aria-label="Search" aria-disabled="true" data-i18n-attr="aria-label:chrome.searchButtonAria">🔍</button></div>
@@ -355,6 +360,7 @@
 <script src="i18n/strings.fr.js"></script>
 <script src="i18n/i18n.js"></script>
 <script src="notes.js"></script>
+<script src="demobar.js"></script>
 
 <!-- Labels for the reviewer-notes toggle. They live here, already translated, because
      notes.js is not allowed to build a string — see the note at the top of that file.

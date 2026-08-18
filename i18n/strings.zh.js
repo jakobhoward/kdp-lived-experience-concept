@@ -436,6 +436,7 @@ window.I18N.zh = {
      screen is for, and the notes behind the Show-notes toggle. Translated like
      everything else — a reviewer reading in Arabic should not hit an English
      signpost. */
+  "demo.bannerAria": "关于本原型",
   "demo.navAria": "原型导览",
   "demo.step.search": "搜索",
   "demo.step.category": "分类",

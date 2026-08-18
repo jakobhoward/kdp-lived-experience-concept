@@ -477,6 +477,7 @@ window.I18N.fr = {
      screen is for, and the notes behind the Show-notes toggle. Translated like
      everything else — a reviewer reading in Arabic should not hit an English
      signpost. */
+  "demo.bannerAria": "À propos de ce prototype",
   "demo.navAria": "Parcours du prototype",
   "demo.step.search": "Recherche",
   "demo.step.category": "Catégorie",

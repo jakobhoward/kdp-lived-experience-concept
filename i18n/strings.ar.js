@@ -429,6 +429,7 @@ window.I18N.ar = {
      screen is for, and the notes behind the Show-notes toggle. Translated like
      everything else — a reviewer reading in Arabic should not hit an English
      signpost. */
+  "demo.bannerAria": "حول هذا النموذج الأولي",
   "demo.navAria": "جولة في النموذج الأولي",
   "demo.step.search": "البحث",
   "demo.step.category": "الفئة",
