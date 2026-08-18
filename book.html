@@ -277,13 +277,22 @@
      and rotation is direction-neutral, so it survives the Arabic layout untouched. */
   .expander[aria-expanded="true"] .caret { transform: rotate(180deg); }
 
+  /* ---------- the advance-reader signal (added 8/17) ----------
+     A bare metadata line, not a box: this sits in the slot where Amazon's own
+     social-proof strings live ("2K+ bought in past month"), because that is what it
+     is — an observed count, not a module arguing for itself. The disclosure panel
+     below it reuses .attest-false's footnote styling: same job, same size. */
+  .arcstrip { font-size: 13px; margin: 6px 0 2px; }
+  .arcstrip b { font-weight: 700; font-variant-numeric: tabular-nums; }
+  .arcstrip .expander { display: block; margin-top: 3px; }
+
   /* ---------- interaction 2: what happens if an attestation is false ---------- */
-  .attest-false {
+  .attest-false, .arc-how {
     font-size: 12px; color: var(--soft); line-height: 1.55;
     margin-top: 10px; padding-top: 10px; border-top: 1px solid #E7E9E9;
   }
-  .attest-false h3 { font-size: 13px; color: var(--ink); font-weight: 700; margin-bottom: 6px; }
-  .attest-false p { margin-bottom: 8px; }
+  .attest-false h3, .arc-how h3 { font-size: 13px; color: var(--ink); font-weight: 700; margin-bottom: 6px; }
+  .attest-false p, .arc-how p { margin-bottom: 8px; }
 
   /* ---------- interaction 1: the question flow ---------- */
   .ask .ask-start { margin-top: 12px; }
@@ -451,6 +460,38 @@
       <div class="ratingrow stars" role="img" aria-label="4.4 out of 5 stars, 214 ratings" data-i18n-attr="aria-label:book.starsAria">★★★★☆<span class="count">(<span data-i18n-num="214">214</span>)</span></div>
       <div class="partof"><span data-i18n="common.partOf">Part of:</span> <a href="index.html" data-i18n="book.partOfValue">Lived Experience (48 books)</a></div>
 
+      <!-- A4: THE ADVANCE-READER SIGNAL (added 8/17). The deck's Ask 4 — Vine seeds
+           early reviews for products, why not books? — made concrete, because both
+           mentors said they could not follow what the ARC idea would look like.
+           What it is: a KDP-run, Vine-shaped advance round (invited, free, disclosed)
+           whose ONLY public trace is this pair of counts. It never touches reviews —
+           that is the design rule R14 set: the hook must never be gameable into a
+           quality claim. A count of readers who finished is a fact, not a verdict.
+           It sits in the social-proof slot under the ratings row, where Amazon's own
+           observed counts live. Same-numbers contract with author-dashboard.html:
+           24 invited, 21 finished, on both pages or on neither.
+           Same progressive-enhancement inversion as the attestation disclosure: the
+           panel ships EXPANDED and the toggle [hidden]; ask.js collapses it and
+           reveals the toggle, so with scripting off the full answer is simply there.
+           ?arc=open leaves it expanded — state by request, the ?ask= idiom. -->
+      <div class="revnote" role="note"><span class="revnote-n" aria-hidden="true"></span><b data-i18n="revnote.book.3Label">The trust signal.</b> <span data-i18n="revnote.book.3Body">Ask 4, made concrete: a Vine-shaped advance round whose only public trace is these counts — on the page from day one, before the first review. Signal, never reviews.</span></div>
+      <div class="arcstrip">
+        <span><b data-i18n-num="24">24</b> <span data-i18n="book.arc.stripInvited">invited early readers</span> · <b data-i18n-num="21">21</b> <span data-i18n="book.arc.stripFinished">finished it before publication</span></span>
+        <button type="button" class="expander" id="arc-toggle" aria-expanded="true" aria-controls="arc-how" hidden><span data-i18n="book.arc.howToggle">How advance readers work</span><span class="caret" aria-hidden="true">▾</span></button>
+        <div class="arc-how" id="arc-how">
+          <h3 data-i18n="book.arc.how.h">How advance readers work</h3>
+          <p data-i18n="book.arc.how.p1">Before this book published, KDP invited 24 readers to take a free advance copy —
+          invited, free, and disclosed, the same shape Amazon Vine already uses for products. Rosa opted in to the round;
+          she was never shown who the readers were.</p>
+          <p data-i18n="book.arc.how.p2">Reading is the signal. A Kindle can tell when a book is finished, and 21 of the 24
+          finished this one. Those counts were on this page from the day it published — before the first review existed.</p>
+          <p data-i18n="book.arc.how.p3">What advance readers do not leave here is reviews. Most could not anyway — writing
+          a review takes $50 of Amazon purchases in the past year — and a review in exchange for a free copy is against the
+          Community Guidelines. So the round never touches reviews: no stars, no quotes, no score. A count of readers who
+          finished is a fact about the book, not a claim that it is good.</p>
+        </div>
+      </div>
+
       <!-- A2: the attestation, in the author's-own-voice slot (§2 row 6).
            Rendered as an Amazon a-box, the same module shape as "Great on Kindle". -->
       <div class="revnote" role="note"><span class="revnote-n" aria-hidden="true"></span><b data-i18n="revnote.book.1Label">In her own words.</b> <span data-i18n="revnote.book.1Body">Amazon badges what it can measure and quotes what it cannot. This is the quoted half.</span></div>
@@ -466,7 +507,7 @@
              nothing to disclose. -->
         <div class="translated" data-i18n-only="translated" data-i18n="book.attest.translationNote" hidden></div>
         <div class="sig">
-          <span data-i18n="book.attest.sigName">Rosa Delgado, author attestation</span> ·
+          <span data-i18n="book.attest.sigName">Rosa Delgado, author attestation</span>
           <!-- INTERACTION 2. Was a dead <a href="#">, which is the one link on this page a
                reader is most likely to actually click: it is the "and what if she is lying"
                question, and the gate is the weakest part of the concept. So the answer is
@@ -742,10 +783,17 @@
 
   </main>
 
-  <footer class="credits" data-i18n="book.credits1">
+  <footer class="credits">
+    <span data-i18n="book.credits1">
     Reader Discovery team — Jakob Picciotto · Pablo Ortega · Jalen Oscar Howard · Wanting Chao ·
     Author-statement gate: Wanting's mechanism (7/27) · Access tiers: Pablo's concept (7/27) ·
     "Translation welcome" eligibility: team research on KDP AI-content policy (7/27)
+    </span>
+    <!-- Its own span with its own key (shared with the dashboard footer), not an edit to
+         book.credits1: that key is already translated in five locales, and rewriting the
+         English would silently strand the translations on the old sentence. -->
+    <span data-i18n="dash.arc.credit">Advance-reader signal added 8/17 — the deck's ARC-as-metadata question (Jalen's
+    slide), made concrete after mentor feedback.</span>
   </footer>
 
 </div>

@@ -53,6 +53,8 @@
      "9 of 14 reader questions answered". This page is the ledger behind that
      line: 14 received = 9 answered & published + 3 waiting + 2 declined &
      deleted. If any count changes, it changes in all three places.
+     Since 8/17 the advance-reader counts join the contract: 24 invited,
+     21 finished — here and on book.html, both pages or neither.
 
      WHAT THE CONTROLS ARE:
      - The queue's Answer / Publish / Decline buttons are inert (.btn with
@@ -318,16 +320,42 @@
         <p class="mocknote" data-i18n="dash.mockNote">Prototype note: nothing here is sent anywhere. The two toggles work so
         the choice can be seen being made; they change only this page.</p>
       </div>
+
+      <!-- THE ADVANCE-READER SIGNAL, author's side (added 8/17). The ledger behind the
+           "24 invited · 21 finished" line on book.html — same-numbers contract as the
+           question counts above: if either number changes, it changes on both pages.
+           Display only, no controls: the round is KDP's to run and over by publication,
+           so unlike the tiers there is no live choice for a reviewer to make here. -->
+      <div class="abox" style="margin-top:16px">
+        <h2 data-i18n="dash.arc.h2">Advance readers</h2>
+        <div class="sub" data-i18n="dash.arc.sub">One round, before publication · run by KDP, opted into by you</div>
+        <div class="dash-summary" style="margin:12px 0 2px">
+          <div><b data-i18n-num="24">24</b><span data-i18n="dash.arc.invited">invited</span></div>
+          <div><b data-i18n-num="21">21</b><span data-i18n="dash.arc.finished">finished the book</span></div>
+        </div>
+        <p class="dash-note" data-i18n="dash.arc.body">KDP ran the round: it chose the readers, sent the copies, and never
+        showed you who they were. What your book page shows is the count and nothing else — no reviews, no score, and no way
+        for an advance reader to write to you.</p>
+        <div class="note" data-i18n="dash.arc.note">Advance readers cannot review the book through this round — a review in
+        exchange for a free copy is against the Community Guidelines that protect your reviews too. Skipping the round is
+        never penalized; a book without one simply shows no counts.</div>
+      </div>
     </div>
 
   </div>
 
 </main>
 
-<footer class="credits" data-i18n="dash.credits1">
+<footer class="credits">
+  <span data-i18n="dash.credits1">
   Reader Discovery team — Jakob Picciotto · Pablo Ortega · Jalen Oscar Howard · Wanting Chao ·
   The author's side of Pablo's access tiers (7/27) · The pending questions are readers' own words,
   drawn nearly verbatim from open-text answers in our survey (n = 42) and lightly adapted to Rosa's book.
+  </span>
+  <!-- Its own span with its own key (shared with book.html's footer), not an edit to
+       dash.credits1 — that key is translated in five locales already. -->
+  <span data-i18n="dash.arc.credit">Advance-reader signal added 8/17 — the deck's ARC-as-metadata question (Jalen's
+  slide), made concrete after mentor feedback.</span>
 </footer>
 
 </div>

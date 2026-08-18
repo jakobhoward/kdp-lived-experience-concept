@@ -219,6 +219,20 @@ window.I18N.en = {
   "book.attest.false.p4": "So reporting is the whole of the mechanism. It is not a promise of an outcome, and you will not get a progress report.",
   "book.attest.false.reportLink": "Report this content",
 
+  /* The advance-reader signal. Added 8/17, English only so far — the five other locales
+     fall back to English until these are translated. This is the deck's Ask 4 (Vine for
+     books, engagement as metadata) made concrete after the 8/17 mentor feedback: both
+     mentors said they could not follow what the ARC idea would actually look like.
+     The counts here are the same counts author-dashboard.html reports: 24 invited,
+     21 finished. If either number changes, it changes on both pages. */
+  "book.arc.stripInvited": "invited early readers",
+  "book.arc.stripFinished": "finished it before publication",
+  "book.arc.howToggle": "How advance readers work",
+  "book.arc.how.h": "How advance readers work",
+  "book.arc.how.p1": "Before this book published, KDP invited 24 readers to take a free advance copy — invited, free, and disclosed, the same shape Amazon Vine already uses for products. Rosa opted in to the round; she was never shown who the readers were.",
+  "book.arc.how.p2": "Reading is the signal. A Kindle can tell when a book is finished, and 21 of the 24 finished this one. Those counts were on this page from the day it published — before the first review existed.",
+  "book.arc.how.p3": "What advance readers do not leave here is reviews. Most could not anyway — writing a review takes $50 of Amazon purchases in the past year — and a review in exchange for a free copy is against the Community Guidelines. So the round never touches reviews: no stars, no quotes, no score. A count of readers who finished is a fact about the book, not a claim that it is good.",
+
   "book.desc.lede": "Because every ordinary life has an extraordinary story worth remembering.",
   "book.desc.p1Html": "In 1979, Rosa Delgado boarded a plane in Manila with a nursing contract, a single suitcase, and no way of knowing she would not see her mother again for eleven years. <em>The Road from Manila</em> is the story of the years between — night shifts in a country whose language she dreamed in translation, remittances folded into birthday cards, and the slow work of building a home while homesick for another.",
   "book.desc.p2": "Written first in Tagalog and translated with her niece, this memoir is for anyone who has ever been the one who left — or the one who stayed.",
@@ -537,6 +551,9 @@ window.I18N.en = {
   "revnote.book.1Body": "Amazon badges what it can measure and quotes what it cannot. This is the quoted half.",
   "revnote.book.2Label": "The hook.",
   "revnote.book.2Body": "Reader access is opt-in and reversible. Every state is reachable here, including the one where nothing happens.",
+  /* Added 8/17 with the advance-reader signal — English only so far, falls back. */
+  "revnote.book.3Label": "The trust signal.",
+  "revnote.book.3Body": "Ask 4, made concrete: a Vine-shaped advance round whose only public trace is these counts — on the page from day one, before the first review. Signal, never reviews.",
   "revnote.author.1Label": "The author decides.",
   "revnote.author.1Body": "She chooses each tier and can switch it off at any time.",
   "revnote.search.1Label": "Not a ranking proposal.",
@@ -598,5 +615,17 @@ window.I18N.en = {
   "dash.tier3Body": "Switch every tier off and your book stays in the collection, your attestation stays on its page, and nothing about your listing changes.",
   "dash.noMsgNote": "There is no private messaging at any tier — readers cannot write to you outside these questions, and you cannot write back except by publishing an answer. Contact details are never shared in either direction. That is out of scope by design, for your safety.",
   "dash.mockNote": "Prototype note: nothing here is sent anywhere. The two toggles work so the choice can be seen being made; they change only this page.",
+
+  /* The author's side of the advance-reader signal. Added 8/17, English only so far —
+     the five other locales fall back to English. Same-numbers contract with book.html:
+     24 invited, 21 finished, on both pages or on neither. */
+  "dash.arc.h2": "Advance readers",
+  "dash.arc.sub": "One round, before publication · run by KDP, opted into by you",
+  "dash.arc.invited": "invited",
+  "dash.arc.finished": "finished the book",
+  "dash.arc.body": "KDP ran the round: it chose the readers, sent the copies, and never showed you who they were. What your book page shows is the count and nothing else — no reviews, no score, and no way for an advance reader to write to you.",
+  "dash.arc.note": "Advance readers cannot review the book through this round — a review in exchange for a free copy is against the Community Guidelines that protect your reviews too. Skipping the round is never penalized; a book without one simply shows no counts.",
+  /* Rendered in the credits footer of BOTH author-dashboard.html and book.html. */
+  "dash.arc.credit": "Advance-reader signal added 8/17 — the deck's ARC-as-metadata question (Jalen's slide), made concrete after mentor feedback.",
   "dash.credits1": "Reader Discovery team — Jakob Picciotto · Pablo Ortega · Jalen Oscar Howard · Wanting Chao · The author's side of Pablo's access tiers (7/27) · The pending questions are readers' own words, drawn nearly verbatim from open-text answers in our survey (n = 42) and lightly adapted to Rosa's book."
 };

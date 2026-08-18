@@ -3,7 +3,8 @@
    1. The question flow: idle → compose → sent → waiting, plus the states a reader can
       land in without doing anything (not a reader of this book yet, author has questions
       switched off, switched off after asking, send failed).
-   2. The attestation disclosure: "What happens if an attestation is false".
+   2. The disclosures: "What happens if an attestation is false", and (since 8/17)
+      the advance-reader "How advance readers work" panel.
 
    Nothing is sent anywhere. This is a coursework mockup; the flow exists so the states
    can be *read* — above all the waiting state, where the honest answer is that nothing
@@ -42,25 +43,26 @@
 
   var root = document.getElementById('ask');
 
-  /* ---------- interaction 2: the attestation disclosure ----------
-     Independent of the question flow; kept in this file because they are the two halves
-     of the same argument (the gate and the hook) and a second <script> tag on a page
-     opened over file:// is one more thing to go wrong. */
-  function startDisclosure() {
-    var toggle = document.getElementById('attest-toggle');
-    var panel = document.getElementById('attest-false');
+  /* ---------- interaction 2: the disclosures ----------
+     Two of them now: the attestation footnote and, since 8/17, the advance-reader
+     "how it works" panel. Independent of the question flow; kept in this file because
+     they are pieces of the same argument (the gate, the hook, the trust signal) and a
+     second <script> tag on a page opened over file:// is one more thing to go wrong. */
+  function startDisclosure(toggleId, panelId, open) {
+    var toggle = document.getElementById(toggleId);
+    var panel = document.getElementById(panelId);
     if (!toggle || !panel) return;
 
-    function set(open) {
-      panel.hidden = !open;
-      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    function set(on) {
+      panel.hidden = !on;
+      toggle.setAttribute('aria-expanded', on ? 'true' : 'false');
     }
 
     /* Collapsed on arrival, because the detail page's job is the book, and this is the
        footnote a reader goes looking for. Reveal the control first, so it is never
        possible to hide the panel without also showing the way back to it. */
     toggle.hidden = false;
-    set(false);
+    set(!!open);
 
     toggle.addEventListener('click', function () {
       set(panel.hidden);
@@ -289,7 +291,10 @@
   }
 
   function boot() {
-    startDisclosure();
+    startDisclosure('attest-toggle', 'attest-false', false);
+    /* ?arc=open leaves the advance-reader panel expanded — the ?ask= idiom: a state
+       is reachable by asking for it, never on a timer. */
+    startDisclosure('arc-toggle', 'arc-how', /[?&]arc=open/.test(window.location.search));
     startAsk();
   }
 
