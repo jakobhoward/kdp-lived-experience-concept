@@ -225,7 +225,6 @@
   #sq-stake[data-on] .ell { opacity: 0.28; }
   #sq-stake[data-on="1"] .ell:nth-child(1), #sq-stake[data-on="2"] .ell:nth-child(2),
   #sq-stake[data-on="3"] .ell:nth-child(3), #sq-stake[data-on="4"] .ell:nth-child(4) { opacity: 1; transform: scale(1.06); }
-  .gifover { position: absolute; }
   .scene { position: absolute; inset: 0; opacity: 0; transition: opacity .45s ease; }
   .scene.show { opacity: 1; }
   .matrix { position: absolute; left: 110px; right: 110px; top: 296px; display: grid; grid-template-columns: 118px repeat(4, 1fr); column-gap: 30px; color: var(--ink); }
@@ -635,24 +634,17 @@
         <div class="srcline">Sources: BookNet Canada (2025) · PNAS Nexus — Altay, Gilardi, Wittenberg (2024) · Amazon KDP Content Guidelines (2023) · YouBooks (2026)</div>
       </section>
 
-      <!-- §15 EMPOWERING -->
-      <section class="seq" id="sq-emp">
-        <div class="base bleed"><img data-src="b33.webp" alt="Accessible, inclusive, equitable"></div>
-        <img class="gifover" data-src="i18n.gif" style="left:249px; top:173px; width:1102px; height:620px;" alt="Prototype flipping between six languages">
-      </section>
-
       <!-- §16 CLOSING -->
       <section class="seq" id="sq-close">
         <div id="close-qs" style="position:absolute; inset:0; transition:opacity .5s ease;">
           <div class="typo" style="justify-content:flex-start; padding:130px 110px 0;">
-            <div class="kicker">In closing</div>
-            <div class="huge" style="font-size:64px;">Five questions for Amazon</div>
+            <div class="kicker">In closing · if we were part of the team</div>
+            <div class="huge" style="font-size:64px;">Our next steps to research</div>
             <div class="lines" style="margin-top:56px; gap:26px;">
               <div class="line">1 · Would your storefront teams give this shelf a home?</div>
               <div class="line">2 · What should happen when an attestation is false?</div>
               <div class="line">3 · What breaks first in the author Q&amp;A — and at what scale?</div>
               <div class="line">4 · Amazon Vine seeds early reviews for products. Why not books?</div>
-              <div class="line">5 · What would kill this internally that we haven&rsquo;t seen?</div>
             </div>
           </div>
         </div>
@@ -806,9 +798,9 @@
     { say: '', dark: true, build: '', go() { histShow(null); sceneOn(true); bubs(1); } },
     { say: '', dark: true, build: '', go() { histShow(null); sceneOn(true); bubs(4); } },
     { say: '', dark: true, build: '', go() { evoAll(['ev-clay', 'ev-bone', 'ev-codex']); } },
+    { say: '', dark: true, build: '', go() { evo('ev-print', true); show('print-ground'); } },
     { say: '', build: '', go() { histShow('f10'); } },
     { say: '', build: '', go() { histShow('f11'); } },
-    { say: '', dark: true, build: '', go() { evo('ev-print', true); show('print-ground'); } },
     { say: '', build: '', go() { histShow('abe'); } },
     { say: '', build: '', go() { histShow('f13'); } }
   ], () => { histShow(null); });
@@ -940,11 +932,6 @@
     { say: '', build: '', go() { stSet(3); } },
     { say: '', build: '', go() { stSet(4); } }
   ], () => stSet(0));
-
-  /* §15 empowering */
-  sec('emp', 'Is it empowering?', '', '', 'cream', 'sq-emp', [
-    { say: '', build: '', go() {} }
-  ], () => {});
 
   /* §16 closing */
   sec('close', 'Closing', '', '', 'cream', 'sq-close', [
