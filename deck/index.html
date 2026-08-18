@@ -215,9 +215,6 @@
 
   /* §16 native five-questions list */
   #close-qs .line { font-size: 30px; max-width: none; }
-  #al1, #al2 { transition: font-size .5s ease; }
-  #sq-ans.s2 #al1 { font-size: 27px; }
-  #sq-ans.s2 #al2 { font-size: 62px; }
   .ell { width: 292px; height: 150px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; text-align: center; font-family: var(--serif); font-weight: 800; font-size: 24px; color: var(--cream); line-height: 1.12; padding: 0 26px; transition: opacity .4s ease, transform .4s ease; }
   .ellrow { position: absolute; left: 110px; right: 110px; top: 292px; display: flex; gap: 36px; justify-content: center; }
   .stdetail { position: absolute; left: 200px; right: 200px; top: 540px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 44px; opacity: 0; transition: opacity .45s ease; }
@@ -436,17 +433,6 @@
         </div>
         <div class="anno" id="a-anno2" style="left:140px; top:88px;">
           <span class="chip"><b>Observed, not awarded.</b> The badge only says she opted in to reader questions.</span>
-        </div>
-      </section>
-
-      <!-- §6 OUR ANSWER -->
-      <section class="seq" id="sq-ans">
-        <div id="ans-stack" class="typo" style="transition: opacity .45s ease;">
-          <div class="kicker">Our answer</div>
-          <div id="al1" class="step" style="font-family:var(--serif); font-size:42px;">A collection of</div>
-          <div id="al2" class="step" style="font-family:var(--serif); font-weight:800; font-size:104px; line-height:1.04;">first-person books</div>
-          <div id="al3" class="step" style="font-family:var(--serif); font-weight:800; font-size:46px; line-height:1.15; margin-top:30px; max-width:24ch;">by authors who never saw themselves as writers</div>
-          <div id="al4" class="step" style="font-size:29px; line-height:1.45; margin-top:46px; max-width:44ch;">— where the reason to pick one up is that <b class="accent">you can reach the person who lived it</b>.</div>
         </div>
       </section>
 
@@ -832,18 +818,7 @@
     { say: '', build: '', go() {} }
   ], () => {});
 
-  /* §6 answer */
-  function ansReset() {
-    $('sq-ans').classList.remove('s2');
-    ['al1', 'al2', 'al3', 'al4'].forEach(i => show(i, false));
-  }
-  sec('ans', 'Our answer', '', '', 'cream', 'sq-ans', [
-    { say: '', build: '', go() { show('al1'); show('al2'); } },
-    { say: '', build: '', go() { show('al1'); show('al2'); $('sq-ans').classList.add('s2'); show('al3'); } },
-    { say: '', build: '', go() { show('al1'); show('al2'); $('sq-ans').classList.add('s2'); show('al3'); show('al4'); } }
-  ], ansReset);
-
-  /* §the shelf — moved after the answer so the demo proves a thesis the room has heard */
+  /* §the shelf */
   function aReset() {
     $('seq-a').classList.remove('focused');
     $('a-lift').style.transform = DOCK.a;
