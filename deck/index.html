@@ -180,7 +180,6 @@
     filter: drop-shadow(0 26px 44px rgba(0,0,0,0.85)) drop-shadow(0 0 34px rgba(224,138,60,0.28)); }
   .evob.page img { border-radius: 3px; }
   .evob.show { opacity: 1; transform: translateX(-50%); }
-  #ev-clay { left: 400px; } #ev-bone { left: 800px; } #ev-codex { left: 1200px; }
   /* right third, large — the left half of the type field is the photo's focal point */
   #ev-print { left: 1150px; bottom: 160px; }
   .shot { position: absolute; overflow: hidden; border-radius: 10px; background: #fff; box-shadow: 0 24px 60px -18px rgba(0,0,0,0.45); }
@@ -405,10 +404,6 @@
           </g>
         </svg>
         <img id="print-ground" data-src="chinese-type.webp" alt="Chinese movable type blocks standing on a bed of set type">
-        <!-- the story without its teller: the last bubble hardens into clay, then evolves -->
-        <div class="evob" id="ev-clay"><img data-src="clay.webp" style="height:200px;" alt="Proto-cuneiform tablet, Sumer"></div>
-        <div class="evob" id="ev-bone"><img data-src="bone.webp" style="height:320px;" alt="Shang oracle bone, British Library Or. 1595"></div>
-        <div class="evob page" id="ev-codex"><img data-src="w4.webp" style="height:310px;" alt="Dresden Codex page, Maya"></div>
         <div class="evob page" id="ev-print"><img data-src="gut.webp" style="height:580px;" alt="Gutenberg Bible, Genesis"></div>
         <div class="frame" id="f10"><img data-src="e10.webp" alt="School of Athens"></div>
         <div class="frame" id="f11"><img data-src="e11.webp" alt="Shakespeare reads to a crowd"></div>
@@ -824,7 +819,7 @@
   /* §2 history — the fire continues; figures inverted to cream around it */
   const FR = ['f10', 'f11', 'f13'];
   const SCENES = { abe: 'abe-scene' };
-  const EVO = ['ev-clay', 'ev-bone', 'ev-codex', 'ev-print'];
+  const EVO = ['ev-print'];
   function sceneOn(on) {
     $('camp').classList.toggle('show', on);
     $('bubs').classList.toggle('show', on);
@@ -835,25 +830,11 @@
     $('sq-hist').classList.toggle('lone', !!lone);
   }
   function evo(id, lone) { evoStage(lone); EVO.forEach(e => show(e, e === id)); }
-  /* the writing beat: the circle gets one breath on screen, then the three artifacts
-     rise together while figures and fire fade — writing is the moment the story
-     leaves its teller. `lone` clears the figures; the fire fades on the video layer. */
-  let evoTimer = 0;
-  function evoAll(list) {
-    evoStage(false);
-    clearTimeout(evoTimer);
-    evoTimer = setTimeout(() => {
-      $('sq-hist').classList.add('lone');
-      list.forEach(id => show(id));
-      sceneVid.style.opacity = 0;
-    }, 900);
-  }
   function bubs(n) {
     ['bub1', 'bub2', 'bub3', 'bub4'].forEach((b, i) => { $(b).style.opacity = i < n ? 1 : 0; });
   }
   function histShow(key) {
     sceneOn(false); bubs(0);
-    clearTimeout(evoTimer);
     $('print-ground').classList.remove('show');
     $('sq-hist').classList.remove('lone');
     document.querySelectorAll('#camp .stick').forEach(el => { el.style.opacity = ''; });
@@ -868,8 +849,7 @@
     { say: '', dark: true, build: '', go() { histShow(null); sceneOn(true); bubs(0); } },
     { say: '', dark: true, build: '', go() { histShow(null); sceneOn(true); bubs(1); } },
     { say: '', dark: true, build: '', go() { histShow(null); sceneOn(true); bubs(4); } },
-    { say: '', dark: true, build: '', go() { evoAll(['ev-clay', 'ev-bone', 'ev-codex']); } },
-    { say: '', dark: true, build: '', go() { evo('ev-print', true); show('print-ground'); } },
+    { say: '', dark: true, build: '', go() { evo('ev-print', true); show('print-ground'); sceneVid.style.opacity = 0; } },
     { say: '', build: '', go() { histShow('f10'); } },
     { say: '', build: '', go() { histShow('f11'); } },
     { say: '', build: '', go() { histShow('abe'); } },
