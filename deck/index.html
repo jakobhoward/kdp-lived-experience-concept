@@ -965,15 +965,15 @@
     stage.classList.toggle('dark', f.s.stage === 'dark' || !!f.b.dark || (f.s.id === 'close' && f.bi === 1));
     // One clip throughout: wide for the cold open, pushed to 1.45x behind the figures,
     // and it stays zoomed through the writing beat so the fade there is the fire leaving,
-    // not the camera pulling back. Beat 6 (print) keeps the pitch ground it faded to.
-    const zoom = f.s.id === 'hist' && f.bi <= 5;
+    // not the camera pulling back. Beat 4 (print) alone keeps the pitch ground it faded to.
+    const zoom = f.s.id === 'hist' && f.bi <= 6 && f.bi !== 4;
     const sceneOn = f.s.id === 'fire' || zoom;
     sceneVid.classList.toggle('on', sceneOn);
     sceneVid.classList.toggle('zoomed', zoom);
     // figures wait for the camera only on the fire → figures cut
     $('sq-hist').classList.toggle('delayfigs', !!(shown && shown.s.id === 'fire' && f.s.id === 'hist' && f.bi === 0));
     if (sceneOn) { sceneVid.play().catch(() => {}); } else { sceneVid.pause(); }
-    stage.classList.toggle('pitch', sceneOn || (f.s.id === 'hist' && f.bi === 6));
+    stage.classList.toggle('pitch', sceneOn || (f.s.id === 'hist' && f.bi === 4));
     requestAnimationFrame(() => requestAnimationFrame(() => f.b.go()));
     // header
     $('secnm').textContent = '§' + (f.si + 1) + ' · ' + f.s.name;
