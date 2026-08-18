@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- The one link the project travels under: the QR on the closing slide, and the
+     single URL handed in for submission. Deliberately not indexable, for the same
+     reason the prototype isn't — the pages behind it borrow Amazon's store grammar
+     and should never surface stripped of the student-concept banner. -->
+<meta name="robots" content="noindex, nofollow">
+<title>Reader Discovery — project index</title>
+<meta name="description" content="The presentation, the prototype, and the full survey data behind Reader Discovery — a student concept for Kindle Direct Publishing. COMMLD 560, University of Washington.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Reader Discovery — project index">
+<meta property="og:description" content="The presentation, the prototype, and the full survey data behind Reader Discovery — a student concept for Kindle Direct Publishing. Not an Amazon product.">
+<meta property="og:url" content="https://jakobhoward.github.io/kdp-lived-experience-concept/start/">
+<meta property="og:image" content="https://jakobhoward.github.io/kdp-lived-experience-concept/share/og-cover.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A cream card headed STUDENT CONCEPT — Inclusive Design &amp; Product Equity (COMMLD 560), University of Washington, reading 'First-person stories, in the authors' own words', with four book covers fanned beside it.">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+  /* Same palette and type as the survey appendix at /data — these two pages are the
+     project's own voice, as opposed to the prototype, which wears Amazon's. */
+  :root { --navy: #101528; --cream: #F5EFE2; --cream-deep: #EDE5D2; --ink: #1F2A4A; --muted: #6E6A5E; --accent: #C0662A; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--cream); color: var(--ink); font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.5; }
+  .banner { background: var(--navy); color: var(--cream); font-size: 13.5px; padding: 10px 16px; text-align: center; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 60px 28px 80px; }
+  .kicker { font-size: 13px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); font-weight: 700; }
+  h1 { font-family: "Playfair Display", "Didot", "Bodoni 72", Georgia, serif; font-weight: 800; font-size: clamp(34px, 6.4vw, 54px); line-height: 1.06; margin: 14px 0 18px; }
+  .standfirst { font-size: 18px; max-width: 60ch; }
+  .standfirst b { font-weight: 700; }
+
+  .cards { margin-top: 46px; display: grid; gap: 16px; }
+
+  /* Whole card is one link: a phone-sized tap target, not a text link a thumb has to
+     find. 1.4.11 wants 3:1 on the focus ring — --accent is 4.6:1 on --cream. */
+  .card {
+    display: block; text-decoration: none; color: inherit;
+    background: #fff; border: 1px solid rgba(31,42,74,0.10); border-radius: 16px;
+    padding: 24px 26px; box-shadow: 0 8px 22px rgba(31,42,74,0.07);
+    transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+  }
+  .card:hover, .card:focus-visible { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(31,42,74,0.13); border-color: rgba(192,102,42,0.45); }
+  .card:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+  .card .num { font-size: 12.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); font-weight: 700; }
+  .card h2 { font-family: "Playfair Display", "Didot", "Bodoni 72", Georgia, serif; font-size: 27px; font-weight: 700; margin: 7px 0 8px; display: flex; align-items: baseline; gap: 10px; }
+  .card h2 .arw { font-family: inherit; color: var(--accent); font-size: 22px; transition: transform .16s ease; display: inline-block; }
+  .card:hover h2 .arw, .card:focus-visible h2 .arw { transform: translateX(4px); }
+  .card p { font-size: 15.5px; color: var(--muted); max-width: 54ch; }
+
+  /* Motion is decoration here; a reader who asked for less shouldn't get any. */
+  @media (prefers-reduced-motion: reduce) { .card, .card h2 .arw { transition: none; } .card:hover, .card:focus-visible { transform: none; } .card:hover h2 .arw { transform: none; } }
+
+  /* Almost everyone arrives here by scanning the QR off a slide, on a phone. At the
+     desktop rhythm the standfirst alone fills that screen and only one of the three
+     doors is visible — so tighten until all three are in reach of the first scroll. */
+  @media (max-width: 560px) {
+    .wrap { padding: 34px 20px 56px; }
+    h1 { margin: 10px 0 12px; }
+    .standfirst { font-size: 16.5px; }
+    .cards { margin-top: 28px; gap: 12px; }
+    .card { padding: 18px 20px; border-radius: 14px; }
+    .card h2 { font-size: 23px; margin: 5px 0 6px; }
+    .card p { font-size: 15px; }
+    footer { margin-top: 40px; }
+  }
+
+  footer { margin-top: 54px; padding-top: 22px; border-top: 1px solid rgba(31,42,74,0.15); font-size: 14.5px; color: var(--muted); }
+  footer a { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="banner">Student project — University of Washington, COMMLD 560. Not an Amazon product or study.</div>
+
+<div class="wrap">
+  <main>
+    <div class="kicker">Reader Discovery · KDP case study</div>
+    <h1>Everything behind the concept</h1>
+    <p class="standfirst">A browsable collection of first-person books by authors who never saw themselves as writers — where the reason to pick one up is that <b>you can reach the person who lived it</b>. Three ways in:</p>
+
+    <div class="cards">
+      <a class="card" href="../deck/?present">
+        <div class="num">01</div>
+        <h2>The presentation <span class="arw" aria-hidden="true">&rarr;</span></h2>
+        <p>The full deck, self-paced — the problem, the research that killed our first hypothesis, and where the concept landed.</p>
+      </a>
+
+      <a class="card" href="../">
+        <div class="num">02</div>
+        <h2>The prototype <span class="arw" aria-hidden="true">&rarr;</span></h2>
+        <p>A working walkthrough of the collection, the author attestation, and the reader-to-author question. Books, authors and ratings are fictional.</p>
+      </a>
+
+      <a class="card" href="../data/">
+        <div class="num">03</div>
+        <h2>The survey data <span class="arw" aria-hidden="true">&rarr;</span></h2>
+        <p>All of it, not just the charts that fit on a slide — with the method, the sample size, and the recruitment confound stated up front.</p>
+      </a>
+    </div>
+  </main>
+
+  <footer>
+    Reader Discovery — Jalen Oscar Howard, Jakob Picciotto, Wanting Chao, Pablo Ortega.<br>
+    Inclusive Design &amp; Product Equity (COMMLD 560), Communication Leadership, University of Washington, Summer 2026.
+  </footer>
+</div>
+</body>
+</html>
